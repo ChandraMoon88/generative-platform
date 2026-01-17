@@ -12,6 +12,7 @@ import { patternsRouter } from './api/patterns';
 import { modelsRouter } from './api/models';
 import { sessionsRouter } from './api/sessions';
 import { generatorRouter } from './api/generator';
+import { authRouter } from './api/auth';
 import { initDatabase } from './db/database';
 import { logger } from './utils/logger';
 
@@ -21,7 +22,7 @@ const PORT = process.env.PORT || 3001;
 // Middleware
 app.use(helmet());
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+  origin: ['http://localhost:3000', 'http://localhost:3002'],
   credentials: true,
 }));
 app.use(compression());
