@@ -5,7 +5,7 @@
 
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useEventTracking } from '@/lib/instrumentation/eventTracker';
 
 // ========== MODAL ==========
