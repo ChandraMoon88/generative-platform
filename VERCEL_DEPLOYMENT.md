@@ -391,7 +391,7 @@ VERCEL_URL=https://your-app.vercel.app
 JWT_SECRET=your-jwt-secret-256-bits
 WEBHOOK_SECRET=your-webhook-secret
 ADMIN_SECRET=your-admin-secret
-ADMIN_WEBHOOK_URL=https://your-ngrok-url.ngrok.io/webhook/apps
+ADMIN_WEBHOOK_URL=https://your-tunnel.trycloudflare.com/webhook/apps
 NODE_ENV=production
 RATE_LIMIT=100
 RATE_WINDOW=900000
@@ -426,4 +426,4 @@ Need help? Check:
 - Local sync logs: `user-apps/sync-log.txt`
 - Network requests: Browser DevTools
 
-Keep your ngrok and local sync service running to receive apps!
+Keep your Cloudflare Tunnel and local sync service running to receive apps!
