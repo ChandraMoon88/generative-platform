@@ -108,17 +108,21 @@ export function useInstrumentation(options: UseInstrumentationOptions) {
     logFormEvent(formId, 'field_change', field);
   }, []);
   
+  // Track form submit - supports boolean (true=create, false=update) or CRUDOperation
   const trackFormSubmit = useCallback((
     formId: string,
-    formData: Record<string, unknown>,
-    operation: CRUDOperation = 'create'
+    formData: Record<string, unknown> | object,
+    operationOrIsNew: CRUDOperation | boolean = 'create'
   ) => {
+    const operation: CRUDOperation = typeof operationOrIsNew === 'boolean'
+      ? (operationOrIsNew ? 'create' : 'update')
+      : operationOrIsNew;
     const timing = endTiming(`form_${formId}`);
     logFormEvent(
       formId,
       'submit',
       undefined,
-      formData,
+      formData as Record<string, unknown>,
       undefined,
       createSemanticAction(
         operation === 'create' ? 'crud_create' : 'crud_update',
