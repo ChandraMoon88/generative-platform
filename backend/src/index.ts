@@ -346,6 +346,7 @@ import { generatorRouter } from './api/generator';
 import { authRouter } from './api/auth';
 import { projectsRouter } from './api/projects';
 import { assetsRouter } from './api/assets';
+import { webhookRouter } from './api/webhook';
 import { initDatabase } from './db/database';
 import { logger } from './utils/logger';
 import { 
