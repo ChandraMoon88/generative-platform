@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Restaurant Manager - Generative Platform',
-  description: 'Restaurant management simulation for the Generative Platform',
+  title: 'Restaurant Manager - Demo App',
+  description: 'Demo restaurant management app for the Generative Platform',
 };
 
 export default function RootLayout({
