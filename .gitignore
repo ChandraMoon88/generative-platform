@@ -30,6 +30,7 @@ INFINITE_BUILDER_COMPLETE.md
 QUICKSTART.md
 QUICK_START.md
 ADMIN_SECURITY_COMPLETE.md
+VERCEL_DEPLOYMENT.md
 plan.txt
 
 # Root utility scripts - contain admin logic
@@ -37,6 +38,11 @@ start-all.ps1
 stop-all.ps1
 auto-commit.ps1
 start-auto-commit.bat
+local-sync-service.js
+
+# Production environment
+.env.production
+.env.production.example
 
 # Internal backend services
 backend/src/api/models.ts
