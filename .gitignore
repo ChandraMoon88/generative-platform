@@ -23,9 +23,15 @@ USER_README.md
 GITHUB_README.md
 WORKFLOW.md
 VERIFICATION_COMPLETE.md
+IMPLEMENTATION_GUIDE.md
+COMPLETE_LIBRARY_ALL_TYPES.md
+COMPONENT_LIBRARY_COMPLETE.md
+INFINITE_BUILDER_COMPLETE.md
+QUICKSTART.md
+QUICK_START.md
 plan.txt
 
-# Root utility scripts
+# Root utility scripts - contain admin logic
 start-all.ps1
 stop-all.ps1
 auto-commit.ps1
