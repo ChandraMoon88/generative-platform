@@ -254,20 +254,51 @@ export const useRestaurantStore = create<RestaurantState>((set, get) => ({
   },
   
   // Order Actions
-  createOrder: (tableNumber, customerName) => {
-    const now = Date.now();
-    const orderNumber = `ORD-${now.toString(36).toUpperCase()}`;
+  addOrder: (order) => {
+    set((state) => {
+      logStateChange('set', 'orders/add', 'addOrder', undefined, order);
+      return { orders: [...state.orders, order] };
+    });
+  },
+
+  updateOrder: (id, updates) => {
+    set((state) => {
+      const index = state.orders.findIndex((o) => o.id === id);
+      if (index === -1) return state;
+      
+      const oldOrder = state.orders[index];
+      const updatedOrder = { ...oldOrder, ...updates, updatedAt: new Date().toISOString() };
+      const newOrders = [...state.orders];
+      newOrders[index] = updatedOrder;
+      
+      logStateChange('update', `orders/${id}`, 'updateOrder', oldOrder, updatedOrder);
+      
+      return { orders: newOrders };
+    });
+  },
+
+  deleteOrder: (id) => {
+    set((state) => {
+      const order = state.orders.find((o) => o.id === id);
+      logStateChange('delete', `orders/${id}`, 'deleteOrder', order, undefined);
+      return { orders: state.orders.filter((o) => o.id !== id) };
+    });
+  },
+
+  createOrder: (tableId, customerName) => {
+    const now = new Date().toISOString();
+    const orderNumber = `ORD-${Date.now().toString(36).toUpperCase()}`;
     
     const newOrder: Order = {
       id: uuidv4(),
       orderNumber,
-      tableNumber,
+      tableId,
       customerName,
       items: [],
       status: 'pending',
       subtotal: 0,
       tax: 0,
-      total: 0,
+      totalAmount: 0,
       paymentStatus: 'pending',
       createdAt: now,
       updatedAt: now,
@@ -279,8 +310,8 @@ export const useRestaurantStore = create<RestaurantState>((set, get) => ({
     });
     
     // Update table status if assigned
-    if (tableNumber) {
-      const table = get().tables.find((t) => t.number === tableNumber);
+    if (tableId) {
+      const table = get().tables.find((t) => t.id === tableId);
       if (table) {
         get().updateTableStatus(table.id, 'occupied', newOrder.id);
       }
