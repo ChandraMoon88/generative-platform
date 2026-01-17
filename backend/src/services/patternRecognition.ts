@@ -91,13 +91,15 @@ export class PatternRecognitionEngine {
    * Reload pattern definitions
    */
   public reloadDefinitions(): void {
-    this.loadDefinitions();
+    this.isInitialized = false;
+    this.ensureInitialized();
   }
   
   /**
    * Analyze events for a session
    */
   public analyzeSession(sessionId: string): RecognizedPattern[] {
+    this.ensureInitialized();
     const db = getDatabase();
     
     // Get events for session
