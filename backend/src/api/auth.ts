@@ -109,7 +109,7 @@ authRouter.post('/login', async (req: Request, res: Response) => {
     db.prepare('UPDATE users SET updated_at = ? WHERE id = ?')
       .run(Date.now(), user.id);
 
-    logger.info(`User logged in: ${email}`);
+    logger.info(`User logged in: ${email} (role: ${user.role})`);
 
     res.json({
       success: true,
@@ -120,6 +120,7 @@ authRouter.post('/login', async (req: Request, res: Response) => {
         id: user.id,
         name: user.name,
         email: user.email,
+        role: user.role,
       },
     });
   } catch (error) {
