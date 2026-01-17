@@ -47,6 +47,7 @@ app.get('/health', (req, res) => {
 
 // API Routes
 app.use('/api/auth', authRouter);
+app.use('/api/projects', projectsRouter);
 app.use('/api/events', eventsRouter);
 app.use('/api/patterns', patternsRouter);
 app.use('/api/models', modelsRouter);
