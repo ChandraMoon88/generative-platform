@@ -94,9 +94,9 @@ export class PatternRecognitionEngine {
       SELECT * FROM events 
       WHERE session_id = ?
       ORDER BY timestamp ASC
-    `).all(sessionId) as Record<string, unknown>[];
+    `).all(sessionId);
     
-    const events: Event[] = eventRows.map(row => ({
+    const events: Event[] = eventRows.map((row: any) => ({
       id: row.id as string,
       session_id: row.session_id as string,
       type: row.type as string,
