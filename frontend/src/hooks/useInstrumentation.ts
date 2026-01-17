@@ -186,31 +186,46 @@ export function useInstrumentation(options: UseInstrumentationOptions) {
     }
   }, [entityType, componentName, createSemanticAction]);
   
-  // Track list interactions
-  const trackListView = useCallback((items: unknown[], filters?: Record<string, unknown>) => {
+  // Track list interactions - supports array or entity name with count
+  const trackListView = useCallback((itemsOrEntity: unknown[] | string, filtersOrCount?: Record<string, unknown> | number) => {
+    const itemCount = typeof itemsOrEntity === 'string' 
+      ? (typeof filtersOrCount === 'number' ? filtersOrCount : 0)
+      : itemsOrEntity.length;
+    const filters = typeof filtersOrCount === 'object' ? filtersOrCount : undefined;
+    const entity = typeof itemsOrEntity === 'string' ? itemsOrEntity : entityType;
+    
     logInteraction(
       'scroll',
-      { tagName: 'list', attributes: { 'data-entity': entityType || '' } },
-      createSemanticAction('list_view', 'read', `Viewing ${entityType} list`),
-      { itemCount: items.length, filters }
+      { tagName: 'list', attributes: { 'data-entity': entity || '' } },
+      createSemanticAction('list_view', 'read', `Viewing ${entity} list`),
+      { itemCount, filters }
     );
   }, [entityType, createSemanticAction]);
   
-  const trackFilter = useCallback((filters: Record<string, unknown>) => {
+  // Track filter - supports (entity, filters) or just (filters)
+  const trackFilter = useCallback((entityOrFilters: string | Record<string, unknown>, filters?: Record<string, unknown>) => {
+    const actualFilters = typeof entityOrFilters === 'string' ? filters : entityOrFilters;
+    const entity = typeof entityOrFilters === 'string' ? entityOrFilters : entityType;
+    
     logInteraction(
       'input',
       { tagName: 'filter' },
-      createSemanticAction('filter', undefined, `Filtering ${entityType}`),
-      filters
+      createSemanticAction('filter', undefined, `Filtering ${entity}`),
+      actualFilters
     );
   }, [entityType, createSemanticAction]);
   
-  const trackSort = useCallback((field: string, direction: 'asc' | 'desc') => {
+  // Track sort - supports (entity, field, direction) or (field, direction)
+  const trackSort = useCallback((entityOrField: string, fieldOrDirection: string, direction?: 'asc' | 'desc') => {
+    const field = direction ? fieldOrDirection : entityOrField;
+    const dir = direction || (fieldOrDirection as 'asc' | 'desc');
+    const entity = direction ? entityOrField : entityType;
+    
     logInteraction(
       'click',
       { tagName: 'sort', attributes: { 'data-field': field } },
-      createSemanticAction('sort', undefined, `Sorting ${entityType} by ${field}`),
-      { field, direction }
+      createSemanticAction('sort', undefined, `Sorting ${entity} by ${field}`),
+      { field, direction: dir }
     );
   }, [entityType, createSemanticAction]);
   
