@@ -347,3 +347,41 @@ patternsRouter.get('/stats/summary', async (req: Request, res: Response) => {
     });
   }
 });
+
+/**
+ * GET /api/patterns/:sessionId/predict
+ * Predict application type for a session (NEW)
+ */
+patternsRouter.get('/:sessionId/predict', async (req: Request, res: Response) => {
+  try {
+    const { sessionId } = req.params;
+    const engine = getNewPatternEngine();
+    const prediction = await engine.predictApplicationType(sessionId);
+
+    if (!prediction) {
+      res.json({ prediction: null, message: 'Not enough data to predict' });
+    } else {
+      res.json({ prediction });
+    }
+  } catch (error) {
+    logger.error('Error predicting application type:', error);
+    res.status(500).json({ error: 'Failed to predict application type' });
+  }
+});
+
+/**
+ * GET /api/patterns/:sessionId/recommendations
+ * Get component recommendations for a session (NEW)
+ */
+patternsRouter.get('/:sessionId/recommendations', async (req: Request, res: Response) => {
+  try {
+    const { sessionId } = req.params;
+    const engine = getNewPatternEngine();
+    const recommendations = await engine.getRecommendations(sessionId);
+
+    res.json({ recommendations });
+  } catch (error) {
+    logger.error('Error getting recommendations:', error);
+    res.status(500).json({ error: 'Failed to get recommendations' });
+  }
+});
