@@ -284,9 +284,11 @@ curl -H "X-Admin-Secret: your-admin-secret" \
 curl http://localhost:4000/health
 ```
 
-**Check 2: Is ngrok running?**
+**Check 2: Is Cloudflare Tunnel running?**
 ```bash
-curl https://your-ngrok-url.ngrok.io/health
+cloudflared tunnel list
+# Or check your tunnel URL
+curl https://your-tunnel.trycloudflare.com/health
 ```
 
 **Check 3: Check Vercel logs**
@@ -338,7 +340,7 @@ Before going live:
 - [ ] Change all default secrets
 - [ ] Set strong JWT_SECRET
 - [ ] Configure production database
-- [ ] Set up ngrok with paid plan (for stable URL)
+- [ ] Set up Cloudflare Tunnel (free forever, no paid plan needed)
 - [ ] Test all security features
 - [ ] Test app syncing
 - [ ] Set up monitoring (Vercel Analytics)
