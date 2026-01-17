@@ -12,7 +12,7 @@ import type {
   Supplier,
   Order,
   OrderItem,
-  StaffMember,
+  Staff,
   Table,
   Reservation,
   Customer,
@@ -30,7 +30,7 @@ interface RestaurantState {
   ingredients: Ingredient[];
   suppliers: Supplier[];
   orders: Order[];
-  staff: StaffMember[];
+  staff: Staff[];
   tables: Table[];
   reservations: Reservation[];
   customers: Customer[];
@@ -43,7 +43,7 @@ interface RestaurantState {
   selectedItem: string | null;
   
   // Menu Item Actions
-  addMenuItem: (item: Omit<MenuItem, 'id' | 'createdAt' | 'updatedAt'>) => MenuItem;
+  addMenuItem: (item: MenuItem | Omit<MenuItem, 'id' | 'createdAt' | 'updatedAt'>) => MenuItem;
   updateMenuItem: (id: string, updates: Partial<MenuItem>) => void;
   deleteMenuItem: (id: string) => void;
   
@@ -58,7 +58,10 @@ interface RestaurantState {
   deleteSupplier: (id: string) => void;
   
   // Order Actions
-  createOrder: (tableNumber?: number, customerName?: string) => Order;
+  addOrder: (order: Order) => void;
+  updateOrder: (id: string, updates: Partial<Order>) => void;
+  deleteOrder: (id: string) => void;
+  createOrder: (tableId?: string, customerName?: string) => Order;
   addItemToOrder: (orderId: string, menuItemId: string, quantity: number, instructions?: string) => void;
   removeItemFromOrder: (orderId: string, orderItemId: string) => void;
   updateOrderStatus: (orderId: string, status: OrderStatus) => void;
@@ -67,17 +70,20 @@ interface RestaurantState {
   cancelOrder: (orderId: string) => void;
   
   // Staff Actions
-  addStaffMember: (staff: Omit<StaffMember, 'id' | 'createdAt' | 'updatedAt'>) => StaffMember;
-  updateStaffMember: (id: string, updates: Partial<StaffMember>) => void;
-  deleteStaffMember: (id: string) => void;
+  addStaff: (staff: Staff | Omit<Staff, 'id' | 'createdAt' | 'updatedAt'>) => Staff;
+  updateStaff: (id: string, updates: Partial<Staff>) => void;
+  deleteStaff: (id: string) => void;
   
   // Table Actions
-  addTable: (table: Omit<Table, 'id'>) => Table;
+  addTable: (table: Table | Omit<Table, 'id'>) => Table;
+  updateTable: (id: string, updates: Partial<Table>) => void;
+  deleteTable: (id: string) => void;
   updateTableStatus: (id: string, status: Table['status'], orderId?: string) => void;
   
   // Reservation Actions
-  createReservation: (reservation: Omit<Reservation, 'id' | 'createdAt' | 'updatedAt' | 'status'>) => Reservation;
+  addReservation: (reservation: Reservation | Omit<Reservation, 'id' | 'createdAt' | 'updatedAt' | 'status'>) => Reservation;
   updateReservation: (id: string, updates: Partial<Reservation>) => void;
+  deleteReservation: (id: string) => void;
   cancelReservation: (id: string) => void;
   
   // Alert Actions
