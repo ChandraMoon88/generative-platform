@@ -12,7 +12,7 @@ import { Reservation, ReservationStatus } from '@/types/restaurant';
 
 export default function ReservationsPage() {
   const { reservations, tables, addReservation, updateReservation, deleteReservation } = useRestaurantStore();
-  const { trackClick, trackFilter, trackCRUD, trackListView, trackFormSubmit } = useInstrumentation();
+  const { trackClick, trackFilter, trackCRUD, trackListView, trackFormSubmit } = useInstrumentation({ componentName: 'ReservationsPage', entityType: 'reservation' });
 
   const [dateFilter, setDateFilter] = useState<string>(new Date().toISOString().split('T')[0]);
   const [statusFilter, setStatusFilter] = useState<ReservationStatus | 'all'>('all');

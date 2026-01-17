@@ -12,7 +12,7 @@ import { Staff, StaffRole } from '@/types/restaurant';
 
 export default function StaffPage() {
   const { staff, addStaff, updateStaff, deleteStaff } = useRestaurantStore();
-  const { trackClick, trackFilter, trackCRUD, trackListView, trackFormSubmit } = useInstrumentation();
+  const { trackClick, trackFilter, trackCRUD, trackListView, trackFormSubmit } = useInstrumentation({ componentName: 'StaffPage', entityType: 'staff' });
 
   const [roleFilter, setRoleFilter] = useState<StaffRole | 'all'>('all');
   const [showModal, setShowModal] = useState(false);

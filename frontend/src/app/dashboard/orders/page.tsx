@@ -13,7 +13,7 @@ import { Order, OrderStatus } from '@/types/restaurant';
 
 export default function OrdersPage() {
   const { orders, updateOrder, deleteOrder } = useRestaurantStore();
-  const { trackClick, trackFilter, trackSort, trackCRUD, trackListView } = useInstrumentation();
+  const { trackClick, trackFilter, trackSort, trackCRUD, trackListView } = useInstrumentation({ componentName: 'OrdersPage', entityType: 'order' });
   
   const [statusFilter, setStatusFilter] = useState<OrderStatus | 'all'>('all');
   const [sortField, setSortField] = useState<keyof Order>('createdAt');

@@ -12,7 +12,7 @@ import { Table, TableStatus } from '@/types/restaurant';
 
 export default function TablesPage() {
   const { tables, addTable, updateTable, deleteTable } = useRestaurantStore();
-  const { trackClick, trackFilter, trackCRUD, trackListView, trackFormSubmit } = useInstrumentation();
+  const { trackClick, trackFilter, trackCRUD, trackListView, trackFormSubmit } = useInstrumentation({ componentName: 'TablesPage', entityType: 'table' });
 
   const [statusFilter, setStatusFilter] = useState<TableStatus | 'all'>('all');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
