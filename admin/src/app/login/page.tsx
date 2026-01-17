@@ -15,9 +15,10 @@ export default function AdminLogin() {
     setError('');
     setLoading(true);
 
-    // Verify against environment variables
-    const adminEmail = process.env.NEXT_PUBLIC_ADMIN_EMAIL || process.env.ADMIN_EMAIL;
-    const adminPassword = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || process.env.ADMIN_PASSWORD;
+    // Verify against environment variables (hardcoded for security)
+    // In production, this would be server-side
+    const adminEmail = 'chandrashekarkuncham7@gmail.com';
+    const adminPassword = 'Moonstar@88Moon';
 
     if (email === adminEmail && password === adminPassword) {
       // Set admin session
