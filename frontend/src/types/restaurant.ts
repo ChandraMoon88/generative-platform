@@ -159,14 +159,18 @@ export interface Shift {
 // Table
 export interface Table {
   id: string;
-  number: number;
+  tableNumber: string;
   capacity: number;
   status: TableStatus;
   currentOrderId?: string;
   section: string;
+  minPartySize: number;
+  maxPartySize: number;
+  createdAt: string;
+  updatedAt: string;
 }
 
-export type TableStatus = 'available' | 'occupied' | 'reserved' | 'cleaning';
+export type TableStatus = 'available' | 'occupied' | 'reserved' | 'cleaning' | 'maintenance';
 
 // Reservation
 export interface Reservation {
