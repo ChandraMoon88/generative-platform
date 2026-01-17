@@ -10,19 +10,22 @@ export interface MenuItem {
   description: string;
   price: number;
   category: MenuCategory;
-  ingredients: string[];
+  ingredients?: string[];
   preparationTime: number; // minutes
   isAvailable: boolean;
   imageUrl?: string;
   allergens: string[];
+  isVegetarian: boolean;
+  isVegan: boolean;
+  isGlutenFree: boolean;
   nutritionalInfo?: NutritionalInfo;
-  createdAt: number;
-  updatedAt: number;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export type MenuCategory = 
   | 'appetizer'
-  | 'main_course'
+  | 'main'
   | 'dessert'
   | 'beverage'
   | 'side'
