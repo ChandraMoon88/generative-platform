@@ -40,6 +40,23 @@ authRouter.post('/register', async (req: Request, res: Response) => {
       });
     }
 
+    // Validate email format
+    if (!isValidEmail(email)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid email format',
+      });
+    }
+
+    // Validate password strength
+    const passwordCheck = isValidPassword(password);
+    if (!passwordCheck.valid) {
+      return res.status(400).json({
+        success: false,
+        message: passwordCheck.message,
+      });
+    }
+
     const db = getDatabase();
 
     // Check if user already exists
@@ -53,14 +70,14 @@ authRouter.post('/register', async (req: Request, res: Response) => {
 
     // Create user (default role is 'client', only allow 'admin' if explicitly set)
     const userId = uuidv4();
-    const hashedPassword = hashPassword(password);
+    const { hash, salt } = hashPassword(password);
     const createdAt = Date.now();
     const userRole = role === 'admin' ? 'admin' : 'client';
 
     db.prepare(`
-      INSERT INTO users (id, name, email, password, role, created_at, updated_at)
-      VALUES (?, ?, ?, ?, ?, ?, ?)
-    `).run(userId, name, email, hashedPassword, userRole, createdAt, createdAt);
+      INSERT INTO users (id, name, email, password, salt, role, created_at, updated_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    `).run(userId, name, email, hash, salt, userRole, createdAt, createdAt);
 
     // Generate simple token (userId:timestamp)
     const token = Buffer.from(`${userId}:${Date.now()}`).toString('base64');
