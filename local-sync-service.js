@@ -175,9 +175,11 @@ async function start() {
     console.log(`📡 Listening on port: ${PORT}`);
     console.log(`📂 Apps directory: ${APPS_DIR}`);
     console.log(`🔐 Webhook secret: ${WEBHOOK_SECRET === 'default-secret' ? '⚠️  Using default secret!' : '✅ Custom secret configured'}`);
-    console.log(`\n💡 To expose this locally for Vercel:`);
-    console.log(`   ngrok http ${PORT}`);
-    console.log(`   Then set ADMIN_WEBHOOK_URL in Vercel env vars\n`);
+    console.log(`\n💡 To expose this for Vercel (Free Forever):`);
+    console.log(`   1. Install: winget install Cloudflare.cloudflared`);
+    console.log(`   2. Run: cloudflared tunnel --url http://localhost:${PORT}`);
+    console.log(`   3. Copy the https://*.trycloudflare.com URL`);
+    console.log(`   4. Set ADMIN_WEBHOOK_URL in Vercel env vars\n`);
   });
 }
 
