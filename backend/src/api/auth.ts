@@ -116,12 +116,11 @@ authRouter.post('/login', async (req: Request, res: Response) => {
     }
 
     const db = getDatabase();
-    const hashedPassword = hashPassword(password);
 
-    const user = db.prepare('SELECT * FROM users WHERE email = ? AND password = ?')
-      .get(email, hashedPassword) as Record<string, unknown> | undefined;
+    const user = db.prepare('SELECT * FROM users WHERE email = ?')
+      .get(email) as { id: string; password: string; salt: string; role: string; name: string } | undefined;
 
-    if (!user) {
+    if (!user || !verifyPassword(password, user.password, user.salt)) {
       return res.status(401).json({
         success: false,
         message: 'Invalid email or password',
