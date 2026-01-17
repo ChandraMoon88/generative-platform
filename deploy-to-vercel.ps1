@@ -78,12 +78,13 @@ Write-Host "1️⃣  Start Local Sync Service:" -ForegroundColor Yellow
 Write-Host "   `$env:WEBHOOK_SECRET='$webhookSecret'" -ForegroundColor Gray
 Write-Host "   node local-sync-service.js`n" -ForegroundColor Gray
 
-Write-Host "2️⃣  Expose with ngrok:" -ForegroundColor Yellow
-Write-Host "   ngrok http 4000`n" -ForegroundColor Gray
+Write-Host "2️⃣  Expose with Cloudflare Tunnel (Free Forever):" -ForegroundColor Yellow
+Write-Host "   # Install: winget install Cloudflare.cloudflared" -ForegroundColor Gray
+Write-Host "   cloudflared tunnel --url http://localhost:4000`n" -ForegroundColor Gray
 
 Write-Host "3️⃣  Set webhook URL in Vercel:" -ForegroundColor Yellow
 Write-Host "   vercel env add ADMIN_WEBHOOK_URL production" -ForegroundColor Gray
-Write-Host "   Enter: https://your-ngrok-url.ngrok.io/webhook/apps`n" -ForegroundColor Gray
+Write-Host "   Enter: https://your-tunnel.trycloudflare.com/webhook/apps`n" -ForegroundColor Gray
 
 Write-Host "4️⃣  Redeploy:" -ForegroundColor Yellow
 Write-Host "   vercel --prod`n" -ForegroundColor Gray
