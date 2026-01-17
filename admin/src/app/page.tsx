@@ -12,8 +12,14 @@ export default function AdminHome() {
   const router = useRouter();
   
   useEffect(() => {
-    // Redirect to events page
-    router.push('/events');
+    // Check if authenticated
+    const isAuthenticated = sessionStorage.getItem('admin_authenticated') === 'true';
+    
+    if (isAuthenticated) {
+      router.push('/events');
+    } else {
+      router.push('/login');
+    }
   }, [router]);
   
   return (
@@ -22,7 +28,7 @@ export default function AdminHome() {
         <h1 className="text-4xl font-bold text-slate-800 mb-4">
           Generative Platform Admin
         </h1>
-        <p className="text-slate-600">Redirecting to admin dashboard...</p>
+        <p className="text-slate-600">Loading...</p>
       </div>
     </div>
   );
