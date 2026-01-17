@@ -52,33 +52,28 @@ eventsRouter.post('/', async (req: Request, res: Response) => {
         end_time = ?
     `);
     
-    const processEvents = db.transaction((eventList: IncomingEvent[]) => {
-      const processedIds: string[] = [];
-      
-      for (const event of eventList) {
-        const eventId = event.id || uuidv4();
-        const { sessionId, userId, type, timestamp, ...data } = event;
-        
-        // Store event
-        insertEvent.run(
-          eventId,
-          sessionId,
-          userId || null,
-          type,
-          timestamp,
-          JSON.stringify(data)
-        );
-        
-        // Update session
-        updateSession.run(sessionId, userId || null, timestamp, timestamp);
-        
-        processedIds.push(eventId);
-      }
-      
-      return processedIds;
-    });
+    // Process events (sql.js doesn't support transactions, process sequentially)
+    const processedIds: string[] = [];
     
-    const processedIds = processEvents(events);
+    for (const event of events) {
+      const eventId = event.id || uuidv4();
+      const { sessionId, userId, type, timestamp, ...data } = event;
+      
+      // Store event
+      insertEvent.run(
+        eventId,
+        sessionId,
+        userId || null,
+        type,
+        timestamp,
+        JSON.stringify(data)
+      );
+      
+      // Update session
+      updateSession.run(sessionId, userId || null, timestamp, timestamp);
+      
+      processedIds.push(eventId);
+    }
     
     logger.debug(`Processed ${processedIds.length} events`);
     
