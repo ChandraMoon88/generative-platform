@@ -165,6 +165,20 @@ export async function initDatabase(): Promise<void> {
 }
 
 function createTables(): void {
+  // Users table - client authentication
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS users (
+      id TEXT PRIMARY KEY,
+      name TEXT NOT NULL,
+      email TEXT UNIQUE NOT NULL,
+      password TEXT NOT NULL,
+      created_at INTEGER NOT NULL,
+      updated_at INTEGER NOT NULL
+    )
+  `);
+  
+  db.exec(`CREATE INDEX IF NOT EXISTS idx_users_email ON users(email)`);
+  
   // Events table - stores raw events
   db.exec(`
     CREATE TABLE IF NOT EXISTS events (
