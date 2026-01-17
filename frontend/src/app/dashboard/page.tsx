@@ -45,7 +45,7 @@ export default function DashboardPage() {
   );
   const todayRevenue = todayOrders
     .filter((o) => o.paymentStatus === 'paid')
-    .reduce((sum, o) => sum + o.total, 0);
+    .reduce((sum, o) => sum + o.totalAmount, 0);
   const occupiedTables = tables.filter((t) => t.status === 'occupied').length;
   const unreadAlerts = alerts.filter((a) => !a.read);
   
