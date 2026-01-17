@@ -14,8 +14,8 @@ export default function Home() {
     if (token) {
       // Initialize instrumentation session
       initSession();
-      // Redirect to dashboard
-      router.push('/dashboard');
+      // Redirect to projects (user's workspace)
+      router.push('/projects');
     } else {
       // Redirect to login
       router.push('/login');
