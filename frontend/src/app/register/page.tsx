@@ -48,7 +48,9 @@ export default function ClientRegister() {
         localStorage.setItem('user_token', data.token);
         localStorage.setItem('user_email', formData.email);
         localStorage.setItem('user_id', data.userId);
-        router.push('/dashboard');
+        localStorage.setItem('user_role', data.user.role);
+        localStorage.setItem('user_name', data.user.name);
+        router.push('/projects');
       } else {
         setError(data.message || 'Registration failed');
       }
