@@ -9,7 +9,15 @@ import { logger } from '../utils/logger';
 import { PatternRecognitionEngine } from '../services/patternRecognition';
 
 export const patternsRouter = Router();
-const patternEngine = new PatternRecognitionEngine();
+let patternEngine: PatternRecognitionEngine | null = null;
+
+// Initialize pattern engine lazily
+function getPatternEngine(): PatternRecognitionEngine {
+  if (!patternEngine) {
+    patternEngine = new PatternRecognitionEngine();
+  }
+  return patternEngine;
+}
 
 /**
  * GET /api/patterns
