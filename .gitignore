@@ -140,3 +140,5 @@ env/
 
 # Generated files (keep templates, ignore outputs)
 generated-apps/
+.vercel
+.env*.local
