@@ -147,6 +147,35 @@ export function useInstrumentation(options: UseInstrumentationOptions) {
   const trackDelete = useCallback((id: string, data: unknown) => {
     logStateChange('delete', `${entityType}/${id}`, componentName, data, undefined);
   }, [entityType, componentName]);
+
+  // Combined CRUD tracking (convenience method)
+  const trackCRUD = useCallback((
+    operation: CRUDOperation,
+    entity: string,
+    id?: string,
+    data?: Record<string, unknown>,
+    previousData?: unknown
+  ) => {
+    const targetEntity = entity || entityType;
+    switch (operation) {
+      case 'create':
+        logStateChange('set', `${targetEntity}/create`, componentName, undefined, data);
+        break;
+      case 'read':
+        logInteraction(
+          'click',
+          { tagName: 'item', id: id || '' },
+          createSemanticAction('crud_read', 'read', `View ${targetEntity} ${id}`)
+        );
+        break;
+      case 'update':
+        logStateChange('update', `${targetEntity}/${id}`, componentName, previousData, data);
+        break;
+      case 'delete':
+        logStateChange('delete', `${targetEntity}/${id}`, componentName, data, undefined);
+        break;
+    }
+  }, [entityType, componentName, createSemanticAction]);
   
   // Track list interactions
   const trackListView = useCallback((items: unknown[], filters?: Record<string, unknown>) => {
