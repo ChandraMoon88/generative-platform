@@ -6,8 +6,10 @@
 import { Router, Request, Response } from 'express';
 import { getDatabase } from '../db/database';
 import { logger } from '../utils/logger';
+import { PatternRecognitionEngine } from '../services/patternRecognition';
 
 export const patternsRouter = Router();
+const patternEngine = new PatternRecognitionEngine();
 
 /**
  * GET /api/patterns
@@ -272,6 +274,32 @@ patternsRouter.get('/:id', async (req: Request, res: Response) => {
     res.status(500).json({
       error: 'Internal server error',
       message: 'Failed to fetch pattern',
+    });
+  }
+});
+
+/**
+ * POST /api/patterns/analyze/:sessionId
+ * Analyze a session for patterns
+ */
+patternsRouter.post('/analyze/:sessionId', async (req: Request, res: Response) => {
+  try {
+    const { sessionId } = req.params;
+    
+    logger.info(`Analyzing session ${sessionId} for patterns`);
+    const patterns = patternEngine.analyzeSession(sessionId);
+    
+    res.json({
+      success: true,
+      sessionId,
+      patternsFound: patterns.length,
+      patterns,
+    });
+  } catch (error) {
+    logger.error('Failed to analyze session', { error, sessionId: req.params.sessionId });
+    res.status(500).json({
+      error: 'Internal server error',
+      message: 'Failed to analyze session',
     });
   }
 });
