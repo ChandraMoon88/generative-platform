@@ -10,18 +10,16 @@ import {
   DataTable,
   CardGrid,
   DetailView,
-  UniversalForm,
   Button,
   Navbar,
   Modal,
-  Toast,
   KanbanBoard,
   MonthCalendar,
   SettingsPanel,
 } from '@/components/universal';
 
 // ========== RESTAURANT BOOKING DEMO ==========
-export function RestaurantBookingDemo() {
+function RestaurantBookingDemo() {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [showBookingForm, setShowBookingForm] = useState(false);
 
