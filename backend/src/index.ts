@@ -348,18 +348,34 @@ import { projectsRouter } from './api/projects';
 import { assetsRouter } from './api/assets';
 import { initDatabase } from './db/database';
 import { logger } from './utils/logger';
+import { 
+  rateLimiter, 
+  validateInput, 
+  csrfProtection, 
+  securityHeaders 
+} from './middleware/security';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// Middleware
+// Security middleware (FIRST)
+app.use(securityHeaders);
+app.use(rateLimiter);
+
+// Core middleware
 app.use(helmet());
 app.use(cors({
-  origin: ['http://localhost:3000', 'http://localhost:3002'],
+  origin: process.env.NODE_ENV === 'production' 
+    ? [process.env.FRONTEND_URL, process.env.VERCEL_URL].filter(Boolean)
+    : ['http://localhost:3000', 'http://localhost:3002'],
   credentials: true,
 }));
 app.use(compression());
-app.use(express.json({ limit: '10mb' }));
+app.use(express.json({ limit: '1mb' })); // Reduced from 10mb for security
+
+// Input validation and CSRF protection
+app.use(validateInput);
+app.use(csrfProtection);
 
 // Request logging
 app.use((req, res, next) => {
