@@ -48,9 +48,20 @@ interface RecognizedPattern {
  */
 export class PatternRecognitionEngine {
   private definitions: PatternDefinition[] = [];
+  private isInitialized = false;
   
   constructor() {
-    this.loadDefinitions();
+    // Don't load definitions immediately - wait until first use
+  }
+  
+  /**
+   * Initialize the engine - must be called before first use
+   */
+  private ensureInitialized(): void {
+    if (!this.isInitialized) {
+      this.loadDefinitions();
+      this.isInitialized = true;
+    }
   }
   
   /**
