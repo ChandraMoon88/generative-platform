@@ -467,52 +467,66 @@ export const useRestaurantStore = create<RestaurantState>((set, get) => ({
   },
   
   // Staff Actions
-  addStaffMember: (staffData) => {
-    const now = Date.now();
-    const newStaff: StaffMember = {
-      ...staffData,
-      id: uuidv4(),
-      createdAt: now,
-      updatedAt: now,
+  addStaff: (staffData) => {
+    const now = new Date().toISOString();
+    const newStaff: Staff = {
+      id: (staffData as Staff).id || uuidv4(),
+      name: staffData.name,
+      email: staffData.email,
+      phone: staffData.phone,
+      role: staffData.role,
+      hourlyRate: staffData.hourlyRate,
+      status: staffData.status || 'active',
+      assignedTables: staffData.assignedTables || [],
+      createdAt: (staffData as Staff).createdAt || now,
+      updatedAt: (staffData as Staff).updatedAt || now,
     };
     
     set((state) => {
-      logStateChange('set', 'staff/add', 'addStaffMember', undefined, newStaff);
+      logStateChange('set', 'staff/add', 'addStaff', undefined, newStaff);
       return { staff: [...state.staff, newStaff] };
     });
     
     return newStaff;
   },
   
-  updateStaffMember: (id, updates) => {
+  updateStaff: (id, updates) => {
     set((state) => {
       const index = state.staff.findIndex((s) => s.id === id);
       if (index === -1) return state;
       
       const oldStaff = state.staff[index];
-      const updatedStaff = { ...oldStaff, ...updates, updatedAt: Date.now() };
+      const updatedStaff = { ...oldStaff, ...updates, updatedAt: new Date().toISOString() };
       const newStaff = [...state.staff];
       newStaff[index] = updatedStaff;
       
-      logStateChange('update', `staff/${id}`, 'updateStaffMember', oldStaff, updatedStaff);
+      logStateChange('update', `staff/${id}`, 'updateStaff', oldStaff, updatedStaff);
       
       return { staff: newStaff };
     });
   },
   
-  deleteStaffMember: (id) => {
+  deleteStaff: (id) => {
     set((state) => {
       const staff = state.staff.find((s) => s.id === id);
-      logStateChange('delete', `staff/${id}`, 'deleteStaffMember', staff, undefined);
+      logStateChange('delete', `staff/${id}`, 'deleteStaff', staff, undefined);
       return { staff: state.staff.filter((s) => s.id !== id) };
     });
   },
   
   // Table Actions
   addTable: (tableData) => {
+    const now = new Date().toISOString();
     const newTable: Table = {
-      ...tableData,
-      id: uuidv4(),
+      id: (tableData as Table).id || uuidv4(),
+      tableNumber: tableData.tableNumber,
+      capacity: tableData.capacity,
+      status: tableData.status || 'available',
+      section: tableData.section,
+      minPartySize: tableData.minPartySize || 1,
+      maxPartySize: tableData.maxPartySize || tableData.capacity,
+      createdAt: (tableData as Table).createdAt || now,
+      updatedAt: (tableData as Table).updatedAt || now,
     };
     
     set((state) => {
@@ -521,6 +535,30 @@ export const useRestaurantStore = create<RestaurantState>((set, get) => ({
     });
     
     return newTable;
+  },
+
+  updateTable: (id, updates) => {
+    set((state) => {
+      const index = state.tables.findIndex((t) => t.id === id);
+      if (index === -1) return state;
+      
+      const oldTable = state.tables[index];
+      const updatedTable = { ...oldTable, ...updates, updatedAt: new Date().toISOString() };
+      const newTables = [...state.tables];
+      newTables[index] = updatedTable;
+      
+      logStateChange('update', `tables/${id}`, 'updateTable', oldTable, updatedTable);
+      
+      return { tables: newTables };
+    });
+  },
+
+  deleteTable: (id) => {
+    set((state) => {
+      const table = state.tables.find((t) => t.id === id);
+      logStateChange('delete', `tables/${id}`, 'deleteTable', table, undefined);
+      return { tables: state.tables.filter((t) => t.id !== id) };
+    });
   },
   
   updateTableStatus: (id, status, orderId) => {
