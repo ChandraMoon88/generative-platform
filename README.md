@@ -49,32 +49,56 @@ Open `http://localhost:3000/register` and create your account
 
 ---
 
-## 🌐 Deploy to Cloud (Free)
+## 🌐 Deploy to Vercel (Free)
 
-### Option 1: Deploy to Vercel ⚡
+Deploy your own instance in 3 simple steps:
 
-1. Fork this repository to your GitHub
-2. Sign up at **[vercel.com](https://vercel.com)** (free forever)
-3. Click **"New Project"** → Import your fork
-4. Click **"Deploy"** → Done in 30 seconds!
+### Step 1: Fork Repository
+Click the **"Fork"** button at the top of this page to create your own copy
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new)
+### Step 2: Deploy to Vercel
 
-### Option 2: Deploy to Netlify 🌐
+1. **Sign up** at [vercel.com](https://vercel.com) (100% free forever)
+2. Click **"New Project"**
+3. **Import** your forked repository from GitHub
+4. **Configure** (optional):
+   - Framework Preset: **Next.js** (auto-detected)
+   - Root Directory: `./` (leave default)
+   - Build Command: Leave default
+   - Environment Variables: Add later if needed
+5. Click **"Deploy"** 
 
-1. Fork this repository to your GitHub
-2. Sign up at **[netlify.com](https://netlify.com)** (free forever)
-3. Click **"Add new site"** → Import your fork
-4. Click **"Deploy"** → Your app is live!
+⚡ Your app will be live in ~30 seconds at: `https://your-app.vercel.app`
 
-[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com)
+### Step 3: Access Your App
 
-### Option 3: Deploy to Railway 🚂
+Visit your deployment URL and:
+- ✅ Create your admin account at `/register`
+- ✅ Browse 150+ components at `/components`
+- ✅ Start building projects
 
-1. Fork this repository
-2. Sign up at **[railway.app](https://railway.app)** (free tier)
-3. Import your repository
-4. Automatic deployment!
+### 🎯 One-Click Deploy
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/YOUR_USERNAME/generative-platform)
+
+---
+
+### 📝 Environment Variables (Optional)
+
+For production use, you can add these in Vercel Dashboard → Settings → Environment Variables:
+
+```bash
+# JWT Secret (for secure authentication)
+JWT_SECRET=your-random-secret-string-here
+
+# Database (Vercel provides SQLite by default)
+DATABASE_URL=file:./data/production.db
+
+# Frontend URL (auto-set by Vercel)
+FRONTEND_URL=https://your-app.vercel.app
+```
+
+**Note**: The app works out-of-the-box without setting any environment variables!
 
 ---
 
