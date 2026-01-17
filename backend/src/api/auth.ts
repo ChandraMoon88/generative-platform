@@ -8,12 +8,21 @@ import { getDatabase } from '../db/database';
 import { logger } from '../utils/logger';
 import { v4 as uuidv4 } from 'uuid';
 import * as crypto from 'crypto';
+import { isValidEmail, isValidPassword } from '../middleware/security';
 
 export const authRouter = Router();
 
-// Simple password hashing (in production, use bcrypt)
-function hashPassword(password: string): string {
-  return crypto.createHash('sha256').update(password).digest('hex');
+// Secure password hashing with salt
+function hashPassword(password: string, salt?: string): { hash: string; salt: string } {
+  const useSalt = salt || crypto.randomBytes(32).toString('hex');
+  const hash = crypto.pbkdf2Sync(password, useSalt, 10000, 64, 'sha512').toString('hex');
+  return { hash, salt: useSalt };
+}
+
+// Verify password
+function verifyPassword(password: string, hash: string, salt: string): boolean {
+  const { hash: newHash } = hashPassword(password, salt);
+  return hash === newHash;
 }
 
 /**
