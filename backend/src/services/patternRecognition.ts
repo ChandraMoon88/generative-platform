@@ -61,9 +61,9 @@ export class PatternRecognitionEngine {
       const db = getDatabase();
       const rows = db.prepare(`
         SELECT * FROM pattern_definitions WHERE is_active = 1
-      `).all() as Record<string, unknown>[];
+      `).all();
       
-      this.definitions = rows.map(row => ({
+      this.definitions = rows.map((row: any) => ({
         id: row.id as string,
         name: row.name as string,
         type: row.type as string,
@@ -72,7 +72,7 @@ export class PatternRecognitionEngine {
       
       logger.info(`Loaded ${this.definitions.length} pattern definitions`);
     } catch (error) {
-      logger.error('Failed to load pattern definitions', { error });
+      logger.error('Failed to load pattern definitions', { error: error instanceof Error ? error.message : String(error) });
     }
   }
   
