@@ -295,7 +295,7 @@ patternsRouter.post('/analyze/:sessionId', async (req: Request, res: Response) =
     const { sessionId } = req.params;
     
     logger.info(`Analyzing session ${sessionId} for patterns`);
-    const patterns = patternEngine.analyzeSession(sessionId);
+    const patterns = getPatternEngine().analyzeSession(sessionId);
     
     res.json({
       success: true,
