@@ -113,7 +113,7 @@ POST /api/webhook/app-built
          ↓
 Vercel backend receives app data
          ↓
-Sends POST to your ngrok URL
+Sends POST to your Cloudflare Tunnel URL
          ↓
 Your local sync service receives it
          ↓
@@ -243,7 +243,7 @@ Output: "Password must contain uppercase letter" (400)
 - [ ] Set environment variables
 - [ ] Deploy to production: `vercel --prod`
 - [ ] Start local sync service
-- [ ] Start ngrok: `ngrok http 4000`
+- [ ] Start Cloudflare Tunnel: `cloudflared tunnel --url http://localhost:4000`
 - [ ] Update ADMIN_WEBHOOK_URL in Vercel
 - [ ] Test app syncing
 
