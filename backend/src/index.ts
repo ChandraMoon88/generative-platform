@@ -47,6 +47,7 @@ app.use('/api/events', eventsRouter);
 app.use('/api/patterns', patternsRouter);
 app.use('/api/models', modelsRouter);
 app.use('/api/sessions', sessionsRouter);
+app.use('/api/generate', generatorRouter);
 
 // Error handling
 app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
