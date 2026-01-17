@@ -18,11 +18,11 @@ function hashPassword(password: string): string {
 
 /**
  * POST /api/auth/register
- * Register a new user
+ * Register a new user (defaults to 'client' role)
  */
 authRouter.post('/register', async (req: Request, res: Response) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, role } = req.body;
 
     if (!name || !email || !password) {
       return res.status(400).json({
@@ -42,27 +42,28 @@ authRouter.post('/register', async (req: Request, res: Response) => {
       });
     }
 
-    // Create user
+    // Create user (default role is 'client', only allow 'admin' if explicitly set)
     const userId = uuidv4();
     const hashedPassword = hashPassword(password);
     const createdAt = Date.now();
+    const userRole = role === 'admin' ? 'admin' : 'client';
 
     db.prepare(`
-      INSERT INTO users (id, name, email, password, created_at, updated_at)
-      VALUES (?, ?, ?, ?, ?, ?)
-    `).run(userId, name, email, hashedPassword, createdAt, createdAt);
+      INSERT INTO users (id, name, email, password, role, created_at, updated_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?)
+    `).run(userId, name, email, hashedPassword, userRole, createdAt, createdAt);
 
     // Generate simple token (userId:timestamp)
     const token = Buffer.from(`${userId}:${Date.now()}`).toString('base64');
 
-    logger.info(`User registered: ${email}`);
+    logger.info(`User registered: ${email} (role: ${userRole})`);
 
     res.status(201).json({
       success: true,
       message: 'Registration successful',
       userId,
       token,
-      user: { id: userId, name, email },
+      user: { id: userId, name, email, role: userRole },
     });
   } catch (error) {
     logger.error('Registration failed', { error });
