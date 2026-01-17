@@ -150,11 +150,11 @@ export default function DashboardPage() {
                     <div>
                       <p className="font-medium text-slate-800">{order.orderNumber}</p>
                       <p className="text-sm text-slate-500">
-                        {order.items.length} items • Table {order.tableNumber || 'Takeaway'}
+                        {order.items.length} items • Table {order.tableId || 'Takeaway'}
                       </p>
                     </div>
                     <div className="text-right">
-                      <p className="font-medium text-slate-800">${order.total.toFixed(2)}</p>
+                      <p className="font-medium text-slate-800">${order.totalAmount.toFixed(2)}</p>
                       <span className={`
                         text-xs px-2 py-1 rounded-full
                         ${order.status === 'completed' ? 'bg-green-100 text-green-700' :
