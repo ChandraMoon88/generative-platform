@@ -97,7 +97,7 @@ function RestaurantBookingDemo() {
 }
 
 // ========== PROJECT MANAGEMENT DEMO ==========
-export function ProjectManagementDemo() {
+function ProjectManagementDemo() {
   const [selectedTask, setSelectedTask] = useState<any>(null);
 
   const initialColumns = [
