@@ -118,28 +118,28 @@ export type PaymentMethod = 'cash' | 'card' | 'upi' | 'other';
 export type PaymentStatus = 'pending' | 'paid' | 'refunded';
 
 // Staff Member
-export interface StaffMember {
+export interface Staff {
   id: string;
   name: string;
   email: string;
-  phone: string;
+  phone?: string;
   role: StaffRole;
   hourlyRate: number;
-  hireDate: number;
+  hireDate?: string;
   status: 'active' | 'inactive';
+  assignedTables: string[];
   schedule?: WeeklySchedule;
-  createdAt: number;
-  updatedAt: number;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export type StaffRole = 
-  | 'owner'
   | 'manager'
-  | 'chef'
-  | 'cook'
+  | 'host'
   | 'waiter'
-  | 'cashier'
-  | 'host';
+  | 'chef'
+  | 'bartender'
+  | 'busser';
 
 export interface WeeklySchedule {
   monday?: Shift[];
