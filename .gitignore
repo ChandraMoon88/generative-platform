@@ -6,6 +6,11 @@ admin/**
 **/admin/**
 /admin/
 
+# Shared types - CRITICAL: Admin depends on these
+shared/
+shared/**
+**/shared/**
+
 # Internal documentation  
 ACCESS_CONTROL.md
 IMPLEMENTATION_SUMMARY.md
@@ -16,7 +21,15 @@ SECURITY_CHECKLIST.md
 GITHUB_SETUP.md
 USER_README.md
 GITHUB_README.md
+WORKFLOW.md
+VERIFICATION_COMPLETE.md
 plan.txt
+
+# Root utility scripts
+start-all.ps1
+stop-all.ps1
+auto-commit.ps1
+start-auto-commit.bat
 
 # Internal backend services
 backend/src/api/models.ts
