@@ -102,9 +102,9 @@ You'll get a URL like: `https://abc-def-ghi.trycloudflare.com`
 ### C. Update Vercel Environment Variable
 
 ```bash
-# Set the ngrok URL as your webhook endpoint
+# Set the Cloudflare Tunnel URL as your webhook endpoint
 vercel env add ADMIN_WEBHOOK_URL production
-# Enter: https://abc123.ngrok.io/webhook/apps
+# Enter: https://your-tunnel.trycloudflare.com/webhook/apps
 
 # Redeploy to apply the change
 vercel --prod
@@ -128,7 +128,7 @@ vercel --prod
 
 ```
 6. Backend webhook receives app data
-7. Backend sends POST request to your ngrok URL
+7. Backend sends POST request to your Cloudflare Tunnel URL
 8. Your local sync service receives the data
 9. App is saved to: user-apps/user_{userId}/{projectId}/
 ```
