@@ -13,6 +13,7 @@ import { modelsRouter } from './api/models';
 import { sessionsRouter } from './api/sessions';
 import { generatorRouter } from './api/generator';
 import { authRouter } from './api/auth';
+import { projectsRouter } from './api/projects';
 import { assetsRouter } from './api/assets';
 import { initDatabase } from './db/database';
 import { logger } from './utils/logger';
