@@ -172,6 +172,7 @@ function createTables(): void {
       name TEXT NOT NULL,
       email TEXT UNIQUE NOT NULL,
       password TEXT NOT NULL,
+      salt TEXT NOT NULL,
       role TEXT DEFAULT 'client' CHECK(role IN ('admin', 'client')),
       created_at INTEGER NOT NULL,
       updated_at INTEGER NOT NULL
