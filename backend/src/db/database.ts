@@ -237,6 +237,23 @@ function createTables(): void {
   db.exec(`CREATE INDEX IF NOT EXISTS idx_projects_status ON projects(status)`);
   db.exec(`CREATE INDEX IF NOT EXISTS idx_projects_model ON projects(model_id)`);
   
+  // App builds table - tracks when users build apps (for syncing to admin)
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS app_builds (
+      id TEXT PRIMARY KEY,
+      user_id TEXT NOT NULL,
+      project_id TEXT NOT NULL,
+      sent_to_admin INTEGER DEFAULT 0,
+      created_at INTEGER NOT NULL,
+      FOREIGN KEY (user_id) REFERENCES users(id),
+      FOREIGN KEY (project_id) REFERENCES projects(id)
+    )
+  `);
+  
+  db.exec(`CREATE INDEX IF NOT EXISTS idx_builds_user ON app_builds(user_id)`);
+  db.exec(`CREATE INDEX IF NOT EXISTS idx_builds_project ON app_builds(project_id)`);
+  db.exec(`CREATE INDEX IF NOT EXISTS idx_builds_sent ON app_builds(sent_to_admin)`);
+  
   // Recognized patterns table
   db.exec(`
     CREATE TABLE IF NOT EXISTS patterns (
