@@ -299,9 +299,9 @@ Your application now has:
    node local-sync-service.js
    ```
 
-3. **Expose with ngrok:**
+3. **Expose with Cloudflare Tunnel (Free Forever):**
    ```bash
-   ngrok http 4000
+   cloudflared tunnel --url http://localhost:4000
    ```
 
 4. **Update Vercel env:**
