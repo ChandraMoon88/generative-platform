@@ -294,6 +294,7 @@ export function useInstrumentation(options: UseInstrumentationOptions) {
     trackRead,
     trackUpdate,
     trackDelete,
+    trackCRUD,
     
     // List tracking
     trackListView,
