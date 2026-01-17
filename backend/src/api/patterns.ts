@@ -7,6 +7,7 @@ import { Router, Request, Response } from 'express';
 import { getDatabase } from '../db/database';
 import { logger } from '../utils/logger';
 import { PatternRecognitionEngine } from '../services/patternRecognition';
+import { getPatternEngine as getNewPatternEngine } from '../services/PatternRecognitionEngine';
 
 export const patternsRouter = Router();
 let patternEngine: PatternRecognitionEngine | null = null;
