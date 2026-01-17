@@ -582,18 +582,25 @@ export const useRestaurantStore = create<RestaurantState>((set, get) => ({
   },
   
   // Reservation Actions
-  createReservation: (reservationData) => {
-    const now = Date.now();
+  addReservation: (reservationData) => {
+    const now = new Date().toISOString();
     const newReservation: Reservation = {
-      ...reservationData,
-      id: uuidv4(),
-      status: 'pending',
-      createdAt: now,
-      updatedAt: now,
+      id: (reservationData as Reservation).id || uuidv4(),
+      customerName: reservationData.customerName,
+      customerPhone: reservationData.customerPhone,
+      customerEmail: reservationData.customerEmail,
+      partySize: reservationData.partySize,
+      tableId: reservationData.tableId,
+      date: reservationData.date,
+      time: reservationData.time,
+      specialRequests: reservationData.specialRequests,
+      status: (reservationData as Reservation).status || 'pending',
+      createdAt: (reservationData as Reservation).createdAt || now,
+      updatedAt: (reservationData as Reservation).updatedAt || now,
     };
     
     set((state) => {
-      logStateChange('set', 'reservations/create', 'createReservation', undefined, newReservation);
+      logStateChange('set', 'reservations/add', 'addReservation', undefined, newReservation);
       return { reservations: [...state.reservations, newReservation] };
     });
     
@@ -606,13 +613,21 @@ export const useRestaurantStore = create<RestaurantState>((set, get) => ({
       if (index === -1) return state;
       
       const oldReservation = state.reservations[index];
-      const updatedReservation = { ...oldReservation, ...updates, updatedAt: Date.now() };
+      const updatedReservation = { ...oldReservation, ...updates, updatedAt: new Date().toISOString() };
       const newReservations = [...state.reservations];
       newReservations[index] = updatedReservation;
       
       logStateChange('update', `reservations/${id}`, 'updateReservation', oldReservation, updatedReservation);
       
       return { reservations: newReservations };
+    });
+  },
+
+  deleteReservation: (id) => {
+    set((state) => {
+      const reservation = state.reservations.find((r) => r.id === id);
+      logStateChange('delete', `reservations/${id}`, 'deleteReservation', reservation, undefined);
+      return { reservations: state.reservations.filter((r) => r.id !== id) };
     });
   },
   
