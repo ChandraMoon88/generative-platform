@@ -176,17 +176,18 @@ export type TableStatus = 'available' | 'occupied' | 'reserved' | 'cleaning' | '
 export interface Reservation {
   id: string;
   customerName: string;
-  customerPhone: string;
+  customerPhone?: string;
   customerEmail?: string;
   partySize: number;
   tableId?: string;
-  date: number;
+  date: string;
   time: string;
-  duration: number; // minutes
+  duration?: number; // minutes
   status: ReservationStatus;
+  specialRequests?: string;
   notes?: string;
-  createdAt: number;
-  updatedAt: number;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export type ReservationStatus = 
@@ -195,7 +196,7 @@ export type ReservationStatus =
   | 'seated'
   | 'completed'
   | 'cancelled'
-  | 'no_show';
+  | 'no-show';
 
 // Customer (for loyalty/tracking)
 export interface Customer {
