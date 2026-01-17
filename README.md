@@ -1,6 +1,25 @@
 # Generative Platform
 
-A platform that learns from user interactions and generates new applications based on observed patterns.
+A gamified platform that learns from user interactions and generates real applications - users think they're playing a game, but they're actually building production-ready apps!
+
+## 🔐 Security & Authentication
+
+### Admin Access (Port 3002)
+- **Protected with credentials from `.env` file**
+- Only you have access
+- Never commit `.env` to GitHub (already in `.gitignore`)
+- Credentials stored in: `admin/.env`
+
+```env
+ADMIN_EMAIL=admin@generativeplatform.com
+ADMIN_PASSWORD=Admin2026Secure!
+```
+
+### Client Access (Port 3000)
+- Users register and login
+- They think it's a "game" or "creative tool"
+- Actually building real applications in the background
+- Each user has their own workspace and built apps
 
 ## Architecture
 
