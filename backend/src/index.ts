@@ -13,6 +13,7 @@ import { modelsRouter } from './api/models';
 import { sessionsRouter } from './api/sessions';
 import { generatorRouter } from './api/generator';
 import { authRouter } from './api/auth';
+import { assetsRouter } from './api/assets';
 import { initDatabase } from './db/database';
 import { logger } from './utils/logger';
 
@@ -50,6 +51,7 @@ app.use('/api/patterns', patternsRouter);
 app.use('/api/models', modelsRouter);
 app.use('/api/sessions', sessionsRouter);
 app.use('/api/generate', generatorRouter);
+app.use('/api/assets', assetsRouter);
 
 // Error handling
 app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
