@@ -273,6 +273,23 @@ function createTables(): void {
     )
   `);
   
+  // User assets table - stores user-uploaded assets
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS user_assets (
+      id TEXT PRIMARY KEY,
+      session_id TEXT NOT NULL,
+      type TEXT NOT NULL,
+      name TEXT NOT NULL,
+      data TEXT NOT NULL,
+      url TEXT,
+      metadata TEXT NOT NULL,
+      created_at INTEGER NOT NULL
+    )
+  `);
+  
+  db.exec(`CREATE INDEX IF NOT EXISTS idx_user_assets_session ON user_assets(session_id)`);
+  db.exec(`CREATE INDEX IF NOT EXISTS idx_user_assets_type ON user_assets(type)`);
+  
   // Insert default pattern definitions
   insertDefaultPatternDefinitions();
 }
