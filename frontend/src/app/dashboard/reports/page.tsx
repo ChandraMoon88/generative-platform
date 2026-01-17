@@ -11,12 +11,12 @@ import { useInstrumentation } from '@/hooks/useInstrumentation';
 
 export default function ReportsPage() {
   const { orders, tables, staff, menuItems, reservations } = useRestaurantStore();
-  const { trackPageView } = useInstrumentation();
+  const { trackListView } = useInstrumentation({ componentName: 'ReportsPage', entityType: 'report' });
   const [dateRange, setDateRange] = useState<'today' | 'week' | 'month'>('today');
 
   useEffect(() => {
-    trackPageView('/dashboard/reports', { page: 'reports' });
-  }, []);
+    trackListView([{ page: 'reports' }], { dateRange });
+  }, [dateRange, trackListView]);
 
   // Calculate statistics
   const completedOrders = orders.filter(o => o.status === 'completed');
