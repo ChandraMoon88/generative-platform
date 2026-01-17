@@ -165,19 +165,21 @@ export async function initDatabase(): Promise<void> {
 }
 
 function createTables(): void {
-  // Users table - client authentication
+  // Users table - client authentication with role-based access
   db.exec(`
     CREATE TABLE IF NOT EXISTS users (
       id TEXT PRIMARY KEY,
       name TEXT NOT NULL,
       email TEXT UNIQUE NOT NULL,
       password TEXT NOT NULL,
+      role TEXT DEFAULT 'client' CHECK(role IN ('admin', 'client')),
       created_at INTEGER NOT NULL,
       updated_at INTEGER NOT NULL
     )
   `);
   
   db.exec(`CREATE INDEX IF NOT EXISTS idx_users_email ON users(email)`);
+  db.exec(`CREATE INDEX IF NOT EXISTS idx_users_role ON users(role)`);
   
   // Events table - stores raw events
   db.exec(`
@@ -211,6 +213,28 @@ function createTables(): void {
   
   db.exec(`CREATE INDEX IF NOT EXISTS idx_sessions_user ON sessions(user_id)`);
   db.exec(`CREATE INDEX IF NOT EXISTS idx_sessions_start ON sessions(start_time)`);
+  
+  // Projects table - user-owned applications
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS projects (
+      id TEXT PRIMARY KEY,
+      user_id TEXT NOT NULL,
+      name TEXT NOT NULL,
+      description TEXT,
+      model_id TEXT,
+      status TEXT DEFAULT 'draft' CHECK(status IN ('draft', 'building', 'completed', 'deployed')),
+      config TEXT,
+      generated_files TEXT,
+      created_at INTEGER NOT NULL,
+      updated_at INTEGER NOT NULL,
+      FOREIGN KEY (user_id) REFERENCES users(id),
+      FOREIGN KEY (model_id) REFERENCES app_models(id)
+    )
+  `);
+  
+  db.exec(`CREATE INDEX IF NOT EXISTS idx_projects_user ON projects(user_id)`);
+  db.exec(`CREATE INDEX IF NOT EXISTS idx_projects_status ON projects(status)`);
+  db.exec(`CREATE INDEX IF NOT EXISTS idx_projects_model ON projects(model_id)`);
   
   // Recognized patterns table
   db.exec(`
