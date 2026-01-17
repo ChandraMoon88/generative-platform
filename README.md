@@ -1,103 +1,55 @@
-# Generative Platform
+# 🎨 Component Library Platform
 
-A gamified platform that learns from user interactions and generates real applications - users think they're playing a game, but they're actually building production-ready apps!
+**Build applications faster with 150+ production-ready React components**
 
-## 🔐 Security & Authentication
-
-### Admin Access (Port 3002)
-- **Protected with credentials from `.env` file**
-- Only you have access
-- Never commit `.env` to GitHub (already in `.gitignore`)
-- Credentials stored in: `admin/.env`
-
-```env
-ADMIN_EMAIL=admin@generativeplatform.com
-ADMIN_PASSWORD=Admin2026Secure!
-```
-
-### Client Access (Port 3000)
-- Users register and login
-- They think it's a "game" or "creative tool"
-- Actually building real applications in the background
-- Each user has their own workspace and built apps
-
-## Architecture
-
-The platform consists of **3 separate servers**:
-
-### 1. **Client Server** (Port 3000)
-**Purpose:** Demo application for end users to interact with  
-**Location:** `./frontend/`  
-**Example:** Restaurant management dashboard  
-
-This is where users perform their tasks (create orders, manage staff, etc). All interactions are instrumented and sent to the backend.
-
-```bash
-cd frontend
-npm run dev
-```
-
-Access: http://localhost:3000
+A comprehensive component library for building modern web applications. Browse, preview, and use universal components designed for any type of application.
 
 ---
 
-### 2. **Backend API** (Port 3001)
-**Purpose:** Event collection, pattern recognition, model synthesis, code generation  
-**Location:** `./backend/`  
+## ✨ Features
 
-Handles:
-- Event collection from client
-- Pattern recognition
-- Application model synthesis
-- Code generation
+- 🧩 **150+ Components** - Buttons, forms, charts, animations, 3D, games, and more
+- 🔍 **Smart Search** - Find exactly what you need instantly
+- 👁️ **Live Previews** - See components in action before using
+- 📱 **Project Management** - Organize your applications
+- 🎯 **30+ Categories** - From basic UI to advanced game development
+- 📝 **Code Examples** - Copy-paste ready implementations
 
+---
+
+## 🚀 Quick Start
+
+### Prerequisites
+- Node.js 18 or higher
+- npm or yarn
+
+### Installation
+
+**1. Clone the repository**
+```bash
+git clone <your-repo-url>
+cd generative-platform
+```
+
+**2. Install and start backend**
 ```bash
 cd backend
+npm install
 npm run dev
 ```
+Backend runs on **http://localhost:3001**
 
-API Endpoints:
-- `POST /api/events` - Collect events
-- `GET /api/sessions` - View sessions
-- `POST /api/patterns/analyze/:sessionId` - Analyze patterns
-- `POST /api/models/synthesize` - Create app models
-- `POST /api/generator/generate` - Generate code
-
----
-
-### 3. **Admin Server** (Port 3002)
-**Purpose:** Admin dashboard for developers/platform operators  
-**Location:** `./admin/`  
-
-Features:
-- View collected events
-- Analyze recognized patterns
-- Browse session recordings
-- View synthesized models
-- Generate and download code
-- Pattern configuration
-
+**3. Install and start frontend** (new terminal)
 ```bash
-cd admin
+cd frontend
+npm install
 npm run dev
 ```
+Frontend runs on **http://localhost:3000**
 
-Access: http://localhost:3002
-
----
-
-## How It Works
-
+**4. Open browser**
 ```
-┌─────────────────────┐
-│   Client Server     │  Port 3000 - Users interact with demo app
-│  (Demo Restaurant)  │  (creates orders, manages staff, etc.)
-└──────────┬──────────┘
-           │ Events (clicks, forms, navigation)
-           ↓
-┌─────────────────────┐
-│   Backend API       │  Port 3001 - Processes events
-│  (Event Collection) │  - Stores events in SQLite
+http://localhost:3000
 │  (Pattern Engine)   │  - Recognizes patterns
 │  (Code Generator)   │  - Synthesizes models
 └──────────┬──────────┘  - Generates code

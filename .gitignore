@@ -1,3 +1,32 @@
+# ========================================
+# KEEP ADMIN PRIVATE - DO NOT COMMIT
+# ========================================
+admin/
+admin/**
+**/admin/**
+/admin/
+
+# Internal documentation  
+ACCESS_CONTROL.md
+IMPLEMENTATION_SUMMARY.md
+ARCHITECTURE_DIAGRAM.txt
+STATUS.txt
+SECURITY.md
+SECURITY_CHECKLIST.md
+GITHUB_SETUP.md
+USER_README.md
+GITHUB_README.md
+plan.txt
+
+# Internal backend services
+backend/src/api/models.ts
+backend/src/api/patterns.ts
+backend/src/api/generator.ts
+backend/src/services/
+backend/src/services/**
+backend/data/
+backend/logs/
+
 # Dependencies
 node_modules/
 .pnpm-store/
