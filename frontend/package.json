@@ -1,5 +1,5 @@
 {
-  "name": "generative-platform-frontend",
+  "name": "generative-platform-client",
   "version": "1.0.0",
   "private": true,
   "scripts": {
