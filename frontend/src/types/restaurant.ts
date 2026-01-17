@@ -72,20 +72,20 @@ export interface Supplier {
 export interface Order {
   id: string;
   orderNumber: string;
-  tableNumber?: number;
+  tableId?: string;
   customerName?: string;
   items: OrderItem[];
   status: OrderStatus;
   subtotal: number;
   tax: number;
   tip?: number;
-  total: number;
+  totalAmount: number;
   paymentMethod?: PaymentMethod;
   paymentStatus: PaymentStatus;
   notes?: string;
-  createdAt: number;
-  updatedAt: number;
-  completedAt?: number;
+  createdAt: string;
+  updatedAt: string;
+  completedAt?: string;
 }
 
 export interface OrderItem {
