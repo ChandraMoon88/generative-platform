@@ -27,6 +27,24 @@ backend/src/services/**
 backend/data/
 backend/logs/
 
+# User-generated apps - NEVER COMMIT
+generated-apps/
+user-apps/
+user-builds/
+generated/
+builds/
+**/generated-apps/**
+**/user-apps/**
+**/user-builds/**
+frontend/generated/
+backend/generated/
+admin/generated/
+
+# User project files - stored locally only
+project-files/
+user-projects/
+**/project-files/**
+
 # Dependencies
 node_modules/
 .pnpm-store/
