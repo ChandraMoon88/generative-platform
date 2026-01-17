@@ -51,17 +51,26 @@ export function useInstrumentation(options: UseInstrumentationOptions) {
     description: description || `${pattern} on ${entityType || 'unknown'}`,
   }), [entityType]);
   
-  // Track click with semantic meaning
+  // Track click with semantic meaning - supports HTMLElement or string identifier
   const trackClick = useCallback((
-    element: HTMLElement,
-    pattern: PatternType,
-    operation?: CRUDOperation,
+    elementOrId: HTMLElement | string,
+    patternOrEntity?: PatternType | string,
+    operationOrMeta?: CRUDOperation | Record<string, unknown>,
     description?: string
   ) => {
+    const target = typeof elementOrId === 'string' 
+      ? { tagName: 'button', id: elementOrId, attributes: {} }
+      : extractElementTarget(elementOrId);
+    const pattern: PatternType = (typeof patternOrEntity === 'string' && !['crud_create', 'crud_read', 'crud_update', 'crud_delete'].includes(patternOrEntity))
+      ? 'crud_read' 
+      : (patternOrEntity as PatternType) || 'crud_read';
+    const operation = typeof operationOrMeta === 'string' ? operationOrMeta as CRUDOperation : undefined;
+    
     logInteraction(
       'click',
-      extractElementTarget(element),
-      createSemanticAction(pattern, operation, description)
+      target,
+      createSemanticAction(pattern, operation, description),
+      typeof operationOrMeta === 'object' ? operationOrMeta : undefined
     );
   }, [createSemanticAction]);
   
