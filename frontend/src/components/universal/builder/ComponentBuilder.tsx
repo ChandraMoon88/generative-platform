@@ -311,7 +311,7 @@ export function DynamicFormBuilder({
     setEditingField(newField);
   };
 
-  const updateField = (fieldId: string, updates: Partial<FormField>) => {
+  const updateField = (fieldId: string, updates: Partial<BuilderFormField>) => {
     setFields(fields.map((f) => (f.id === fieldId ? { ...f, ...updates } : f)));
   };
 
