@@ -89,18 +89,18 @@ export const ComponentShowcase: React.FC = () => {
 // <Badge id="badge-3" content="Sale" variant="success" />
 // <Badge id="badge-4" content="Hot" variant="danger" />`
       // },
-      ProgressBar: {
-        component: (
-          <div className="space-y-4">
-            <UniversalComponents.ProgressBar id="demo-progress-1" value={25} max={100} showLabel />
-            <UniversalComponents.ProgressBar id="demo-progress-2" value={50} max={100} showLabel variant="success" />
-            <UniversalComponents.ProgressBar id="demo-progress-3" value={75} max={100} showLabel variant="warning" />
-          </div>
-        ),
-        code: `<ProgressBar id="progress-1" value={25} max={100} showLabel />
-<ProgressBar id="progress-2" value={50} max={100} showLabel variant="success" />
-<ProgressBar id="progress-3" value={75} max={100} showLabel variant="warning" />`
-      },
+      // ProgressBar: {
+      //   component: (
+      //     <div className="space-y-4">
+      //       <UniversalComponents.ProgressBar id="demo-progress-1" value={25} max={100} showLabel />
+      //       <UniversalComponents.ProgressBar id="demo-progress-2" value={50} max={100} showLabel variant="success" />
+      //       <UniversalComponents.ProgressBar id="demo-progress-3" value={75} max={100} showLabel variant="warning" />
+      //     </div>
+      //   ),
+      //   code: `<ProgressBar id="progress-1" value={25} max={100} showLabel />
+// <ProgressBar id="progress-2" value={50} max={100} showLabel variant="success" />
+// <ProgressBar id="progress-3" value={75} max={100} showLabel variant="warning" />`
+      // },
     };
 
     return examples[componentName] || {
