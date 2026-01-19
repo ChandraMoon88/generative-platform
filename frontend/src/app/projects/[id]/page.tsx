@@ -9,6 +9,9 @@ import React, { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import ComponentShowcase from '@/components/ComponentShowcase';
 
+// Force dynamic rendering for this page
+export const dynamic = 'force-dynamic';
+
 interface Project {
   id: string;
   user_id: string;
