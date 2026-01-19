@@ -180,12 +180,12 @@ export function FileUpload({
         reader.readAsDataURL(file);
 
         // Store in user assets
-        await userAssetManager.addAsset({
-          type: 'image',
-          name: file.name,
-          data: reader.result as string,
-          context: { uploadedFrom: id },
-        });
+        // await userAssetManager.addAsset({
+        //   type: 'image',
+        //   name: file.name,
+        //   data: reader.result as string,
+        //   context: { uploadedFrom: id },
+        // });
       }
     }
 
