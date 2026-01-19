@@ -186,26 +186,24 @@ const gameStructure = {
           { id: "typ6", type: "text", question: "Using semiotics, explain how your typography creates meaning through connotation vs. denotation.", placeholder: "Type connotes cultural meaning by...", points: 200 }
         ]
       },
-          { id: "typ5", type: "choice", question: "Text weight for emphasis?", options: ["Bold & Strong", "Medium Balance", "Light & Airy", "Variable Mix"], points: 100 }
-        ]
-      },
       {
         id: "spacing-rhythm",
-        name: "Mastering Rhythm & Spacing",
+        name: "Spatial Mathematics",
         challenges: [
-          { id: "spa1", type: "choice", question: "How should elements breathe?", options: ["Lots of Space", "Comfortable", "Compact", "Tight & Packed"], points: 150 },
-          { id: "spa2", type: "choice", question: "Create visual rhythm with:", options: ["Regular Patterns", "Varied Sizes", "Alternating Styles", "Random Flow"], points: 150 },
-          { id: "spa3", type: "slider", question: "Padding around content?", min: 0, max: 100, points: 100 },
-          { id: "spa4", type: "choice", question: "Margins between sections?", options: ["Large Gaps", "Medium Space", "Small Breaks", "Minimal Separation"], points: 100 }
+          { id: "spa1", type: "choice", question: "Apply modular scale theory: how should spatial intervals create mathematical harmony?", options: ["Fibonacci Sequence: Natural Growth", "Perfect Fourths: Musical Harmony", "Geometric Progression: Exponential Scale", "Prime Numbers: Irregular Rhythm"], points: 200 },
+          { id: "spa2", type: "choice", question: "🎵 Rhythm Game: Your layout is a percussion piece. What beat pattern?", options: ["4/4 Time: Stable March", "3/4 Waltz: Flowing Grace", "5/4 Complex: Unexpected Rhythm", "Polyrhythm: Layered Complexity"], points: 150 },
+          { id: "spa3", type: "slider", question: "Set the density parameter (0=sparse, 100=packed) for information architecture", min: 0, max: 100, points: 100 },
+          { id: "spa4", type: "text", question: "Describe your whitespace philosophy using Gestalt's law of proximity and common fate.", placeholder: "Whitespace functions as...", points: 200 }
         ]
       },
       {
         id: "visual-hierarchy",
-        name: "Building Visual Hierarchy",
+        name: "Attention Economics",
         challenges: [
-          { id: "vis1", type: "ranking", question: "Rank importance of elements:", items: ["Headline", "Image", "Description", "Action Button"], points: 200 },
-          { id: "vis2", type: "choice", question: "Guide attention through:", options: ["Size Contrast", "Color Emphasis", "Position Flow", "Animation"], points: 150 },
-          { id: "vis3", type: "choice", question: "Secondary information should:", options: ["Fade to Background", "Complement Primary", "Create Balance", "Add Details"], points: 150 }
+          { id: "vis1", type: "choice", question: "Using visual saliency models from neuroscience, what captures attention first?", options: ["Chromatic Contrast: Color Opposition", "Luminance Discontinuity: Light-Dark Edges", "Motion Vectors: Animated Elements", "Semantic Anomaly: Unexpected Content"], points: 200 },
+          { id: "vis2", type: "choice", question: "🎯 Target Practice: Design a visual pathway using saccadic eye movements. What's your strategy?", options: ["Z-Pattern: Western Reading", "F-Pattern: Content Scanning", "Circular: Centered Focus", "Random Walk: Exploration"], points: 150 },
+          { id: "vis3", type: "text", question: "Apply information theory: how does your hierarchy minimize cognitive entropy while maximizing signal clarity?", placeholder: "Information flows with minimal entropy through...", points: 250 },
+          { id: "vis4", type: "choice", question: "How does figure-ground relationship create perceptual layering in your design?", options: ["Strong Contrast: Clear Separation", "Ambiguous Edges: Integrated Layers", "Reversible Figure: Dual Reading", "Transparent Overlay: Blended Depth"], points: 150 }
         ]
       }
     ]
