@@ -194,6 +194,20 @@ function createTables(): void {
   db.exec(`CREATE INDEX IF NOT EXISTS idx_users_email ON users(email)`);
   db.exec(`CREATE INDEX IF NOT EXISTS idx_users_role ON users(role)`);
   
+  // Application models table - MUST be created before projects table
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS app_models (
+      id TEXT PRIMARY KEY,
+      version TEXT NOT NULL,
+      name TEXT NOT NULL,
+      description TEXT,
+      data TEXT NOT NULL,
+      pattern_ids TEXT,
+      confidence REAL,
+      created_at INTEGER DEFAULT (strftime('%s', 'now') * 1000)
+    )
+  `);
+  
   // Events table - stores raw events
   db.exec(`
     CREATE TABLE IF NOT EXISTS events (
@@ -284,20 +298,6 @@ function createTables(): void {
   
   db.exec(`CREATE INDEX IF NOT EXISTS idx_patterns_session ON patterns(session_id)`);
   db.exec(`CREATE INDEX IF NOT EXISTS idx_patterns_type ON patterns(type)`);
-  
-  // Application models table
-  db.exec(`
-    CREATE TABLE IF NOT EXISTS app_models (
-      id TEXT PRIMARY KEY,
-      version TEXT NOT NULL,
-      name TEXT NOT NULL,
-      description TEXT,
-      data TEXT NOT NULL,
-      pattern_ids TEXT,
-      confidence REAL,
-      created_at INTEGER DEFAULT (strftime('%s', 'now') * 1000)
-    )
-  `);
   
   // Pattern definitions table
   db.exec(`
