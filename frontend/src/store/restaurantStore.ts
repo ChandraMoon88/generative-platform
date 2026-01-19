@@ -715,7 +715,7 @@ export const useRestaurantStore = create<RestaurantState>((set, get) => ({
       name: 'Classic Burger',
       description: 'Juicy beef patty with fresh vegetables and special sauce',
       price: 12.99,
-      category: 'main_course',
+      category: 'main',
       ingredients: ['beef', 'lettuce', 'tomato', 'onion', 'cheese', 'bun'],
       preparationTime: 15,
       isAvailable: true,
