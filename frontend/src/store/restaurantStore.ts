@@ -684,7 +684,7 @@ export const useRestaurantStore = create<RestaurantState>((set, get) => ({
       ...alertData,
       id: uuidv4(),
       read: false,
-      createdAt: new Date().toISOString(),
+      createdAt: Date.now(),
     };
     
     set((state) => ({ alerts: [newAlert, ...state.alerts] }));
