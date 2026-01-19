@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import RestaurantDemo from './RestaurantDemo';
+import EnvironmentDemo from './EnvironmentDemo';
 
 interface GameState {
   phase: 'welcome' | 'demo' | 'domain-selection' | 'gameplay' | 'reveal';
@@ -13,70 +13,91 @@ interface GameState {
 
 const domains = [
   { 
-    id: 'restaurant', 
-    name: 'Food Haven', 
-    emoji: '🍽️', 
-    description: 'Create your dream dining experience',
-    color: 'from-orange-400 to-red-500'
+    id: 'sunset', 
+    name: 'Sunset Paradise', 
+    emoji: '🌅', 
+    description: 'Warm, vibrant, and energetic vibes',
+    color: 'from-orange-400 via-red-500 to-pink-500'
   },
   { 
-    id: 'store', 
-    name: 'Shop World', 
-    emoji: '🛍️', 
-    description: 'Design the ultimate shopping destination',
-    color: 'from-blue-400 to-purple-500'
+    id: 'ocean', 
+    name: 'Ocean Breeze', 
+    emoji: '🌊', 
+    description: 'Cool, calm, and refreshing atmosphere',
+    color: 'from-blue-400 via-cyan-500 to-teal-500'
   },
   { 
-    id: 'portfolio', 
-    name: 'Creative Studio', 
-    emoji: '🎨', 
-    description: 'Showcase your artistic vision',
-    color: 'from-pink-400 to-purple-500'
+    id: 'forest', 
+    name: 'Forest Haven', 
+    emoji: '🌲', 
+    description: 'Natural, grounded, and peaceful energy',
+    color: 'from-green-400 via-emerald-500 to-lime-500'
   },
   { 
-    id: 'fitness', 
-    name: 'Fit Life', 
-    emoji: '💪', 
-    description: 'Build a wellness community',
-    color: 'from-green-400 to-teal-500'
+    id: 'cosmic', 
+    name: 'Cosmic Dreams', 
+    emoji: '🌌', 
+    description: 'Mysterious, deep, and inspiring space',
+    color: 'from-purple-500 via-indigo-600 to-blue-700'
   },
   { 
-    id: 'education', 
-    name: 'Learn Hub', 
-    emoji: '📚', 
-    description: 'Create an inspiring learning space',
-    color: 'from-yellow-400 to-orange-500'
+    id: 'sunrise', 
+    name: 'Sunrise Glow', 
+    emoji: '🌄', 
+    description: 'Fresh, hopeful, and bright beginnings',
+    color: 'from-yellow-300 via-orange-400 to-pink-400'
   },
   { 
-    id: 'travel', 
-    name: 'Wanderlust', 
-    emoji: '✈️', 
-    description: 'Design adventures around the world',
-    color: 'from-cyan-400 to-blue-500'
+    id: 'midnight', 
+    name: 'Midnight Magic', 
+    emoji: '✨', 
+    description: 'Elegant, sophisticated, and luxurious feel',
+    color: 'from-gray-800 via-purple-900 to-black'
   }
 ];
 
 const gameTasks = {
-  restaurant: [
-    { id: 1, question: "What feeling should guests have when they arrive?", options: ["Cozy & Warm", "Elegant & Sophisticated", "Fun & Energetic", "Peaceful & Calm"], component: 'hero' },
-    { id: 2, question: "What's the star of your menu?", options: ["Italian Pasta", "Gourmet Burgers", "Sushi Rolls", "Mexican Tacos"], component: 'menu' },
-    { id: 3, question: "How should guests discover your story?", options: ["Video Journey", "Photo Gallery", "Written Tale", "Timeline"], component: 'about' },
-    { id: 4, question: "What makes booking easy?", options: ["Quick Form", "Calendar View", "Chat Booking", "Phone Button"], component: 'booking' },
-    { id: 5, question: "How do you showcase reviews?", options: ["Star Ratings", "Story Cards", "Video Reviews", "Social Feed"], component: 'testimonials' }
+  sunset: [
+    { id: 1, question: "How should visitors feel when they arrive?", options: ["Energized & Excited", "Welcomed & Comfortable", "Curious & Engaged", "Inspired & Motivated"], component: 'hero' },
+    { id: 2, question: "What mood should your colors create?", options: ["Bold & Powerful", "Warm & Cozy", "Playful & Fun", "Elegant & Refined"], component: 'theme' },
+    { id: 3, question: "How do you want to tell your story?", options: ["Big Visual Impact", "Personal Journey", "Simple & Direct", "Creative & Unique"], component: 'content' },
+    { id: 4, question: "What action should stand out most?", options: ["Let's Start!", "Learn More", "Join Now", "Get in Touch"], component: 'cta' },
+    { id: 5, question: "How should sections flow together?", options: ["Smooth Transitions", "Clear Divisions", "Surprising Elements", "Consistent Rhythm"], component: 'layout' }
   ],
-  store: [
-    { id: 1, question: "What catches shoppers' attention first?", options: ["Big Banner Sale", "Product Carousel", "Video Hero", "Search Bar"], component: 'hero' },
-    { id: 2, question: "How should products be displayed?", options: ["Grid Gallery", "Card List", "Masonry Wall", "Slider"], component: 'products' },
-    { id: 3, question: "What helps customers decide?", options: ["Star Reviews", "Image Zoom", "Size Guide", "Compare Tool"], component: 'details' },
-    { id: 4, question: "How should checkout feel?", options: ["Quick 1-Click", "Step-by-Step", "Side Cart", "Full Page"], component: 'cart' },
-    { id: 5, question: "What builds trust?", options: ["Customer Photos", "Brand Story", "Guarantees", "Awards"], component: 'trust' }
+  ocean: [
+    { id: 1, question: "What feeling greets your visitors?", options: ["Peaceful & Calm", "Fresh & Clean", "Open & Free", "Trustworthy & Safe"], component: 'hero' },
+    { id: 2, question: "What vibe do your colors give?", options: ["Cool & Refreshing", "Minimal & Modern", "Light & Airy", "Professional & Clear"], component: 'theme' },
+    { id: 3, question: "How should content breathe?", options: ["Spacious & Open", "Organized & Clean", "Flowing & Natural", "Balanced & Centered"], component: 'content' },
+    { id: 4, question: "What invites interaction?", options: ["Gentle Invitation", "Clear Direction", "Subtle Prompts", "Confident Call"], component: 'cta' },
+    { id: 5, question: "How do elements connect?", options: ["Seamless Flow", "Wave-like Motion", "Layered Depth", "Harmonious Balance"], component: 'layout' }
   ],
-  portfolio: [
-    { id: 1, question: "How do you introduce yourself?", options: ["Bold Statement", "Animated Name", "Video Intro", "Creative Bio"], component: 'hero' },
-    { id: 2, question: "How should projects be showcased?", options: ["Full Screen Gallery", "Grid Tiles", "Masonry Layout", "Slider"], component: 'portfolio' },
-    { id: 3, question: "What tells your story best?", options: ["Timeline", "Skills Chart", "About Page", "Process"], component: 'about' },
-    { id: 4, question: "How can people reach you?", options: ["Contact Form", "Email Button", "Social Links", "Chat"], component: 'contact' },
-    { id: 5, question: "What shows your expertise?", options: ["Client Logos", "Testimonials", "Certifications", "Case Studies"], component: 'proof' }
+  forest: [
+    { id: 1, question: "What atmosphere welcomes people?", options: ["Grounded & Stable", "Natural & Organic", "Comfortable & Safe", "Growth & Progress"], component: 'hero' },
+    { id: 2, question: "What essence do colors convey?", options: ["Earthy & Real", "Fresh & Living", "Calm & Balanced", "Rich & Abundant"], component: 'theme' },
+    { id: 3, question: "How should information grow?", options: ["Naturally Unfolding", "Rooted & Strong", "Branching Paths", "Layered Discovery"], component: 'content' },
+    { id: 4, question: "What encourages exploration?", options: ["Discover More", "Grow With Us", "Start Journey", "Plant Seeds"], component: 'cta' },
+    { id: 5, question: "How do spaces relate?", options: ["Organic Clusters", "Rooted Structure", "Natural Hierarchy", "Ecosystem Balance"], component: 'layout' }
+  ],
+  cosmic: [
+    { id: 1, question: "What first impression sparkles?", options: ["Mysterious & Intriguing", "Vast & Limitless", "Futuristic & Bold", "Magical & Enchanting"], component: 'hero' },
+    { id: 2, question: "What energy do colors radiate?", options: ["Deep & Rich", "Glowing & Vibrant", "Dark & Dramatic", "Shimmering & Bright"], component: 'theme' },
+    { id: 3, question: "How should content reveal itself?", options: ["Gradual Discovery", "Unexpected Moments", "Layered Depths", "Infinite Scroll"], component: 'content' },
+    { id: 4, question: "What launches engagement?", options: ["Launch Mission", "Explore Galaxy", "Beam Me Up", "Join Universe"], component: 'cta' },
+    { id: 5, question: "How do sections orbit?", options: ["Floating Islands", "Stellar Navigation", "Cosmic Grid", "Gravity Wells"], component: 'layout' }
+  ],
+  sunrise: [
+    { id: 1, question: "What awakens your visitors?", options: ["Bright & Cheerful", "Fresh & New", "Optimistic & Hopeful", "Vibrant & Alive"], component: 'hero' },
+    { id: 2, question: "What light do colors bring?", options: ["Golden Glow", "Soft Pastels", "Radiant Energy", "Dawn Warmth"], component: 'theme' },
+    { id: 3, question: "How should stories unfold?", options: ["Progressive Reveal", "Ascending Journey", "Brightening Path", "Rising Action"], component: 'content' },
+    { id: 4, question: "What ignites action?", options: ["Rise & Shine", "New Beginning", "Seize the Day", "Light the Way"], component: 'cta' },
+    { id: 5, question: "How do elements illuminate?", options: ["Gradual Brightening", "Horizon Layers", "Expanding Light", "Radial Balance"], component: 'layout' }
+  ],
+  midnight: [
+    { id: 1, question: "What elegance welcomes guests?", options: ["Sophisticated & Luxe", "Mysterious & Alluring", "Refined & Classy", "Powerful & Bold"], component: 'hero' },
+    { id: 2, question: "What richness do colors exude?", options: ["Deep & Luxurious", "Metallic Accents", "Velvet Tones", "Jewel Elegance"], component: 'theme' },
+    { id: 3, question: "How should content unveil?", options: ["Dramatic Reveals", "Elegant Transitions", "Curtain Opens", "Spotlight Moments"], component: 'content' },
+    { id: 4, question: "What compels exclusivity?", options: ["Enter Experience", "Unlock Access", "Join Elite", "Claim Premium"], component: 'cta' },
+    { id: 5, question: "How do spaces command?", options: ["Symmetrical Power", "Centered Focus", "Luxury Layers", "Premium Grid"], component: 'layout' }
   ]
 };
 
