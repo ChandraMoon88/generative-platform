@@ -15,28 +15,37 @@ const logFormat = printf(({ level, message, timestamp, ...metadata }) => {
   return msg;
 });
 
-export const logger = winston.createLogger({
-  level: process.env.LOG_LEVEL || 'info',
-  format: combine(
-    timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
-    logFormat
-  ),
-  transports: [
-    new winston.transports.Console({
-      format: combine(
-        colorize(),
-        timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
-        logFormat
-      ),
-    }),
+// Transports configuration - only file logging in development
+const transports: winston.transport[] = [
+  new winston.transports.Console({
+    format: combine(
+      colorize(),
+      timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
+      logFormat
+    ),
+  })
+];
+
+// Only add file transports in development (not in serverless/production)
+if (process.env.NODE_ENV !== 'production') {
+  transports.push(
     new winston.transports.File({ 
       filename: 'logs/error.log', 
       level: 'error' 
     }),
     new winston.transports.File({ 
       filename: 'logs/combined.log' 
-    }),
-  ],
+    })
+  );
+}
+
+export const logger = winston.createLogger({
+  level: process.env.LOG_LEVEL || 'info',
+  format: combine(
+    timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
+    logFormat
+  ),
+  transports,
 });
 
 // Create logs directory if it doesn't exist
