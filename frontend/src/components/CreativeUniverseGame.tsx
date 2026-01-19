@@ -95,11 +95,12 @@ const gameStructure = {
     stages: [
       {
         id: "explore-environments",
-        name: "Explore Your Options",
+        name: "Phenomenological Immersion",
         challenges: [
-          { id: "exp1", type: "choice", question: "Which natural element speaks to you?", options: ["Sun & Fire", "Water & Waves", "Earth & Trees", "Stars & Sky", "Sand & Wind", "Ice & Snow"], points: 100 },
-          { id: "exp2", type: "choice", question: "What time of day inspires you most?", options: ["Golden Sunrise", "Bright Midday", "Warm Sunset", "Mysterious Night"], points: 100 },
-          { id: "exp3", type: "ranking", question: "Rank these qualities:", items: ["Adventure", "Peace", "Wonder", "Energy"], points: 150 }
+          { id: "exp1", type: "choice", question: "Which elemental archetype embodies your design epistemology? Consider thermodynamics, fluid dynamics, and crystalline structures.", options: ["Pyroclastic Flow (Sun/Fire): Transformation through energy", "Hydrodynamic Current (Water): Adaptive flow and emergence", "Fractal Branching (Forest): Recursive complexity", "Quantum Vacuum (Cosmic): Infinite possibility space", "Aeolian Erosion (Desert): Time's sculptural force", "Phase Transition (Arctic): Boundary states"], points: 150 },
+          { id: "exp2", type: "choice", question: "🎨 Synesthesia Challenge: If you could taste your chosen environment, what flavor profile would it have?", options: ["Umami - Deep, Complex, Layered", "Sweet - Harmonious, Balanced", "Bitter - Sophisticated, Refined", "Sour - Dynamic, Energetic", "Salty - Grounded, Elemental"], points: 100 },
+          { id: "exp3", type: "text", question: "Describe how circadian rhythms and chronobiology influence your environmental color perception across different cognitive states.", placeholder: "My environment shifts with consciousness because...", points: 200 },
+          { id: "exp4", type: "choice", question: "🎭 Role-Play: You're an environmental architect in 2150. How do your spaces adapt to users' neural states?", options: ["Brainwave-Responsive Chromatics", "Emotional Field Mapping", "Memory Palace Architecture", "Dream State Navigation"], points: 150 }
         ]
       }
     ]
@@ -109,23 +110,25 @@ const gameStructure = {
     stages: [
       {
         id: "color-theory",
-        name: "Mastering Colors",
+        name: "Chromatic Quantum Mechanics",
         challenges: [
-          { id: "col1", type: "choice", question: "What's your primary color personality?", options: ["Warm & Inviting", "Cool & Calming", "Bright & Energetic", "Deep & Mysterious"], points: 100 },
-          { id: "col2", type: "choice", question: "How should colors flow together?", options: ["Smooth Gradients", "Bold Contrasts", "Subtle Harmony", "Dynamic Patterns"], points: 100 },
-          { id: "col3", type: "palette", question: "Choose your accent colors:", count: 3, points: 150 },
-          { id: "col4", type: "choice", question: "What mood do dark colors create?", options: ["Elegance", "Mystery", "Depth", "Sophistication"], points: 75 },
-          { id: "col5", type: "choice", question: "What do light colors bring?", options: ["Openness", "Freshness", "Simplicity", "Clarity"], points: 75 }
+          { id: "col1", type: "choice", question: "In color theory, how does the opponent process theory inform emotional valence in interface design?", options: ["Red-Green Axis: Arousal-Relaxation", "Blue-Yellow Axis: Thermal Perception", "Light-Dark Axis: Cognitive Load", "Saturation Depth: Attention Gradient"], points: 150 },
+          { id: "col2", type: "choice", question: "🎮 Mini-Game: You're mixing pigments in a neural laboratory. Which combination creates 'digital nostalgia'?", options: ["Sunset Orange + Pixel Blue", "Analog Violet + Glitch Green", "Retro Cyan + Static Amber", "Memory Magenta + Dream Teal"], points: 100 },
+          { id: "col3", type: "text", question: "Apply Goethe's color theory to describe how your palette manifests psychological archetypes.", placeholder: "My colors embody archetypal forces through...", points: 200 },
+          { id: "col4", type: "choice", question: "How does metamerism (color matching under different illuminants) influence cross-device environmental consistency?", options: ["Spectral Power Distribution", "Observer Variability Modeling", "Chromatic Adaptation Transform", "Perceptual Uniformity Mapping"], points: 150 },
+          { id: "col5", type: "choice", question: "🌈 Fun Challenge: If your color palette were a chemical reaction, what would be its activation energy?", options: ["Spontaneous (Low Energy)", "Catalyzed (Medium Energy)", "Explosive (High Energy)", "Quantum Tunneling (Probabilistic)"], points: 100 },
+          { id: "col6", type: "text", question: "Describe the 'temporal chromatics' of your environment: how colors evolve across user journey stages.", placeholder: "Colors transform temporally as users...", points: 200 }
         ]
       },
       {
         id: "layout-basics",
-        name: "Understanding Layout",
+        name: "Topological Interface Theory",
         challenges: [
-          { id: "lay1", type: "choice", question: "Where should attention go first?", options: ["Center", "Top", "Left", "Throughout"], points: 100 },
-          { id: "lay2", type: "choice", question: "How should content be organized?", options: ["Linear Flow", "Grid System", "Clustered Groups", "Free Form"], points: 100 },
-          { id: "lay3", type: "choice", question: "What creates visual balance?", options: ["Symmetry", "Asymmetry", "Whitespace", "Contrast"], points: 100 },
-          { id: "lay4", type: "slider", question: "How much spacing between elements?", min: 0, max: 100, points: 75 }
+          { id: "lay1", type: "choice", question: "Apply network topology principles: how does your spatial graph minimize cognitive traversal distance?", options: ["Star Topology: Central Authority", "Mesh Topology: Distributed Access", "Tree Topology: Hierarchical Navigation", "Hypergraph: Non-linear Pathways"], points: 150 },
+          { id: "lay2", type: "choice", question: "🎯 Interactive Puzzle: Arrange these elements using the golden ratio and Fibonacci spirals. What emerges?", options: ["Natural Eye Flow", "Dynamic Tension", "Harmonic Resonance", "Fractal Recursion"], points: 150 },
+          { id: "lay3", type: "text", question: "Using gestalt principles, explain how proximity, similarity, and continuity create emergent meaning.", placeholder: "Spatial relationships generate meaning through...", points: 200 },
+          { id: "lay4", type: "slider", question: "🎨 Calibration: Set the 'entropy level' of your layout (0=perfect order, 100=creative chaos)", min: 0, max: 100, points: 100 },
+          { id: "lay5", type: "choice", question: "How does F-pattern vs. Z-pattern scanning influence information architecture in your environment?", options: ["F-Pattern: Content-Heavy", "Z-Pattern: Minimal Focused", "Layer Cake: Horizontal Scanning", "Spotted Pattern: Non-Linear"], points: 150 }
         ]
       }
     ]
@@ -135,31 +138,34 @@ const gameStructure = {
     stages: [
       {
         id: "hero-section",
-        name: "Crafting Your Welcome",
+        name: "Threshold Experience Design",
         challenges: [
-          { id: "hero1", type: "choice", question: "What greeting style resonates?", options: ["Bold Statement", "Warm Introduction", "Visual Impact", "Mysterious Intrigue"], points: 150 },
-          { id: "hero2", type: "text", question: "Write your welcoming message:", placeholder: "Enter your greeting...", points: 200 },
-          { id: "hero3", type: "choice", question: "What size should your welcome be?", options: ["Large & Commanding", "Medium & Balanced", "Intimate & Personal"], points: 100 },
-          { id: "hero4", type: "choice", question: "How should it appear?", options: ["Fade In", "Slide In", "Instant", "Grow"], points: 100 }
+          { id: "hero1", type: "choice", question: "Apply liminal space theory: your hero section is a psychological threshold. What transitional state does it embody?", options: ["Anticipation: Pre-Experience Tension", "Immersion: Immediate Absorption", "Disorientation: Cognitive Restructuring", "Recognition: Familiar Reimagining"], points: 150 },
+          { id: "hero2", type: "text", question: "🎭 Story Time: Write a hero section that uses narrative transportation theory to create immediate engagement.", placeholder: "You enter a space where...", points: 250 },
+          { id: "hero3", type: "choice", question: "Using scale psychology, how should your hero's typographic hierarchy manipulate perceived environmental depth?", options: ["Forced Perspective: Dramatic Depth", "Isometric Equality: Democratic Space", "Atmospheric Fade: Infinite Horizon", "Scalar Ambiguity: Perceptual Play"], points: 150 },
+          { id: "hero4", type: "choice", question: "🎬 Animation Challenge: Design an entrance sequence based on physics simulations. What law of motion?", options: ["Spring Dynamics: Elastic Energy", "Gravity Wells: Orbital Attraction", "Particle Systems: Emergent Complexity", "Wave Propagation: Ripple Effects"], points: 150 },
+          { id: "hero5", type: "text", question: "Describe your hero section's 'attentional magnetism' using neuroscience principles (foveal vs peripheral processing).", placeholder: "Visual attention is captured through...", points: 200 }
         ]
       },
       {
         id: "content-areas",
-        name: "Designing Content Spaces",
+        name: "Information Ecology",
         challenges: [
-          { id: "cont1", type: "choice", question: "How should stories unfold?", options: ["Progressive Reveal", "All at Once", "Interactive Discovery", "Guided Journey"], points: 150 },
-          { id: "cont2", type: "choice", question: "What structure for information?", options: ["Cards", "Sections", "Layers", "Timeline"], points: 150 },
-          { id: "cont3", type: "choice", question: "How much detail to show?", options: ["Rich & Detailed", "Clean & Minimal", "Balanced Mix", "User Choice"], points: 100 },
-          { id: "cont4", type: "text", question: "Describe your main content theme:", placeholder: "What's your story about?", points: 200 }
+          { id: "cont1", type: "choice", question: "Apply narrative theory: how does your content architecture implement Freytag's dramatic structure in spatial form?", options: ["Exposition: Layered Revelation", "Rising Action: Progressive Disclosure", "Climax: Focal Intensity", "Denouement: Resolution Space"], points: 200 },
+          { id: "cont2", type: "choice", question: "🎲 Randomness Game: Use Perlin noise to generate content distribution. What pattern emerges?", options: ["Organic Clusters", "Smooth Gradients", "Turbulent Flow", "Harmonic Waves"], points: 150 },
+          { id: "cont3", type: "text", question: "Describe your content ecosystem using ecological succession principles: pioneer species, climax community, disturbance regimes.", placeholder: "Content evolves like an ecosystem through...", points: 250 },
+          { id: "cont4", type: "choice", question: "How does information scent (term from information foraging theory) guide navigation?", options: ["Semantic Proximity Cues", "Visual Weight Hierarchy", "Haptic Feedback Trails", "Temporal Breadcrumbs"], points: 150 },
+          { id: "cont5", type: "choice", question: "🧩 Puzzle Mode: Arrange content using tessellation patterns. Which creates optimal cognitive chunks?", options: ["Hexagonal Packing", "Voronoi Diagrams", "Penrose Tiling", "Modular Grid"], points: 150 }
         ]
       },
       {
-        id: "interaction-design",
-        name: "Creating Interactions",
+        id: "inBehavioral Choreography",
         challenges: [
-          { id: "int1", type: "choice", question: "How should buttons feel?", options: ["Soft & Rounded", "Sharp & Modern", "Elegant & Subtle", "Bold & Eye-catching"], points: 100 },
-          { id: "int2", type: "choice", question: "What happens on hover?", options: ["Color Shift", "Gentle Lift", "Scale Up", "Glow Effect"], points: 100 },
-          { id: "int3", type: "text", question: "Name your main action:", placeholder: "e.g., 'Begin Journey'", points: 150 },
+          { id: "int1", type: "choice", question: "Using haptic psychology, what tactile metaphor should interactive elements embody?", options: ["Viscosity: Fluid Resistance", "Elasticity: Spring Memory", "Plasticity: Permanent Deformation", "Crystalline: Brittle Precision"], points: 150 },
+          { id: "int2", type: "choice", question: "🎮 Physics Playground: Design hover states using real physics. What force interaction?", options: ["Magnetic Attraction", "Gravitational Lens", "Electrostatic Charge", "Quantum Superposition"], points: 150 },
+          { id: "int3", type: "text", question: "Describe your interaction model using operant conditioning: what behavior-reward loop does it establish?", placeholder: "Users are reinforced through...", points: 200 },
+          { id: "int4", type: "choice", question: "How does your affordance design balance Donald Norman's signifiers vs. perceptual affordances?", options: ["Explicit Signifiers: Clarity First", "Discovered Affordances: Exploration", "Cultural Conventions: Learned Patterns", "Emergent Properties: Systemic Discovery"], points: 150 },
+          { id: "int5", type: "choice", question: "🎪 Fun Exercise: Your buttons are performers. What's their stage personality?", options: ["Method Actor: Deep Immersion", "Improviser: Responsive Play", "Mime: Silent Expression", "Magician: Surprising Transformation
           { id: "int4", type: "choice", question: "How obvious should actions be?", options: ["Very Clear", "Subtle Hints", "Hidden Until Hover", "Always Visible"], points: 100 }
         ]
       }
@@ -168,13 +174,14 @@ const gameStructure = {
   level5: {
     name: "Advanced Design",
     stages: [
-      {
-        id: "typography",
-        name: "Perfecting Typography",
+      {Typographic Phenomenology",
         challenges: [
-          { id: "typ1", type: "choice", question: "What font personality?", options: ["Modern & Clean", "Classic & Elegant", "Playful & Fun", "Bold & Strong"], points: 150 },
-          { id: "typ2", type: "slider", question: "How large for headers?", min: 24, max: 96, points: 100 },
-          { id: "typ3", type: "choice", question: "How should text align?", options: ["Left - Natural", "Center - Balanced", "Right - Unique", "Justified - Formal"], points: 100 },
+          { id: "typ1", type: "choice", question: "Apply type classification history: which typographic paradigm aligns with your environmental philosophy?", options: ["Humanist: Renaissance Proportion", "Transitional: Enlightenment Rationality", "Modern: Industrial Geometry", "Postmodern: Deconstructed Meaning"], points: 200 },
+          { id: "typ2", type: "slider", question: "🎼 Musical Tuning: Set your typographic scale using harmonic ratios (perfect fourth = 1.333, perfect fifth = 1.5)", min: 1, max: 2, points: 150 },
+          { id: "typ3", type: "text", question: "Describe your typography's 'voice' using phonetics: what acoustic properties does it possess?", placeholder: "My type speaks with...", points: 200 },
+          { id: "typ4", type: "choice", question: "How does vertical rhythm establish temporal pacing in reading flow? Apply music theory.", options: ["Adagio: Slow, Spacious", "Andante: Walking Pace", "Allegro: Brisk, Energetic", "Syncopated: Unexpected Rhythm"], points: 150 },
+          { id: "typ5", type: "choice", question: "🎨 Calligraphy Challenge: If you handwrote your interface, what script style?", options: ["Gothic: Dense Texture", "Italic: Flowing Grace", "Uncial: Rounded Warmth", "Blackletter: Dramatic Contrast"], points: 100 },
+          { id: "typ6", type: "text", question: "Using semiotics, explain how your typography creates meaning through connotation vs. denotation.", placeholder: "Type connotes cultural meaning by...", points: 2points: 100 },
           { id: "typ4", type: "slider", question: "Line spacing comfort level?", min: 0, max: 100, points: 100 },
           { id: "typ5", type: "choice", question: "Text weight for emphasis?", options: ["Bold & Strong", "Medium Balance", "Light & Airy", "Variable Mix"], points: 100 }
         ]
