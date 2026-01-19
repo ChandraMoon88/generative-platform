@@ -75,20 +75,20 @@ export const ComponentShowcase: React.FC = () => {
 <Alert id="alert-3" type="warning" message="Warning!" />
 <Alert id="alert-4" type="info" message="Info!" />`
       },
-      Badge: {
-        component: (
-          <div className="flex gap-3">
-            <UniversalComponents.Badge id="demo-badge-1" content="New" variant="default" />
-            <UniversalComponents.Badge id="demo-badge-2" content="5" variant="primary" />
-            <UniversalComponents.Badge id="demo-badge-3" content="Sale" variant="success" />
-            <UniversalComponents.Badge id="demo-badge-4" content="Hot" variant="danger" />
-          </div>
-        ),
-        code: `<Badge id="badge-1" content="New" variant="default" />
-<Badge id="badge-2" content="5" variant="primary" />
-<Badge id="badge-3" content="Sale" variant="success" />
-<Badge id="badge-4" content="Hot" variant="danger" />`
-      },
+      // Badge: {
+      //   component: (
+      //     <div className="flex gap-3">
+      //       <UniversalComponents.Badge id="demo-badge-1" content="New" variant="default" />
+      //       <UniversalComponents.Badge id="demo-badge-2" content="5" variant="primary" />
+      //       <UniversalComponents.Badge id="demo-badge-3" content="Sale" variant="success" />
+      //       <UniversalComponents.Badge id="demo-badge-4" content="Hot" variant="danger" />
+      //     </div>
+      //   ),
+      //   code: `<Badge id="badge-1" content="New" variant="default" />
+// <Badge id="badge-2" content="5" variant="primary" />
+// <Badge id="badge-3" content="Sale" variant="success" />
+// <Badge id="badge-4" content="Hot" variant="danger" />`
+      // },
       ProgressBar: {
         component: (
           <div className="space-y-4">
