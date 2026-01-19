@@ -298,8 +298,8 @@ export function DynamicFormBuilder({
   const [fields, setFields] = useState<BuilderFormField[]>([]);
   const [editingField, setEditingField] = useState<BuilderFormField | null>(null);
 
-  const addField = (type: FormField['type']) => {
-    const newField: FormField = {
+  const addField = (type: BuilderFormField['type']) => {
+    const newField: BuilderFormField = {
       id: `field-${Date.now()}`,
       type,
       label: `New ${type} field`,
@@ -326,7 +326,7 @@ export function DynamicFormBuilder({
     onSave(fields);
   };
 
-  const fieldTypes: FormField['type'][] = [
+  const fieldTypes: BuilderFormField['type'][] = [
     'text',
     'email',
     'number',
