@@ -174,15 +174,18 @@ const gameStructure = {
   level5: {
     name: "Advanced Design",
     stages: [
-      {Typographic Phenomenology",
+      {
+        id: "typography",
+        name: "Typographic Phenomenology",
         challenges: [
           { id: "typ1", type: "choice", question: "Apply type classification history: which typographic paradigm aligns with your environmental philosophy?", options: ["Humanist: Renaissance Proportion", "Transitional: Enlightenment Rationality", "Modern: Industrial Geometry", "Postmodern: Deconstructed Meaning"], points: 200 },
           { id: "typ2", type: "slider", question: "🎼 Musical Tuning: Set your typographic scale using harmonic ratios (perfect fourth = 1.333, perfect fifth = 1.5)", min: 1, max: 2, points: 150 },
-          { id: "typ3", type: "text", question: "Describe your typography's 'voice' using phonetics: what acoustic properties does it possess?", placeholder: "My type speaks with...", points: 200 },
+          { id: "typ3", type: "text", question: "Describe your typography's voice using phonetics: what acoustic properties does it possess?", placeholder: "My type speaks with...", points: 200 },
           { id: "typ4", type: "choice", question: "How does vertical rhythm establish temporal pacing in reading flow? Apply music theory.", options: ["Adagio: Slow, Spacious", "Andante: Walking Pace", "Allegro: Brisk, Energetic", "Syncopated: Unexpected Rhythm"], points: 150 },
           { id: "typ5", type: "choice", question: "🎨 Calligraphy Challenge: If you handwrote your interface, what script style?", options: ["Gothic: Dense Texture", "Italic: Flowing Grace", "Uncial: Rounded Warmth", "Blackletter: Dramatic Contrast"], points: 100 },
-          { id: "typ6", type: "text", question: "Using semiotics, explain how your typography creates meaning through connotation vs. denotation.", placeholder: "Type connotes cultural meaning by...", points: 2points: 100 },
-          { id: "typ4", type: "slider", question: "Line spacing comfort level?", min: 0, max: 100, points: 100 },
+          { id: "typ6", type: "text", question: "Using semiotics, explain how your typography creates meaning through connotation vs. denotation.", placeholder: "Type connotes cultural meaning by...", points: 200 }
+        ]
+      },
           { id: "typ5", type: "choice", question: "Text weight for emphasis?", options: ["Bold & Strong", "Medium Balance", "Light & Airy", "Variable Mix"], points: 100 }
         ]
       },
