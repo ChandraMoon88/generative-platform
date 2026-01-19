@@ -34,7 +34,9 @@ export default function ClientLogin() {
         localStorage.setItem('user_name', data.user.name);
         console.log('Token saved:', localStorage.getItem('user_token'));
         console.log('Redirecting to /projects');
-        router.push('/projects');
+        
+        // Force a full page reload to ensure localStorage is available
+        window.location.href = '/projects';
       } else {
         setError(data.message || 'Login failed');
       }
