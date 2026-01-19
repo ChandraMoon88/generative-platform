@@ -756,8 +756,10 @@ export const useRestaurantStore = create<RestaurantState>((set, get) => ({
     // Sample Tables
     for (let i = 1; i <= 10; i++) {
       store.addTable({
-        number: i,
+        tableNumber: String(i),
         capacity: i <= 4 ? 2 : i <= 8 ? 4 : 6,
+        minPartySize: 1,
+        maxPartySize: i <= 4 ? 2 : i <= 8 ? 4 : 6,
         status: 'available',
         section: i <= 5 ? 'Main Hall' : 'Patio',
       });
