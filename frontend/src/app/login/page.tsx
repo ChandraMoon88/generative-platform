@@ -16,6 +16,8 @@ export default function ClientLogin() {
     setError('');
     setLoading(true);
 
+    alert('Login form submitted! Check console for details.');
+    
     try {
       console.log('Attempting login with:', { email });
       
@@ -32,6 +34,7 @@ export default function ClientLogin() {
       console.log('Response data:', data);
 
       if (response.ok) {
+        alert('Login successful! Redirecting...');
         console.log('Login successful, saving to localStorage:', data);
         localStorage.setItem('user_token', data.token);
         localStorage.setItem('user_email', email);
@@ -53,10 +56,12 @@ export default function ClientLogin() {
           window.location.href = '/projects';
         }, 100);
       } else {
+        alert('Login failed: ' + data.message);
         console.error('Login failed:', data.message);
         setError(data.message || 'Login failed');
       }
     } catch (err) {
+      alert('Error: ' + err);
       console.error('Login error:', err);
       setError('Connection error. Please try again.');
     } finally {
