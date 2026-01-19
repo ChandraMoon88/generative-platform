@@ -11,6 +11,12 @@ import ComponentShowcase from '@/components/ComponentShowcase';
 
 // Force dynamic rendering for this page
 export const dynamic = 'force-dynamic';
+export const dynamicParams = true;
+
+// Prevent static generation at build time
+export function generateStaticParams() {
+  return [];
+}
 
 interface Project {
   id: string;
