@@ -52,7 +52,7 @@ export default function ProjectDetailPage() {
         return;
       }
 
-      const res = await fetch(`http://localhost:3001/api/projects/${projectId}`, {
+      const res = await fetch(`/api/projects/${projectId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

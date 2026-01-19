@@ -23,7 +23,7 @@ export interface UserAsset {
 
 class UserAssetManager {
   private assets: Map<string, UserAsset> = new Map();
-  private apiEndpoint = 'http://localhost:3001/api/assets';
+  private apiEndpoint = '/api/assets';
 
   constructor() {
     this.loadAssetsFromStorage();
