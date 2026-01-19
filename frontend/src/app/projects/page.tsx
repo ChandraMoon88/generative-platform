@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
+import ComponentShowcase from '@/components/ComponentShowcase';
 
 interface Project {
   id: string;
@@ -20,7 +21,11 @@ interface Project {
 
 export default function ProjectsPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const projectId = searchParams.get('id');
+  
   const [projects, setProjects] = useState<Project[]>([]);
+  const [currentProject, setCurrentProject] = useState<Project | null>(null);
   const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
   const [showNewProject, setShowNewProject] = useState(false);
@@ -32,6 +37,15 @@ export default function ProjectsPage() {
   useEffect(() => {
     fetchProjects();
   }, []);
+
+  useEffect(() => {
+    if (projectId && projects.length > 0) {
+      const project = projects.find(p => p.id === projectId);
+      if (project) {
+        setCurrentProject(project);
+      }
+    }
+  }, [projectId, projects]);
 
   const fetchProjects = async () => {
     try {
@@ -274,7 +288,11 @@ export default function ProjectsPage() {
                 {/* Actions */}
                 <div className="mt-4 flex gap-2">
                   <button
-                    onClick={() => router.push(`/projects/${project.id}`)}
+                    onClick={() => {
+                      // Store project ID in localStorage and reload
+                      localStorage.setItem('current_project_id', project.id);
+                      window.location.href = `/projects?id=${project.id}`;
+                    }}
                     className="flex-1 px-3 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 text-sm font-medium"
                   >
                     Open
