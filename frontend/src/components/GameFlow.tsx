@@ -1,7 +1,7 @@
 ﻿'use client';
 
 import React, { useState } from 'react';
-import EnvironmentDemo from './EnvironmentDemo';
+import RestaurantDemo from './RestaurantDemo';
 
 interface GameState {
   phase: 'welcome' | 'demo' | 'domain-selection' | 'gameplay' | 'reveal';
