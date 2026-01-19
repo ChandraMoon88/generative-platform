@@ -159,14 +159,14 @@ const gameStructure = {
         ]
       },
       {
-        id: "inBehavioral Choreography",
+        id: "interaction-design",
+        name: "Behavioral Choreography",
         challenges: [
           { id: "int1", type: "choice", question: "Using haptic psychology, what tactile metaphor should interactive elements embody?", options: ["Viscosity: Fluid Resistance", "Elasticity: Spring Memory", "Plasticity: Permanent Deformation", "Crystalline: Brittle Precision"], points: 150 },
           { id: "int2", type: "choice", question: "🎮 Physics Playground: Design hover states using real physics. What force interaction?", options: ["Magnetic Attraction", "Gravitational Lens", "Electrostatic Charge", "Quantum Superposition"], points: 150 },
           { id: "int3", type: "text", question: "Describe your interaction model using operant conditioning: what behavior-reward loop does it establish?", placeholder: "Users are reinforced through...", points: 200 },
           { id: "int4", type: "choice", question: "How does your affordance design balance Donald Norman's signifiers vs. perceptual affordances?", options: ["Explicit Signifiers: Clarity First", "Discovered Affordances: Exploration", "Cultural Conventions: Learned Patterns", "Emergent Properties: Systemic Discovery"], points: 150 },
-          { id: "int5", type: "choice", question: "🎪 Fun Exercise: Your buttons are performers. What's their stage personality?", options: ["Method Actor: Deep Immersion", "Improviser: Responsive Play", "Mime: Silent Expression", "Magician: Surprising Transformation
-          { id: "int4", type: "choice", question: "How obvious should actions be?", options: ["Very Clear", "Subtle Hints", "Hidden Until Hover", "Always Visible"], points: 100 }
+          { id: "int5", type: "choice", question: "🎪 Fun Exercise: Your buttons are performers. What is their stage personality?", options: ["Method Actor: Deep Immersion", "Improviser: Responsive Play", "Mime: Silent Expression", "Magician: Surprising Transformation"], points: 100 }
         ]
       }
     ]
