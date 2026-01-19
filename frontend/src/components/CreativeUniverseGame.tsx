@@ -521,7 +521,7 @@ export default function CreativeUniverseGame({ onGameComplete }: { onGameComplet
           </div>
 
           {/* Answer UI based on challenge type */}
-          {challenge.type === 'choice' && (
+          {challenge.type === 'choice' && 'options' in challenge && (
             <div className="grid md:grid-cols-2 gap-4">
               {challenge.options.map((option: string, index: number) => (
                 <button
@@ -540,7 +540,7 @@ export default function CreativeUniverseGame({ onGameComplete }: { onGameComplet
             </div>
           )}
 
-          {challenge.type === 'text' && (
+          {challenge.type === 'text' && 'placeholder' in challenge && (
             <div>
               <textarea
                 value={userAnswer || ''}
@@ -559,7 +559,7 @@ export default function CreativeUniverseGame({ onGameComplete }: { onGameComplet
             </div>
           )}
 
-          {challenge.type === 'slider' && (
+          {challenge.type === 'slider' && 'min' in challenge && (
             <div>
               <input
                 type="range"
@@ -578,6 +578,18 @@ export default function CreativeUniverseGame({ onGameComplete }: { onGameComplet
               >
                 Lock In →
               </button>
+            </div>
+          )}
+
+          {(challenge.type === 'ranking' || challenge.type === 'match' || challenge.type === 'palette' || challenge.type === 'review') && (
+            <div className="text-center">
+              <button
+                onClick={() => handleAnswer('completed')}
+                className="px-12 py-6 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-2xl text-2xl font-bold hover:scale-105 transform transition-all shadow-lg"
+              >
+                Complete Challenge →
+              </button>
+              <p className="mt-4 text-gray-600">Click to continue - all answers are valid!</p>
             </div>
           )}
         </div>
