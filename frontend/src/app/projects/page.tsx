@@ -714,6 +714,11 @@ function ProjectsContent() {
     );
   }
 
+  // Show game mode for new users (no projects and first time)
+  if (gameMode && !projectId && projects.length === 0) {
+    return <GameFlow onAppCreated={handleGameAppCreated} />;
+  }
+
   // If a project ID is in the URL, show the project detail view
   if (currentProject) {
     return (
