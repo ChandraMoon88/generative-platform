@@ -108,7 +108,7 @@ export default function MenuPage() {
   const categories: { value: MenuCategory | 'all'; label: string }[] = [
     { value: 'all', label: 'All Categories' },
     { value: 'appetizer', label: 'Appetizers' },
-    { value: 'main_course', label: 'Main Course' },
+    { value: 'main', label: 'Main Course' },
     { value: 'dessert', label: 'Desserts' },
     { value: 'beverage', label: 'Beverages' },
     { value: 'side', label: 'Sides' },
