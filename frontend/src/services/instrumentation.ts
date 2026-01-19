@@ -74,7 +74,9 @@ export function initSession(existingSessionId?: string, existingUserId?: string)
   }
   
   // Start flush interval
-  startFlushInterval();
+  if (typeof window !== 'undefined') {
+    startFlushInterval();
+  }
   
   return sessionId;
 }
@@ -280,6 +282,11 @@ function bufferEvent(event: TrackedEvent): void {
 }
 
 function startFlushInterval(): void {
+  // Guard against server-side rendering
+  if (typeof window === 'undefined') {
+    return;
+  }
+  
   if (flushTimeout) {
     clearInterval(flushTimeout);
   }
