@@ -3,7 +3,7 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import ComponentShowcase from '@/components/ComponentShowcase';
-import GameFlow from '@/components/GameFlow';
+import CreativeUniverseGame from '@/components/CreativeUniverseGame';
 
 interface Project {
   id: string;
