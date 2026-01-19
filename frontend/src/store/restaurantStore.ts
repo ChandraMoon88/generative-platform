@@ -213,7 +213,7 @@ export const useRestaurantStore = create<RestaurantState>((set, get) => ({
   
   // Supplier Actions
   addSupplier: (supplierData) => {
-    const now = new Date().toISOString();
+    const now = Date.now();
     const newSupplier: Supplier = {
       ...supplierData,
       id: uuidv4(),
@@ -235,7 +235,7 @@ export const useRestaurantStore = create<RestaurantState>((set, get) => ({
       if (index === -1) return state;
       
       const oldItem = state.suppliers[index];
-      const updatedItem = { ...oldItem, ...updates, updatedAt: new Date().toISOString() };
+      const updatedItem = { ...oldItem, ...updates, updatedAt: Date.now() };
       const newSuppliers = [...state.suppliers];
       newSuppliers[index] = updatedItem;
       
