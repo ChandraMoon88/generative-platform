@@ -27,7 +27,7 @@ class EventTracker {
   private eventQueue: EventData[] = [];
   private flushInterval = 5000; // Send events every 5 seconds
   private maxQueueSize = 50; // Or when queue reaches 50 events
-  private apiEndpoint = 'http://localhost:3001/api/events';
+  private apiEndpoint = '/api/events';
 
   constructor() {
     this.sessionId = this.getOrCreateSessionId();
