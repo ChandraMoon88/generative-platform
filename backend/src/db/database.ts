@@ -111,6 +111,11 @@ class SqlJsDatabaseWrapper implements DatabaseWrapper {
 let wrappedDb: DatabaseWrapper;
 
 function saveDatabase(): void {
+  // Skip file operations in production/serverless environments
+  if (process.env.NODE_ENV === 'production') {
+    return;
+  }
+  
   if (db && dbPath) {
     try {
       const data = db.export();
