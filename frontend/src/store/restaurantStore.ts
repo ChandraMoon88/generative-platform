@@ -161,7 +161,7 @@ export const useRestaurantStore = create<RestaurantState>((set, get) => ({
   
   // Ingredient Actions
   addIngredient: (ingredientData) => {
-    const now = new Date().toISOString();
+    const now = Date.now();
     const newIngredient: Ingredient = {
       ...ingredientData,
       id: uuidv4(),
