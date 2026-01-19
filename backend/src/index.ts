@@ -31,10 +31,12 @@ app.use(rateLimiter);
 
 // Core middleware
 app.use(helmet());
+const allowedOrigins = process.env.NODE_ENV === 'production' 
+  ? [process.env.FRONTEND_URL, process.env.VERCEL_URL].filter((url): url is string => Boolean(url))
+  : ['http://localhost:3000', 'http://localhost:3002'];
+  
 app.use(cors({
-  origin: process.env.NODE_ENV === 'production' 
-    ? [process.env.FRONTEND_URL, process.env.VERCEL_URL].filter(Boolean)
-    : ['http://localhost:3000', 'http://localhost:3002'],
+  origin: allowedOrigins,
   credentials: true,
 }));
 app.use(compression());
