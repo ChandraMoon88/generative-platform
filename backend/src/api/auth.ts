@@ -118,7 +118,7 @@ authRouter.post('/login', async (req: Request, res: Response) => {
     const db = getDatabase();
 
     const user = db.prepare('SELECT * FROM users WHERE email = ?')
-      .get(email) as { id: string; password: string; salt: string; role: string; name: string } | undefined;
+      .get(email) as { id: string; email: string; password: string; salt: string; role: string; name: string } | undefined;
 
     if (!user || !verifyPassword(password, user.password, user.salt)) {
       return res.status(401).json({
