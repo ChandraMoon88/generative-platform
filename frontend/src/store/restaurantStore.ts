@@ -115,7 +115,7 @@ export const useRestaurantStore = create<RestaurantState>((set, get) => ({
   
   // Menu Item Actions
   addMenuItem: (itemData) => {
-    const now = Date.now();
+    const now = new Date().toISOString();
     const newItem: MenuItem = {
       ...itemData,
       id: uuidv4(),
