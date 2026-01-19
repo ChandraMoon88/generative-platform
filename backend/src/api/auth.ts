@@ -4,7 +4,7 @@
  */
 
 import { Router, Request, Response } from 'express';
-import { getDatabase } from '../db/database';
+import { query } from '../db/postgres';
 import { logger } from '../utils/logger';
 import { v4 as uuidv4 } from 'uuid';
 import * as crypto from 'crypto';
@@ -57,11 +57,9 @@ authRouter.post('/register', async (req: Request, res: Response) => {
       });
     }
 
-    const db = getDatabase();
-
     // Check if user already exists
-    const existing = db.prepare('SELECT id FROM users WHERE email = ?').get(email);
-    if (existing) {
+    const existingResult = await query('SELECT id FROM users WHERE email = $1', [email]);
+    if (existingResult.rows.length > 0) {
       return res.status(400).json({
         success: false,
         message: 'User with this email already exists',
@@ -74,10 +72,10 @@ authRouter.post('/register', async (req: Request, res: Response) => {
     const createdAt = Date.now();
     const userRole = role === 'admin' ? 'admin' : 'client';
 
-    db.prepare(`
+    await query(`
       INSERT INTO users (id, name, email, password, salt, role, created_at, updated_at)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-    `).run(userId, name, email, hash, salt, userRole, createdAt, createdAt);
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+    `, [userId, name, email, hash, salt, userRole, createdAt, createdAt]);
 
     // Generate simple token (userId:timestamp)
     const token = Buffer.from(`${userId}:${Date.now()}`).toString('base64');
@@ -115,12 +113,18 @@ authRouter.post('/login', async (req: Request, res: Response) => {
       });
     }
 
-    const db = getDatabase();
+    const userResult = await query('SELECT * FROM users WHERE email = $1', [email]);
 
-    const user = db.prepare('SELECT * FROM users WHERE email = ?')
-      .get(email) as { id: string; email: string; password: string; salt: string; role: string; name: string } | undefined;
+    if (userResult.rows.length === 0) {
+      return res.status(401).json({
+        success: false,
+        message: 'Invalid email or password',
+      });
+    }
 
-    if (!user || !verifyPassword(password, user.password, user.salt)) {
+    const user = userResult.rows[0] as { id: string; email: string; password: string; salt: string; role: string; name: string };
+
+    if (!verifyPassword(password, user.password, user.salt)) {
       return res.status(401).json({
         success: false,
         message: 'Invalid email or password',
@@ -131,8 +135,7 @@ authRouter.post('/login', async (req: Request, res: Response) => {
     const token = Buffer.from(`${user.id}:${Date.now()}`).toString('base64');
 
     // Update last login
-    db.prepare('UPDATE users SET updated_at = ? WHERE id = ?')
-      .run(Date.now(), user.id);
+    await query('UPDATE users SET updated_at = $1 WHERE id = $2', [Date.now(), user.id]);
 
     logger.info(`User logged in: ${email} (role: ${user.role})`);
 
@@ -172,15 +175,13 @@ authRouter.get('/me', async (req: Request, res: Response) => {
     const decoded = Buffer.from(token, 'base64').toString();
     const [userId] = decoded.split(':');
 
-    const db = getDatabase();
-    const user = db.prepare('SELECT id, name, email, created_at FROM users WHERE id = ?')
-      .get(userId);
+    const userResult = await query('SELECT id, name, email, created_at FROM users WHERE id = $1', [userId]);
 
-    if (!user) {
+    if (userResult.rows.length === 0) {
       return res.status(404).json({ success: false, message: 'User not found' });
     }
 
-    res.json({ success: true, user });
+    res.json({ success: true, user: userResult.rows[0] });
   } catch (error) {
     logger.error('Get user failed', { error });
     res.status(500).json({ success: false, message: 'Failed to get user info' });
