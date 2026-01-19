@@ -3,7 +3,7 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import ComponentShowcase from '@/components/ComponentShowcase';
-// import GameFlow from '@/components/GameFlow';
+import GameFlow from '@/components/GameFlow';
 
 interface Project {
   id: string;
@@ -43,9 +43,11 @@ function ProjectsContent() {
 
   useEffect(() => {
     fetchProjects();
-    // Temporarily disable game mode
-    setGameMode(false);
-    localStorage.setItem('skipGameMode', 'true');
+    // Check if user wants to skip game mode
+    const skipGame = localStorage.getItem('skipGameMode');
+    if (skipGame === 'true') {
+      setGameMode(false);
+    }
   }, []);
 
   useEffect(() => {
@@ -133,49 +135,6 @@ function ProjectsContent() {
       }
     } catch (error) {
       console.error('Failed to create project:', error);
-    }
-  };
-
-  const handleGameAppCreated = async (components: any[]) => {
-    // Create project from game
-    try {
-      const token = localStorage.getItem('user_token');
-      const userId = localStorage.getItem('user_id');
-      const userName = localStorage.getItem('user_name');
-      const userEmail = localStorage.getItem('user_email');
-      
-      const projectId = `project_${Date.now()}`;
-
-      const res = await fetch('/api/projects', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          id: projectId,
-          user_id: userId,
-          user_name: userName,
-          user_email: userEmail,
-          name: '🎮 My Creative Build',
-          description: 'Created through Creative Quest game',
-          status: 'completed',
-          config: { components },
-          created_at: Date.now(),
-          updated_at: Date.now(),
-        }),
-      });
-
-      if (res.ok) {
-        const project = await res.json();
-        setGameMode(false);
-        localStorage.setItem('skipGameMode', 'true');
-        await fetchProjects();
-        // Navigate to the new project
-        router.push(`/projects?id=${projectId}`);
-      }
-    } catch (error) {
-      console.error('Error creating project from game:', error);
     }
   };
 
@@ -756,12 +715,9 @@ function ProjectsContent() {
   }
 
   // Show game mode for new users (no projects and first time)
-  // Temporarily disabled
-  /*
   if (gameMode && !projectId && projects.length === 0) {
     return <GameFlow onAppCreated={handleGameAppCreated} />;
   }
-  */
 
   // If a project ID is in the URL, show the project detail view
   if (currentProject) {
