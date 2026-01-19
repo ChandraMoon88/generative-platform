@@ -38,7 +38,11 @@ export default function ProjectsPage() {
       const token = localStorage.getItem('user_token');
       const role = localStorage.getItem('user_role');
       
+      console.log('Projects page - checking token:', token);
+      console.log('Projects page - role:', role);
+      
       if (!token) {
+        console.log('No token found, redirecting to login');
         router.push('/login');
         return;
       }

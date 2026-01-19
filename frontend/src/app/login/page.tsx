@@ -26,11 +26,14 @@ export default function ClientLogin() {
       const data = await response.json();
 
       if (response.ok) {
+        console.log('Login successful, saving to localStorage:', data);
         localStorage.setItem('user_token', data.token);
         localStorage.setItem('user_email', email);
         localStorage.setItem('user_id', data.userId);
         localStorage.setItem('user_role', data.user.role);
         localStorage.setItem('user_name', data.user.name);
+        console.log('Token saved:', localStorage.getItem('user_token'));
+        console.log('Redirecting to /projects');
         router.push('/projects');
       } else {
         setError(data.message || 'Login failed');
