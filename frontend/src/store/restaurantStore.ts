@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Restaurant Store
  * State management using Zustand with instrumentation
  */
@@ -161,7 +161,7 @@ export const useRestaurantStore = create<RestaurantState>((set, get) => ({
   
   // Ingredient Actions
   addIngredient: (ingredientData) => {
-    const now = Date.now();
+    const now = new Date().toISOString();
     const newIngredient: Ingredient = {
       ...ingredientData,
       id: uuidv4(),
@@ -193,7 +193,7 @@ export const useRestaurantStore = create<RestaurantState>((set, get) => ({
       if (index === -1) return state;
       
       const oldItem = state.ingredients[index];
-      const updatedItem = { ...oldItem, ...updates, updatedAt: Date.now() };
+      const updatedItem = { ...oldItem, ...updates, updatedAt: new Date().toISOString() };
       const newIngredients = [...state.ingredients];
       newIngredients[index] = updatedItem;
       
@@ -213,7 +213,7 @@ export const useRestaurantStore = create<RestaurantState>((set, get) => ({
   
   // Supplier Actions
   addSupplier: (supplierData) => {
-    const now = Date.now();
+    const now = new Date().toISOString();
     const newSupplier: Supplier = {
       ...supplierData,
       id: uuidv4(),
@@ -235,7 +235,7 @@ export const useRestaurantStore = create<RestaurantState>((set, get) => ({
       if (index === -1) return state;
       
       const oldItem = state.suppliers[index];
-      const updatedItem = { ...oldItem, ...updates, updatedAt: Date.now() };
+      const updatedItem = { ...oldItem, ...updates, updatedAt: new Date().toISOString() };
       const newSuppliers = [...state.suppliers];
       newSuppliers[index] = updatedItem;
       
@@ -287,7 +287,7 @@ export const useRestaurantStore = create<RestaurantState>((set, get) => ({
 
   createOrder: (tableId, customerName) => {
     const now = new Date().toISOString();
-    const orderNumber = `ORD-${Date.now().toString(36).toUpperCase()}`;
+    const orderNumber = `ORD-${new Date().toISOString().toString(36).toUpperCase()}`;
     
     const newOrder: Order = {
       id: uuidv4(),
@@ -350,7 +350,7 @@ export const useRestaurantStore = create<RestaurantState>((set, get) => ({
         subtotal,
         tax,
         total: subtotal + tax,
-        updatedAt: Date.now(),
+        updatedAt: new Date().toISOString(),
       };
       
       const newOrders = [...state.orders];
@@ -378,7 +378,7 @@ export const useRestaurantStore = create<RestaurantState>((set, get) => ({
         subtotal,
         tax,
         total: subtotal + tax,
-        updatedAt: Date.now(),
+        updatedAt: new Date().toISOString(),
       };
       
       const newOrders = [...state.orders];
@@ -396,7 +396,7 @@ export const useRestaurantStore = create<RestaurantState>((set, get) => ({
       if (orderIndex === -1) return state;
       
       const order = state.orders[orderIndex];
-      const updatedOrder = { ...order, status, updatedAt: Date.now() };
+      const updatedOrder = { ...order, status, updatedAt: new Date().toISOString() };
       const newOrders = [...state.orders];
       newOrders[orderIndex] = updatedOrder;
       
@@ -431,7 +431,7 @@ export const useRestaurantStore = create<RestaurantState>((set, get) => ({
       const newItems = [...order.items];
       newItems[itemIndex] = { ...newItems[itemIndex], status };
       
-      const updatedOrder = { ...order, items: newItems, updatedAt: Date.now() };
+      const updatedOrder = { ...order, items: newItems, updatedAt: new Date().toISOString() };
       const newOrders = [...state.orders];
       newOrders[orderIndex] = updatedOrder;
       
@@ -454,8 +454,8 @@ export const useRestaurantStore = create<RestaurantState>((set, get) => ({
         paymentStatus: 'paid' as const,
         tip,
         total: order.subtotal + order.tax + tip,
-        updatedAt: Date.now(),
-        completedAt: Date.now(),
+        updatedAt: new Date().toISOString(),
+        completedAt: new Date().toISOString(),
       };
       
       const newOrders = [...state.orders];
@@ -485,7 +485,7 @@ export const useRestaurantStore = create<RestaurantState>((set, get) => ({
       const updatedOrder = {
         ...order,
         status: 'cancelled' as OrderStatus,
-        updatedAt: Date.now(),
+        updatedAt: new Date().toISOString(),
       };
       
       const newOrders = [...state.orders];
@@ -668,7 +668,7 @@ export const useRestaurantStore = create<RestaurantState>((set, get) => ({
       if (index === -1) return state;
       
       const oldReservation = state.reservations[index];
-      const updatedReservation = { ...oldReservation, status: 'cancelled' as const, updatedAt: Date.now() };
+      const updatedReservation = { ...oldReservation, status: 'cancelled' as const, updatedAt: new Date().toISOString() };
       const newReservations = [...state.reservations];
       newReservations[index] = updatedReservation;
       
@@ -684,7 +684,7 @@ export const useRestaurantStore = create<RestaurantState>((set, get) => ({
       ...alertData,
       id: uuidv4(),
       read: false,
-      createdAt: Date.now(),
+      createdAt: new Date().toISOString(),
     };
     
     set((state) => ({ alerts: [newAlert, ...state.alerts] }));
