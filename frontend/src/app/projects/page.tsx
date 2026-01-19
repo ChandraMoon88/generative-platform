@@ -138,6 +138,49 @@ function ProjectsContent() {
     }
   };
 
+  const handleGameAppCreated = async (components: any[]) => {
+    // Create project from game
+    try {
+      const token = localStorage.getItem('user_token');
+      const userId = localStorage.getItem('user_id');
+      const userName = localStorage.getItem('user_name');
+      const userEmail = localStorage.getItem('user_email');
+      
+      const projectId = `project_${Date.now()}`;
+
+      const res = await fetch('/api/projects', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          id: projectId,
+          user_id: userId,
+          user_name: userName,
+          user_email: userEmail,
+          name: '🎮 My Creative Build',
+          description: 'Created through Creative Quest game',
+          status: 'completed',
+          config: { components },
+          created_at: Date.now(),
+          updated_at: Date.now(),
+        }),
+      });
+
+      if (res.ok) {
+        const project = await res.json();
+        setGameMode(false);
+        localStorage.setItem('skipGameMode', 'true');
+        await fetchProjects();
+        // Navigate to the new project
+        router.push(`/projects?id=${projectId}`);
+      }
+    } catch (error) {
+      console.error('Error creating project from game:', error);
+    }
+  };
+
   const deleteProject = async (projectId: string) => {
     if (!confirm('Are you sure you want to delete this project?')) return;
 
