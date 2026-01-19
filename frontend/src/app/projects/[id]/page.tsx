@@ -13,11 +13,6 @@ import ComponentShowcase from '@/components/ComponentShowcase';
 export const dynamic = 'force-dynamic';
 export const dynamicParams = true;
 
-// Prevent static generation at build time
-export function generateStaticParams() {
-  return [];
-}
-
 interface Project {
   id: string;
   user_id: string;
