@@ -193,7 +193,7 @@ function ProjectManagementDemo() {
 }
 
 // ========== E-COMMERCE DEMO ==========
-export function ECommerceDemo() {
+function ECommerceDemo() {
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
 
   const products = [
