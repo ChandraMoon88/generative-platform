@@ -57,7 +57,10 @@ export function ToastContainer({ id }: { id: string }) {
   const [toasts, setToasts] = useState<Toast[]>([]);
 
   useEffect(() => {
-    return toastManager.subscribe(setToasts);
+    const unsubscribe = toastManager.subscribe(setToasts);
+    return () => {
+      unsubscribe();
+    };
   }, []);
 
   const handleDismiss = (toastId: string) => {
