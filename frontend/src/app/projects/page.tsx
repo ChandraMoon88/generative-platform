@@ -43,6 +43,11 @@ function ProjectsContent() {
 
   useEffect(() => {
     fetchProjects();
+    // Check if user wants to skip game mode
+    const skipGame = localStorage.getItem('skipGameMode');
+    if (skipGame === 'true') {
+      setGameMode(false);
+    }
   }, []);
 
   useEffect(() => {
