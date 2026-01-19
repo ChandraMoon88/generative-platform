@@ -272,7 +272,7 @@ function ECommerceDemo() {
 }
 
 // ========== ADMIN DASHBOARD DEMO ==========
-export function AdminDashboardDemo() {
+function AdminDashboardDemo() {
   const users = [
     { id: '1', name: 'John Doe', email: 'john@example.com', role: 'Admin', status: 'Active' },
     { id: '2', name: 'Jane Smith', email: 'jane@example.com', role: 'User', status: 'Active' },
