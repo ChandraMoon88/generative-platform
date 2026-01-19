@@ -3,6 +3,7 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import ComponentShowcase from '@/components/ComponentShowcase';
+import GameFlow from '@/components/GameFlow';
 
 interface Project {
   id: string;
@@ -38,6 +39,7 @@ function ProjectsContent() {
   const [projectComponents, setProjectComponents] = useState<any[]>([]);
   const [selectedComponentIndex, setSelectedComponentIndex] = useState<number | null>(null);
   const [showComponentLibrary, setShowComponentLibrary] = useState(false);
+  const [gameMode, setGameMode] = useState(true); // Start in game mode
 
   useEffect(() => {
     fetchProjects();
@@ -633,18 +635,21 @@ function ProjectsContent() {
             </>
           )}
 
-          {['Modal', 'Navbar', 'Card', 'Alert'].includes(comp.type) === false && (
+          {/* Universal Text Editor for all components */}
+          {!['Card', 'Alert'].includes(comp.type) && (
             <div>
-              <label className="block text-xs font-medium mb-2 text-gray-600">Content / Text</label>
+              <label className="block text-xs font-medium mb-2 text-gray-600">Text Content</label>
               <textarea
-                value={comp.props.content || comp.props.text || ''}
+                value={comp.props.content || comp.props.text || comp.props.placeholder || comp.props.title || ''}
                 onChange={(e) => handleComponentUpdate(selectedComponentIndex, { 
                   content: e.target.value,
-                  text: e.target.value 
+                  text: e.target.value,
+                  placeholder: comp.type === 'Input' ? e.target.value : comp.props.placeholder,
+                  title: comp.type === 'Navbar' ? e.target.value : comp.props.title
                 })}
                 className="w-full px-3 py-2 border rounded"
                 rows={3}
-                placeholder="Enter content..."
+                placeholder="Enter text content..."
               />
             </div>
           )}
