@@ -336,3 +336,12 @@ function AdminDashboardDemo() {
     </div>
   );
 }
+
+export default function DemosPage() {
+  return (
+    <div className="min-h-screen bg-gray-50 p-8">
+      <h1 className="text-3xl font-bold mb-8">Demo Scenarios</h1>
+      <p className="text-gray-600">Component demonstrations are available in development mode.</p>
+    </div>
+  );
+}
