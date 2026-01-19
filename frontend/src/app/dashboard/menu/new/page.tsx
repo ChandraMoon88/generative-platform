@@ -28,7 +28,7 @@ interface FormErrors {
 
 const categories: { value: MenuCategory; label: string }[] = [
   { value: 'appetizer', label: 'Appetizer' },
-  { value: 'main_course', label: 'Main Course' },
+  { value: 'main', label: 'Main Course' },
   { value: 'dessert', label: 'Dessert' },
   { value: 'beverage', label: 'Beverage' },
   { value: 'side', label: 'Side' },
