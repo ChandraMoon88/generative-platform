@@ -287,7 +287,7 @@ export const useRestaurantStore = create<RestaurantState>((set, get) => ({
 
   createOrder: (tableId, customerName) => {
     const now = new Date().toISOString();
-    const orderNumber = `ORD-${new Date().toISOString().toString(36).toUpperCase()}`;
+    const orderNumber = `ORD-${Date.now().toString(36).toUpperCase()}`;
     
     const newOrder: Order = {
       id: uuidv4(),
