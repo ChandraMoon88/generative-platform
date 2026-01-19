@@ -217,16 +217,17 @@ projectsRouter.put('/:id', authenticateUser, async (req: Request, res: Response)
     const { id } = req.params;
     const { name, description, status, config, generatedFiles } = req.body;
     const user = (req as any).user;
-    const db = getDatabase();
     
-    const project = db.prepare('SELECT * FROM projects WHERE id = ?').get(id) as any;
+    const result = await query('SELECT * FROM projects WHERE id = $1', [id]);
     
-    if (!project) {
+    if (result.rows.length === 0) {
       return res.status(404).json({
         success: false,
         message: 'Project not found',
       });
     }
+    
+    const project = result.rows[0];
     
     // Access control: clients can only update their own projects
     if (user.role !== 'admin' && project.user_id !== user.id) {
@@ -236,21 +237,37 @@ projectsRouter.put('/:id', authenticateUser, async (req: Request, res: Response)
       });
     }
     
-    const updates: any = {
-      updated_at: Date.now(),
-    };
+    const updates: string[] = ['updated_at = $1'];
+    const values: any[] = [Date.now()];
+    let paramIndex = 2;
     
-    if (name !== undefined) updates.name = name;
-    if (description !== undefined) updates.description = description;
-    if (status !== undefined) updates.status = status;
-    if (config !== undefined) updates.config = JSON.stringify(config);
-    if (generatedFiles !== undefined) updates.generated_files = JSON.stringify(generatedFiles);
+    if (name !== undefined) {
+      updates.push(`name = $${paramIndex++}`);
+      values.push(name);
+    }
+    if (description !== undefined) {
+      updates.push(`description = $${paramIndex++}`);
+      values.push(description);
+    }
+    if (status !== undefined) {
+      updates.push(`status = $${paramIndex++}`);
+      values.push(status);
+    }
+    if (config !== undefined) {
+      updates.push(`config = $${paramIndex++}`);
+      values.push(JSON.stringify(config));
+    }
+    if (generatedFiles !== undefined) {
+      updates.push(`generated_files = $${paramIndex++}`);
+      values.push(JSON.stringify(generatedFiles));
+    }
     
-    const updateFields = Object.keys(updates).map(k => `${k} = ?`).join(', ');
-    const updateValues = Object.values(updates);
+    values.push(id);
     
-    db.prepare(`UPDATE projects SET ${updateFields} WHERE id = ?`)
-      .run(...updateValues, id);
+    await query(
+      `UPDATE projects SET ${updates.join(', ')} WHERE id = $${paramIndex}`,
+      values
+    );
     
     logger.info(`User ${user.id} (${user.role}) updated project ${id}`);
     
@@ -277,16 +294,17 @@ projectsRouter.delete('/:id', authenticateUser, async (req: Request, res: Respon
   try {
     const { id } = req.params;
     const user = (req as any).user;
-    const db = getDatabase();
     
-    const project = db.prepare('SELECT * FROM projects WHERE id = ?').get(id) as any;
+    const result = await query('SELECT * FROM projects WHERE id = $1', [id]);
     
-    if (!project) {
+    if (result.rows.length === 0) {
       return res.status(404).json({
         success: false,
         message: 'Project not found',
       });
     }
+    
+    const project = result.rows[0];
     
     // Access control: clients can only delete their own projects
     if (user.role !== 'admin' && project.user_id !== user.id) {
@@ -296,7 +314,7 @@ projectsRouter.delete('/:id', authenticateUser, async (req: Request, res: Respon
       });
     }
     
-    db.prepare('DELETE FROM projects WHERE id = ?').run(id);
+    await query('DELETE FROM projects WHERE id = $1', [id]);
     
     logger.info(`User ${user.id} (${user.role}) deleted project ${id}`);
     
@@ -330,21 +348,19 @@ projectsRouter.get('/user/:userId', authenticateUser, async (req: Request, res: 
       });
     }
     
-    const db = getDatabase();
-    
-    const projects = db.prepare(`
+    const result = await query(`
       SELECT p.*, u.name as user_name, u.email as user_email
       FROM projects p
       LEFT JOIN users u ON p.user_id = u.id
-      WHERE p.user_id = ?
+      WHERE p.user_id = $1
       ORDER BY p.updated_at DESC
-    `).all(userId);
+    `, [userId]);
     
     logger.info(`Admin ${user.id} accessed projects for user ${userId}`);
     
     res.json({
       success: true,
-      projects: projects.map(p => ({
+      projects: result.rows.map((p: any) => ({
         ...p,
         config: (p as any).config ? JSON.parse((p as any).config) : null,
         generated_files: (p as any).generated_files ? JSON.parse((p as any).generated_files) : null,
