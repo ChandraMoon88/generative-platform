@@ -173,6 +173,54 @@ export default function ProjectsPage() {
     );
   }
 
+  // If a project ID is in the URL, show the project detail view
+  if (currentProject) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <div className="max-w-7xl mx-auto p-6">
+          {/* Header */}
+          <div className="mb-6">
+            <button
+              onClick={() => {
+                setCurrentProject(null);
+                window.history.pushState({}, '', '/projects');
+              }}
+              className="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 flex items-center gap-2 text-sm mb-4"
+            >
+              ← Back to Projects
+            </button>
+            
+            <div className="bg-white rounded-lg shadow-sm p-6">
+              <div className="flex items-start justify-between mb-4">
+                <div>
+                  <h1 className="text-3xl font-bold mb-2">{currentProject.name}</h1>
+                  {currentProject.description && (
+                    <p className="text-gray-600">{currentProject.description}</p>
+                  )}
+                </div>
+                <span className={`px-3 py-1 rounded-lg text-sm font-medium ${getStatusColor(currentProject.status)}`}>
+                  {getStatusIcon(currentProject.status)} {currentProject.status}
+                </span>
+              </div>
+              
+              <div className="text-sm text-gray-500">
+                Created: {new Date(currentProject.created_at).toLocaleDateString()}
+              </div>
+            </div>
+          </div>
+
+          {/* Component Showcase */}
+          <div className="bg-white rounded-lg shadow-sm p-6">
+            <h2 className="text-xl font-bold mb-4">Add Components</h2>
+            <ComponentShowcase onComponentAdd={(comp) => {
+              console.log('Added component:', comp);
+            }} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
