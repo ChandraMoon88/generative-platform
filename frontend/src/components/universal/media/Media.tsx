@@ -329,12 +329,12 @@ export function ImageEditor({
     if (canvasRef.current) {
       const dataUrl = canvasRef.current.toDataURL('image/png');
       onSave(dataUrl);
-      userAssetManager.addAsset({
-        type: 'image',
-        name: 'edited-image.png',
-        data: dataUrl,
-        context: { editedFrom: id, filters: { brightness, contrast, saturation, rotation } },
-      });
+      // userAssetManager.addAsset({
+      //   type: 'image',
+      //   name: 'edited-image.png',
+      //   data: dataUrl,
+      //   context: { editedFrom: id, filters: { brightness, contrast, saturation, rotation } },
+      // });
     }
   };
 
@@ -498,12 +498,12 @@ export function DrawingCanvas({
     if (canvasRef.current) {
       const dataUrl = canvasRef.current.toDataURL('image/png');
       onSave?.(dataUrl);
-      userAssetManager.addAsset({
-        type: 'image',
-        name: 'drawing.png',
-        data: dataUrl,
-        context: { drawnIn: id },
-      });
+      // userAssetManager.addAsset({
+      //   type: 'image',
+      //   name: 'drawing.png',
+      //   data: dataUrl,
+      //   context: { drawnIn: id },
+      // });
     }
   };
 
