@@ -25,7 +25,7 @@ import type {
 
 // Configuration
 const CONFIG = {
-  API_ENDPOINT: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001',
+  API_ENDPOINT: process.env.NEXT_PUBLIC_API_URL || '/api',
   BATCH_SIZE: 10,
   FLUSH_INTERVAL: 5000, // 5 seconds
   DEBUG_MODE: process.env.NODE_ENV === 'development',

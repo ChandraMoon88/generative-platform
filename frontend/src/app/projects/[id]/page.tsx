@@ -86,7 +86,7 @@ export default function ProjectDetailPage() {
   const updateProject = async () => {
     try {
       const token = localStorage.getItem('user_token');
-      const res = await fetch(`http://localhost:3001/api/projects/${projectId}`, {
+      const res = await fetch(`/api/projects/${projectId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
