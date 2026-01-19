@@ -278,7 +278,7 @@ export function TemplateGallery({
 }
 
 // ========== DYNAMIC FORM BUILDER ==========
-export interface FormField {
+export interface BuilderFormField {
   id: string;
   type: 'text' | 'email' | 'number' | 'select' | 'checkbox' | 'textarea';
   label: string;
@@ -292,11 +292,11 @@ export function DynamicFormBuilder({
   onSave,
 }: {
   id: string;
-  onSave: (fields: FormField[]) => void;
+  onSave: (fields: BuilderFormField[]) => void;
 }) {
   const { track } = useEventTracking('DynamicFormBuilder', id);
-  const [fields, setFields] = useState<FormField[]>([]);
-  const [editingField, setEditingField] = useState<FormField | null>(null);
+  const [fields, setFields] = useState<BuilderFormField[]>([]);
+  const [editingField, setEditingField] = useState<BuilderFormField | null>(null);
 
   const addField = (type: FormField['type']) => {
     const newField: FormField = {
