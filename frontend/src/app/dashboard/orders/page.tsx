@@ -53,6 +53,7 @@ export default function OrdersPage() {
     .sort((a, b) => {
       const aVal = a[sortField];
       const bVal = b[sortField];
+      if (!aVal || !bVal) return 0;
       if (sortDir === 'asc') return aVal > bVal ? 1 : -1;
       return aVal < bVal ? 1 : -1;
     });
