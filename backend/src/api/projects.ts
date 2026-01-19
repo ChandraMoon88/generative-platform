@@ -4,14 +4,14 @@
  */
 
 import { Router, Request, Response } from 'express';
-import { getDatabase } from '../db/database';
+import { query } from '../db/postgres';
 import { logger } from '../utils/logger';
 import { v4 as uuidv4 } from 'uuid';
 
 export const projectsRouter = Router();
 
 // Middleware to extract and validate user from token
-function authenticateUser(req: Request, res: Response, next: Function) {
+async function authenticateUser(req: Request, res: Response, next: Function) {
   try {
     const token = req.headers.authorization?.replace('Bearer ', '');
     
@@ -22,16 +22,16 @@ function authenticateUser(req: Request, res: Response, next: Function) {
     const decoded = Buffer.from(token, 'base64').toString();
     const [userId] = decoded.split(':');
 
-    const db = getDatabase();
-    const user = db.prepare('SELECT id, role FROM users WHERE id = ?').get(userId) as any;
+    const result = await query('SELECT id, role FROM users WHERE id = $1', [userId]);
 
-    if (!user) {
+    if (result.rows.length === 0) {
       return res.status(401).json({ success: false, message: 'Invalid token' });
     }
 
-    (req as any).user = user;
+    (req as any).user = result.rows[0];
     next();
   } catch (error) {
+    logger.error('Authentication failed:', error);
     return res.status(401).json({ success: false, message: 'Authentication failed' });
   }
 }
@@ -45,33 +45,32 @@ function authenticateUser(req: Request, res: Response, next: Function) {
 projectsRouter.get('/', authenticateUser, async (req: Request, res: Response) => {
   try {
     const user = (req as any).user;
-    const db = getDatabase();
     
-    let projects: any[];
+    let result: any;
     
     if (user.role === 'admin') {
       // Admin sees ALL projects from ALL users
-      projects = db.prepare(`
+      result = await query(`
         SELECT p.*, u.name as user_name, u.email as user_email
         FROM projects p
         LEFT JOIN users u ON p.user_id = u.id
         ORDER BY p.updated_at DESC
-      `).all();
+      `);
       
-      logger.info(`Admin ${user.id} accessed all projects (${projects.length} total)`);
+      logger.info(`Admin ${user.id} accessed all projects (${result.rows.length} total)`);
     } else {
       // Clients see only their own projects
-      projects = db.prepare(`
+      result = await query(`
         SELECT * FROM projects 
-        WHERE user_id = ?
+        WHERE user_id = $1
         ORDER BY updated_at DESC
-      `).all(user.id);
+      `, [user.id]);
       
-      logger.info(`User ${user.id} accessed their projects (${projects.length} total)`);
+      logger.info(`User ${user.id} accessed their projects (${result.rows.length} total)`);
     }
     
     // Parse JSON fields
-    projects = projects.map(p => ({
+    const projects = result.rows.map((p: any) => ({
       ...p,
       config: p.config ? JSON.parse(p.config) : null,
       generated_files: p.generated_files ? JSON.parse(p.generated_files) : null,
