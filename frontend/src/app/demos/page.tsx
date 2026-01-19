@@ -5,33 +5,55 @@
 
 'use client';
 
-import React, { useState } from 'react';
-import {
-  DataTable,
-  CardGrid,
-  DetailView,
-  Button,
-  Navbar,
-  Modal,
-  KanbanBoard,
-  MonthCalendar,
-  SettingsPanel,
-} from '@/components/universal';
+import React from 'react';
 
-// ========== RESTAURANT BOOKING DEMO ==========
-function RestaurantBookingDemo() {
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const [showBookingForm, setShowBookingForm] = useState(false);
+export default function DemosPage() {
+  return (
+    <div className="min-h-screen bg-gray-50 p-8">
+      <div className="max-w-4xl mx-auto">
+        <h1 className="text-4xl font-bold mb-4">Demo Scenarios</h1>
+        <p className="text-lg text-gray-600 mb-8">
+          Interactive component demonstrations are available in development mode.
+        </p>
+        
+        <div className="bg-white rounded-lg shadow p-6">
+          <h2 className="text-2xl font-semibold mb-4">Available Demos</h2>
+          <ul className="space-y-3">
+            <li className="flex items-start">
+              <span className="text-blue-600 mr-2">🍽️</span>
+              <div>
+                <strong>Restaurant Booking System</strong>
+                <p className="text-gray-600">Calendar, forms, and reservation management</p>
+              </div>
+            </li>
+            <li className="flex items-start">
+              <span className="text-blue-600 mr-2">📋</span>
+              <div>
+                <strong>Project Management</strong>
+                <p className="text-gray-600">Kanban boards, task tracking, and team collaboration</p>
+              </div>
+            </li>
+            <li className="flex items-start">
+              <span className="text-blue-600 mr-2">🛒</span>
+              <div>
+                <strong>E-Commerce Store</strong>
+                <p className="text-gray-600">Product listings, shopping cart, and checkout flow</p>
+              </div>
+            </li>
+            <li className="flex items-start">
+              <span className="text-blue-600 mr-2">⚙️</span>
+              <div>
+                <strong>Admin Dashboard</strong>
+                <p className="text-gray-600">User management, data tables, and system settings</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  );
+}
 
-  const events = [
-    {
-      id: '1',
-      title: 'Reserved: Table 5',
-      start: new Date(2026, 0, 20, 19, 0),
-      end: new Date(2026, 0, 20, 21, 0),
-      color: '#3b82f6',
-    },
-  ];
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
