@@ -196,6 +196,9 @@ export default function NewMenuItemPage() {
         isAvailable: formData.isAvailable,
         ingredients,
         allergens,
+        isVegetarian: false,
+        isVegan: false,
+        isGlutenFree: false,
       });
       
       // Track submission
