@@ -56,7 +56,7 @@ export default function NewMenuItemPage() {
     name: '',
     description: '',
     price: '',
-    category: 'main_course',
+    category: 'main',
     preparationTime: '',
     isAvailable: true,
     ingredients: '',
