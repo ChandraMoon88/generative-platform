@@ -435,4 +435,10 @@ async function start() {
   }
 }
 
-start();
+// For local development
+if (require.main === module) {
+  start();
+}
+
+// For Vercel serverless deployment
+export default app;
