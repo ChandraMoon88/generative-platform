@@ -268,12 +268,12 @@ export function ColorPicker({
     onChange(color);
 
     // Store in user assets
-    userAssetManager.addAsset({
-      type: 'color',
-      name: color,
-      data: color,
-      context: { selectedFrom: id },
-    });
+    // userAssetManager.addAsset({
+    //   type: 'color',
+    //   name: color,
+    //   data: color,
+    //   context: { selectedFrom: id },
+    // });
   };
 
   return (
