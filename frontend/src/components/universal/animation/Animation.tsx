@@ -245,7 +245,7 @@ export const GestureHandler: React.FC<{
   className = '' 
 }) => {
   const startPos = useRef({ x: 0, y: 0 });
-  const [touches, setTouches] = useState<Touch[]>([]);
+  const [touches, setTouches] = useState<React.Touch[]>([]);
   const initialDistance = useRef(0);
   const initialAngle = useRef(0);
 
