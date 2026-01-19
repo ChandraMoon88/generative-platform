@@ -521,7 +521,7 @@ export default function CreativeUniverseGame({ onGameComplete }: { onGameComplet
           </div>
 
           {/* Answer UI based on challenge type */}
-          {challenge.type === 'choice' && 'options' in challenge && (
+          {challenge.type === 'choice' && 'options' in challenge && challenge.options && (
             <div className="grid md:grid-cols-2 gap-4">
               {challenge.options.map((option: string, index: number) => (
                 <button
@@ -540,7 +540,7 @@ export default function CreativeUniverseGame({ onGameComplete }: { onGameComplet
             </div>
           )}
 
-          {challenge.type === 'text' && 'placeholder' in challenge && (
+          {challenge.type === 'text' && 'placeholder' in challenge && challenge.placeholder && (
             <div>
               <textarea
                 value={userAnswer || ''}
@@ -563,8 +563,8 @@ export default function CreativeUniverseGame({ onGameComplete }: { onGameComplet
             <div>
               <input
                 type="range"
-                min={challenge.min || 0}
-                max={challenge.max || 100}
+                min={'min' in challenge ? challenge.min : 0}
+                max={'max' in challenge ? challenge.max : 100}
                 value={userAnswer || 50}
                 onChange={(e) => setUserAnswer(parseInt(e.target.value))}
                 className="w-full h-4 bg-purple-200 rounded-lg appearance-none cursor-pointer"
