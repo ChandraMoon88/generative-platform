@@ -48,8 +48,13 @@ export const logger = winston.createLogger({
   transports,
 });
 
-// Create logs directory if it doesn't exist
-import { mkdirSync, existsSync } from 'fs';
-if (!existsSync('logs')) {
-  mkdirSync('logs');
+// Create logs directory if it doesn't exist (only in development)
+if (process.env.NODE_ENV !== 'production') {
+  import('fs').then(({ mkdirSync, existsSync }) => {
+    if (!existsSync('logs')) {
+      mkdirSync('logs');
+    }
+  }).catch(() => {
+    // Ignore errors in production
+  });
 }
