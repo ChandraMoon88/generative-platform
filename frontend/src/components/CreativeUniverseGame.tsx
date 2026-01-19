@@ -71,20 +71,21 @@ const gameStructure = {
     stages: [
       {
         id: "welcome",
-        name: "First Steps",
+        name: "Philosophy of Space",
         challenges: [
-          { id: "intro1", type: "choice", question: "What draws you to create?", options: ["Beauty", "Expression", "Connection", "Innovation"], points: 50 },
-          { id: "intro2", type: "choice", question: "How do you want people to feel?", options: ["Inspired", "Peaceful", "Excited", "Curious"], points: 50 },
-          { id: "intro3", type: "match", question: "Match colors to feelings:", pairs: [["Red", "Energy"], ["Blue", "Calm"], ["Green", "Growth"]], points: 100 }
+          { id: "intro1", type: "choice", question: "In environmental psychology, how does spatial cognition influence user behavior in digital landscapes?", options: ["Affordance Theory - spaces suggest actions", "Gestalt Principles - wholeness perception", "Biophilic Design - nature connection", "Phenomenology - lived experience"], points: 50 },
+          { id: "intro2", type: "choice", question: "If color temperature could represent temporal dynamics, how would you map time to chromatic experience?", options: ["Warm→Cool: Past→Future", "Saturation: Moment Intensity", "Hue Rotation: Cyclical Rhythm", "Value Gradient: Consciousness Depth"], points: 75 },
+          { id: "intro3", type: "text", question: "🎮 Fun Challenge: Describe your ideal digital environment as if it were a living organism. What does it breathe? How does it grow?", placeholder: "My environment breathes through...", points: 100 }
         ]
       },
       {
         id: "environment-intro",
-        name: "Understanding Environments",
+        name: "Spatial Semantics",
         challenges: [
-          { id: "env1", type: "choice", question: "What makes a space feel welcoming?", options: ["Warm Colors", "Open Layout", "Soft Lighting", "Natural Elements"], points: 75 },
-          { id: "env2", type: "slider", question: "How much energy should your space have?", min: 0, max: 100, points: 75 },
-          { id: "env3", type: "choice", question: "What atmosphere do you prefer?", options: ["Cozy & Intimate", "Grand & Impressive", "Light & Airy", "Bold & Dramatic"], points: 75 }
+          { id: "env1", type: "choice", question: "In the context of semiotics, how do environmental signifiers create meaning hierarchies?", options: ["Icons: Visual Metaphors", "Indexes: Causal Relationships", "Symbols: Cultural Constructs", "Syntactic Patterns: Structural Rhythm"], points: 100 },
+          { id: "env2", type: "slider", question: "🎮 Fun Activity: Adjust the 'emotional resonance frequency' of your space (0=meditative, 100=exhilarating)", min: 0, max: 100, points: 75 },
+          { id: "env3", type: "choice", question: "How does negative space function as an active compositional element in environmental narrative?", options: ["Silence as Emphasis", "Void as Potential", "Breath as Rhythm", "Absence as Presence"], points: 100 },
+          { id: "env4", type: "text", question: "🌟 Creative Exercise: If your environment were a musical composition, what would be its signature chord progression?", placeholder: "My spatial symphony moves from...", points: 150 }
         ]
       }
     ]
