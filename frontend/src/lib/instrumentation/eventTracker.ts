@@ -126,6 +126,11 @@ class EventTracker {
    * Start the periodic flush interval
    */
   private startFlushInterval() {
+    // Guard against server-side rendering
+    if (typeof window === 'undefined') {
+      return;
+    }
+    
     setInterval(() => {
       if (this.eventQueue.length > 0) {
         this.flush();
