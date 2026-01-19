@@ -17,13 +17,19 @@ export default function ClientLogin() {
     setLoading(true);
 
     try {
+      console.log('Attempting login with:', { email });
+      
       const response = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
       });
 
+      console.log('Response status:', response.status);
+      console.log('Response ok:', response.ok);
+      
       const data = await response.json();
+      console.log('Response data:', data);
 
       if (response.ok) {
         console.log('Login successful, saving to localStorage:', data);
@@ -33,14 +39,25 @@ export default function ClientLogin() {
         localStorage.setItem('user_role', data.user.role);
         localStorage.setItem('user_name', data.user.name);
         console.log('Token saved:', localStorage.getItem('user_token'));
-        console.log('Redirecting to /projects');
+        console.log('All localStorage items:', {
+          token: localStorage.getItem('user_token'),
+          email: localStorage.getItem('user_email'),
+          id: localStorage.getItem('user_id'),
+          role: localStorage.getItem('user_role'),
+          name: localStorage.getItem('user_name')
+        });
+        console.log('Redirecting to /projects in 1 second...');
         
-        // Force a full page reload to ensure localStorage is available
-        window.location.href = '/projects';
+        // Small delay to ensure localStorage is written
+        setTimeout(() => {
+          window.location.href = '/projects';
+        }, 100);
       } else {
+        console.error('Login failed:', data.message);
         setError(data.message || 'Login failed');
       }
     } catch (err) {
+      console.error('Login error:', err);
       setError('Connection error. Please try again.');
     } finally {
       setLoading(false);
