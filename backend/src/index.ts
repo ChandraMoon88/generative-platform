@@ -13,7 +13,7 @@ import { authRouter } from './api/auth';
 import { projectsRouter } from './api/projects';
 import { assetsRouter } from './api/assets';
 import { webhookRouter } from './api/webhook';
-import { initDatabase } from './db/database';
+import { initPostgresPool, initializeSchema } from './db/postgres';
 import { logger } from './utils/logger';
 import { 
   rateLimiter, 
@@ -47,14 +47,15 @@ app.use(validateInput);
 // Temporarily disable CSRF for testing
 // app.use(csrfProtection);
 
-// Initialize database for serverless
+// Initialize PostgreSQL for serverless
 let dbInitialized = false;
 app.use(async (req, res, next) => {
   if (!dbInitialized) {
     try {
-      await initDatabase();
+      initPostgresPool();
+      await initializeSchema();
       dbInitialized = true;
-      logger.info('Database initialized for serverless request');
+      logger.info('PostgreSQL initialized for serverless request');
     } catch (error) {
       logger.error('Database initialization failed:', error);
       return res.status(500).json({ error: 'Database initialization failed' });
