@@ -720,6 +720,9 @@ export const useRestaurantStore = create<RestaurantState>((set, get) => ({
       preparationTime: 15,
       isAvailable: true,
       allergens: ['gluten', 'dairy'],
+      isVegetarian: false,
+      isVegan: false,
+      isGlutenFree: false,
     });
     
     store.addMenuItem({
@@ -731,6 +734,9 @@ export const useRestaurantStore = create<RestaurantState>((set, get) => ({
       preparationTime: 8,
       isAvailable: true,
       allergens: ['gluten', 'dairy'],
+      isVegetarian: true,
+      isVegan: false,
+      isGlutenFree: false,
     });
     
     store.addMenuItem({
@@ -742,6 +748,9 @@ export const useRestaurantStore = create<RestaurantState>((set, get) => ({
       preparationTime: 12,
       isAvailable: true,
       allergens: ['gluten', 'dairy', 'eggs'],
+      isVegetarian: true,
+      isVegan: false,
+      isGlutenFree: false,
     });
     
     // Sample Tables
