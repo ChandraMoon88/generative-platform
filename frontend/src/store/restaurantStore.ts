@@ -468,8 +468,8 @@ export const useRestaurantStore = create<RestaurantState>((set, get) => ({
     
     // Update table status
     const order = get().orders.find((o) => o.id === orderId);
-    if (order?.tableNumber) {
-      const table = get().tables.find((t) => t.number === order.tableNumber);
+    if (order?.tableId) {
+      const table = get().tables.find((t) => t.id === order.tableId);
       if (table) {
         get().updateTableStatus(table.id, 'cleaning');
       }
