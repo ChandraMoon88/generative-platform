@@ -3,7 +3,7 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import ComponentShowcase from '@/components/ComponentShowcase';
-import GameFlow from '@/components/GameFlow';
+// import GameFlow from '@/components/GameFlow';
 
 interface Project {
   id: string;
@@ -756,9 +756,12 @@ function ProjectsContent() {
   }
 
   // Show game mode for new users (no projects and first time)
+  // Temporarily disabled
+  /*
   if (gameMode && !projectId && projects.length === 0) {
     return <GameFlow onAppCreated={handleGameAppCreated} />;
   }
+  */
 
   // If a project ID is in the URL, show the project detail view
   if (currentProject) {
