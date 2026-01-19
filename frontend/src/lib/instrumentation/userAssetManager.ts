@@ -214,13 +214,18 @@ class UserAssetManager {
    */
   private async syncToBackend(asset: UserAsset) {
     try {
+      // Check if running in browser environment
+      const sessionId = typeof window !== 'undefined' && typeof sessionStorage !== 'undefined' 
+        ? sessionStorage.getItem('generative_session_id') 
+        : null;
+      
       await fetch(this.apiEndpoint, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          sessionId: sessionStorage.getItem('generative_session_id'),
+          sessionId,
           asset,
         }),
       });
