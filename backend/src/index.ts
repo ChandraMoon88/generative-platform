@@ -378,6 +378,22 @@ app.use(express.json({ limit: '1mb' })); // Reduced from 10mb for security
 app.use(validateInput);
 app.use(csrfProtection);
 
+// Initialize database for serverless
+let dbInitialized = false;
+app.use(async (req, res, next) => {
+  if (!dbInitialized) {
+    try {
+      await initDatabase();
+      dbInitialized = true;
+      logger.info('Database initialized for serverless request');
+    } catch (error) {
+      logger.error('Database initialization failed:', error);
+      return res.status(500).json({ error: 'Database initialization failed' });
+    }
+  }
+  next();
+});
+
 // Request logging
 app.use((req, res, next) => {
   const start = Date.now();
