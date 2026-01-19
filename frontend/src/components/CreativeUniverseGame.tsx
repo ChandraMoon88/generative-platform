@@ -307,8 +307,14 @@ const gameStructure = {
 export default function CreativeUniverseGame({ onGameComplete }: { onGameComplete: (components: any[]) => void }) {
   const [progress, setProgress] = useState<GameProgress>(() => {
     if (typeof window !== 'undefined') {
+      const gameVersion = '2.0.0'; // Version tracking
       const saved = localStorage.getItem('gameProgress');
-      if (saved) return JSON.parse(saved);
+      const savedVersion = localStorage.getItem('gameVersion');
+      
+      // If version mismatch, reset progress
+      if (saved && savedVersion === gameVersion) {
+        return JSON.parse(saved);
+      }
     }
     return {
       currentLevel: 1,
