@@ -238,33 +238,44 @@ function ProjectsContent() {
 
   const renderComponent = (comp: any, index: number) => {
     const isSelected = selectedComponentIndex === index;
-    const commonProps = {
-      ...comp.props,
-      className: `${comp.props.className || ''} ${isSelected ? 'ring-2 ring-purple-500' : ''}`,
+    
+    // Build inline styles from component props
+    const dynamicStyles: React.CSSProperties = {
+      backgroundColor: comp.props.backgroundColor || undefined,
+      color: comp.props.color || undefined,
+      borderWidth: comp.props.borderWidth || undefined,
+      borderColor: comp.props.borderColor || undefined,
+      borderRadius: comp.props.borderRadius || undefined,
+      borderStyle: comp.props.borderWidth ? 'solid' : undefined,
+      padding: comp.props.padding || undefined,
+      margin: comp.props.margin || undefined,
+      width: comp.props.width || undefined,
+      fontSize: comp.props.fontSize || undefined,
+      fontWeight: comp.props.fontWeight || undefined,
+      textAlign: comp.props.textAlign as any || undefined,
     };
 
     return (
       <div
         key={comp.id}
         onClick={() => setSelectedComponentIndex(index)}
-        className={`relative p-4 rounded-lg transition-all cursor-pointer ${
-          isSelected ? 'bg-purple-50 border-2 border-purple-500' : 'bg-white border-2 border-transparent hover:border-gray-300'
+        className={`relative transition-all cursor-pointer ${
+          isSelected ? 'ring-4 ring-purple-500' : 'hover:ring-2 hover:ring-gray-300'
         }`}
+        style={dynamicStyles}
       >
         {isSelected && (
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              handleComponentDelete(index);
-            }}
-            className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded hover:bg-red-600 text-xs"
-          >
-            ✕ Delete
-          </button>
+          <div className="absolute -top-8 left-0 right-0 bg-purple-600 text-white text-xs px-2 py-1 rounded-t flex justify-between items-center z-10">
+            <span>{comp.type}</span>
+            <span className="text-xs opacity-75">Click to edit →</span>
+          </div>
         )}
         
         {comp.type === 'Button' && (
-          <button {...commonProps}>
+          <button
+            style={dynamicStyles}
+            className="px-6 py-3 rounded font-medium transition-all"
+          >
             {comp.props.text || 'Button'}
           </button>
         )}
@@ -273,29 +284,66 @@ function ProjectsContent() {
           <input
             type="text"
             placeholder={comp.props.placeholder || 'Enter text...'}
-            className="w-full px-4 py-2 border rounded"
-            {...commonProps}
+            style={dynamicStyles}
+            className="px-4 py-2 border rounded"
+            readOnly
           />
         )}
         
         {comp.type === 'Card' && (
-          <div className="bg-white p-6 rounded-lg shadow-md" {...commonProps}>
-            <h3 className="text-lg font-bold mb-2">{comp.props.title || 'Card Title'}</h3>
-            <p className="text-gray-600">{comp.props.content || 'Card content goes here'}</p>
+          <div style={dynamicStyles} className="p-6 rounded-lg shadow-md">
+            <h3 className="text-lg font-bold mb-2" style={{ color: comp.props.color }}>
+              {comp.props.title || 'Card Title'}
+            </h3>
+            <p style={{ color: comp.props.color }}>{comp.props.content || 'Card content goes here'}</p>
           </div>
         )}
         
         {comp.type === 'Alert' && (
-          <div className={`p-4 rounded ${comp.props.type === 'error' ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'}`}>
+          <div style={dynamicStyles} className="p-4 rounded">
             {comp.props.message || 'Alert message'}
           </div>
         )}
         
-        {!['Button', 'Input', 'Card', 'Alert'].includes(comp.type) && (
-          <div className="p-4 bg-gray-100 rounded text-center">
-            <div className="text-2xl mb-2">🧩</div>
+        {comp.type === 'Navbar' && (
+          <nav style={dynamicStyles} className="p-4 rounded">
+            <div className="flex items-center justify-between">
+              <div className="text-xl font-bold">{comp.props.title || 'Logo'}</div>
+              <div className="flex gap-4">
+                <a className="hover:opacity-75">Home</a>
+                <a className="hover:opacity-75">About</a>
+                <a className="hover:opacity-75">Contact</a>
+              </div>
+            </div>
+          </nav>
+        )}
+
+        {comp.type === 'Table' && (
+          <div style={dynamicStyles} className="overflow-x-auto">
+            <table className="min-w-full border">
+              <thead>
+                <tr className="bg-gray-100">
+                  <th className="px-4 py-2 border">Column 1</th>
+                  <th className="px-4 py-2 border">Column 2</th>
+                  <th className="px-4 py-2 border">Column 3</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td className="px-4 py-2 border">Data 1</td>
+                  <td className="px-4 py-2 border">Data 2</td>
+                  <td className="px-4 py-2 border">Data 3</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        )}
+        
+        {!['Button', 'Input', 'Card', 'Alert', 'Navbar', 'Table'].includes(comp.type) && (
+          <div style={dynamicStyles} className="p-6 rounded text-center">
+            <div className="text-3xl mb-2">🧩</div>
             <div className="font-medium">{comp.type}</div>
-            <div className="text-xs text-gray-600 mt-1">{comp.category}</div>
+            <p className="text-sm mt-2">{comp.props.content || comp.props.text || 'Edit this component'}</p>
           </div>
         )}
       </div>
@@ -308,99 +356,339 @@ function ProjectsContent() {
     const comp = projectComponents[selectedComponentIndex];
     
     return (
-      <div className="bg-white rounded-lg shadow-sm p-4 space-y-4">
-        <h3 className="font-bold text-lg mb-4">Edit {comp.type}</h3>
-        
-        {comp.type === 'Button' && (
-          <>
-            <div>
-              <label className="block text-sm font-medium mb-1">Button Text</label>
+      <div className="bg-white rounded-lg shadow-sm p-4 space-y-4 max-h-[calc(100vh-120px)] overflow-y-auto">
+        <div className="flex items-center justify-between border-b pb-3">
+          <h3 className="font-bold text-lg">{comp.type}</h3>
+          <button
+            onClick={() => handleComponentDelete(selectedComponentIndex)}
+            className="px-3 py-1 bg-red-500 text-white rounded text-xs hover:bg-red-600"
+          >
+            Delete
+          </button>
+        </div>
+
+        {/* Common Style Controls */}
+        <div className="space-y-3">
+          <div className="font-semibold text-sm text-gray-700 border-b pb-2">🎨 Appearance</div>
+          
+          {/* Background Color */}
+          <div>
+            <label className="block text-xs font-medium mb-2 text-gray-600">Background Color</label>
+            <div className="flex gap-2">
+              <input
+                type="color"
+                value={comp.props.backgroundColor || '#ffffff'}
+                onChange={(e) => handleComponentUpdate(selectedComponentIndex, { backgroundColor: e.target.value })}
+                className="w-12 h-10 rounded border cursor-pointer"
+              />
               <input
                 type="text"
-                value={comp.props.text || ''}
-                onChange={(e) => handleComponentUpdate(selectedComponentIndex, { text: e.target.value })}
-                className="w-full px-3 py-2 border rounded"
+                value={comp.props.backgroundColor || '#ffffff'}
+                onChange={(e) => handleComponentUpdate(selectedComponentIndex, { backgroundColor: e.target.value })}
+                className="flex-1 px-3 py-2 border rounded text-sm"
+                placeholder="#ffffff"
               />
             </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">Variant</label>
-              <select
-                value={comp.props.variant || 'primary'}
-                onChange={(e) => handleComponentUpdate(selectedComponentIndex, { variant: e.target.value })}
-                className="w-full px-3 py-2 border rounded"
-              >
-                <option value="primary">Primary</option>
-                <option value="secondary">Secondary</option>
-                <option value="success">Success</option>
-                <option value="danger">Danger</option>
-              </select>
-            </div>
-          </>
-        )}
-        
-        {comp.type === 'Input' && (
-          <>
-            <div>
-              <label className="block text-sm font-medium mb-1">Placeholder</label>
+          </div>
+
+          {/* Text Color */}
+          <div>
+            <label className="block text-xs font-medium mb-2 text-gray-600">Text Color</label>
+            <div className="flex gap-2">
+              <input
+                type="color"
+                value={comp.props.color || '#000000'}
+                onChange={(e) => handleComponentUpdate(selectedComponentIndex, { color: e.target.value })}
+                className="w-12 h-10 rounded border cursor-pointer"
+              />
               <input
                 type="text"
-                value={comp.props.placeholder || ''}
-                onChange={(e) => handleComponentUpdate(selectedComponentIndex, { placeholder: e.target.value })}
-                className="w-full px-3 py-2 border rounded"
+                value={comp.props.color || '#000000'}
+                onChange={(e) => handleComponentUpdate(selectedComponentIndex, { color: e.target.value })}
+                className="flex-1 px-3 py-2 border rounded text-sm"
+                placeholder="#000000"
               />
             </div>
-          </>
-        )}
-        
-        {comp.type === 'Card' && (
-          <>
-            <div>
-              <label className="block text-sm font-medium mb-1">Title</label>
+          </div>
+
+          {/* Border */}
+          <div>
+            <label className="block text-xs font-medium mb-2 text-gray-600">Border Width (px)</label>
+            <input
+              type="range"
+              min="0"
+              max="10"
+              value={parseInt(comp.props.borderWidth) || 0}
+              onChange={(e) => handleComponentUpdate(selectedComponentIndex, { borderWidth: e.target.value + 'px' })}
+              className="w-full"
+            />
+            <span className="text-xs text-gray-500">{comp.props.borderWidth || '0px'}</span>
+          </div>
+
+          <div>
+            <label className="block text-xs font-medium mb-2 text-gray-600">Border Color</label>
+            <div className="flex gap-2">
+              <input
+                type="color"
+                value={comp.props.borderColor || '#e5e7eb'}
+                onChange={(e) => handleComponentUpdate(selectedComponentIndex, { borderColor: e.target.value })}
+                className="w-12 h-10 rounded border cursor-pointer"
+              />
               <input
                 type="text"
-                value={comp.props.title || ''}
-                onChange={(e) => handleComponentUpdate(selectedComponentIndex, { title: e.target.value })}
-                className="w-full px-3 py-2 border rounded"
+                value={comp.props.borderColor || '#e5e7eb'}
+                onChange={(e) => handleComponentUpdate(selectedComponentIndex, { borderColor: e.target.value })}
+                className="flex-1 px-3 py-2 border rounded text-sm"
               />
             </div>
+          </div>
+
+          {/* Border Radius */}
+          <div>
+            <label className="block text-xs font-medium mb-2 text-gray-600">Border Radius (px)</label>
+            <input
+              type="range"
+              min="0"
+              max="50"
+              value={parseInt(comp.props.borderRadius) || 0}
+              onChange={(e) => handleComponentUpdate(selectedComponentIndex, { borderRadius: e.target.value + 'px' })}
+              className="w-full"
+            />
+            <span className="text-xs text-gray-500">{comp.props.borderRadius || '0px'}</span>
+          </div>
+        </div>
+
+        {/* Spacing Controls */}
+        <div className="space-y-3">
+          <div className="font-semibold text-sm text-gray-700 border-b pb-2">📐 Spacing</div>
+          
+          <div>
+            <label className="block text-xs font-medium mb-2 text-gray-600">Padding (px)</label>
+            <input
+              type="range"
+              min="0"
+              max="100"
+              value={parseInt(comp.props.padding) || 0}
+              onChange={(e) => handleComponentUpdate(selectedComponentIndex, { padding: e.target.value + 'px' })}
+              className="w-full"
+            />
+            <span className="text-xs text-gray-500">{comp.props.padding || '0px'}</span>
+          </div>
+
+          <div>
+            <label className="block text-xs font-medium mb-2 text-gray-600">Margin (px)</label>
+            <input
+              type="range"
+              min="0"
+              max="100"
+              value={parseInt(comp.props.margin) || 0}
+              onChange={(e) => handleComponentUpdate(selectedComponentIndex, { margin: e.target.value + 'px' })}
+              className="w-full"
+            />
+            <span className="text-xs text-gray-500">{comp.props.margin || '0px'}</span>
+          </div>
+
+          <div>
+            <label className="block text-xs font-medium mb-2 text-gray-600">Width</label>
+            <select
+              value={comp.props.width || 'auto'}
+              onChange={(e) => handleComponentUpdate(selectedComponentIndex, { width: e.target.value })}
+              className="w-full px-3 py-2 border rounded text-sm"
+            >
+              <option value="auto">Auto</option>
+              <option value="100%">Full Width (100%)</option>
+              <option value="50%">Half Width (50%)</option>
+              <option value="33.333%">One Third (33%)</option>
+              <option value="300px">Fixed 300px</option>
+              <option value="500px">Fixed 500px</option>
+            </select>
+          </div>
+        </div>
+
+        {/* Typography Controls */}
+        <div className="space-y-3">
+          <div className="font-semibold text-sm text-gray-700 border-b pb-2">✍️ Typography</div>
+          
+          <div>
+            <label className="block text-xs font-medium mb-2 text-gray-600">Font Size (px)</label>
+            <input
+              type="range"
+              min="10"
+              max="72"
+              value={parseInt(comp.props.fontSize) || 16}
+              onChange={(e) => handleComponentUpdate(selectedComponentIndex, { fontSize: e.target.value + 'px' })}
+              className="w-full"
+            />
+            <span className="text-xs text-gray-500">{comp.props.fontSize || '16px'}</span>
+          </div>
+
+          <div>
+            <label className="block text-xs font-medium mb-2 text-gray-600">Font Weight</label>
+            <select
+              value={comp.props.fontWeight || 'normal'}
+              onChange={(e) => handleComponentUpdate(selectedComponentIndex, { fontWeight: e.target.value })}
+              className="w-full px-3 py-2 border rounded text-sm"
+            >
+              <option value="300">Light (300)</option>
+              <option value="normal">Normal (400)</option>
+              <option value="500">Medium (500)</option>
+              <option value="600">Semi-Bold (600)</option>
+              <option value="bold">Bold (700)</option>
+              <option value="900">Black (900)</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-xs font-medium mb-2 text-gray-600">Text Align</label>
+            <div className="grid grid-cols-4 gap-2">
+              {['left', 'center', 'right', 'justify'].map(align => (
+                <button
+                  key={align}
+                  onClick={() => handleComponentUpdate(selectedComponentIndex, { textAlign: align })}
+                  className={`px-2 py-2 border rounded text-xs ${
+                    comp.props.textAlign === align ? 'bg-purple-600 text-white' : 'bg-white'
+                  }`}
+                >
+                  {align === 'left' && '⬅'}
+                  {align === 'center' && '↔️'}
+                  {align === 'right' && '➡'}
+                  {align === 'justify' && '⬌'}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Component-Specific Properties */}
+        <div className="space-y-3">
+          <div className="font-semibold text-sm text-gray-700 border-b pb-2">⚙️ Content</div>
+          
+          {comp.type === 'Button' && (
+            <>
+              <div>
+                <label className="block text-xs font-medium mb-2 text-gray-600">Button Text</label>
+                <input
+                  type="text"
+                  value={comp.props.text || ''}
+                  onChange={(e) => handleComponentUpdate(selectedComponentIndex, { text: e.target.value })}
+                  className="w-full px-3 py-2 border rounded"
+                  placeholder="Click me"
+                />
+              </div>
+            </>
+          )}
+          
+          {comp.type === 'Input' && (
+            <>
+              <div>
+                <label className="block text-xs font-medium mb-2 text-gray-600">Placeholder</label>
+                <input
+                  type="text"
+                  value={comp.props.placeholder || ''}
+                  onChange={(e) => handleComponentUpdate(selectedComponentIndex, { placeholder: e.target.value })}
+                  className="w-full px-3 py-2 border rounded"
+                  placeholder="Enter text..."
+                />
+              </div>
+            </>
+          )}
+          
+          {comp.type === 'Card' && (
+            <>
+              <div>
+                <label className="block text-xs font-medium mb-2 text-gray-600">Title</label>
+                <input
+                  type="text"
+                  value={comp.props.title || ''}
+                  onChange={(e) => handleComponentUpdate(selectedComponentIndex, { title: e.target.value })}
+                  className="w-full px-3 py-2 border rounded"
+                  placeholder="Card title"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-medium mb-2 text-gray-600">Content</label>
+                <textarea
+                  value={comp.props.content || ''}
+                  onChange={(e) => handleComponentUpdate(selectedComponentIndex, { content: e.target.value })}
+                  className="w-full px-3 py-2 border rounded"
+                  rows={4}
+                  placeholder="Card content"
+                />
+              </div>
+            </>
+          )}
+          
+          {comp.type === 'Alert' && (
+            <>
+              <div>
+                <label className="block text-xs font-medium mb-2 text-gray-600">Message</label>
+                <input
+                  type="text"
+                  value={comp.props.message || ''}
+                  onChange={(e) => handleComponentUpdate(selectedComponentIndex, { message: e.target.value })}
+                  className="w-full px-3 py-2 border rounded"
+                  placeholder="Alert message"
+                />
+              </div>
+            </>
+          )}
+
+          {['Modal', 'Navbar', 'Card', 'Alert'].includes(comp.type) === false && (
             <div>
-              <label className="block text-sm font-medium mb-1">Content</label>
+              <label className="block text-xs font-medium mb-2 text-gray-600">Content / Text</label>
               <textarea
-                value={comp.props.content || ''}
-                onChange={(e) => handleComponentUpdate(selectedComponentIndex, { content: e.target.value })}
+                value={comp.props.content || comp.props.text || ''}
+                onChange={(e) => handleComponentUpdate(selectedComponentIndex, { 
+                  content: e.target.value,
+                  text: e.target.value 
+                })}
                 className="w-full px-3 py-2 border rounded"
                 rows={3}
+                placeholder="Enter content..."
               />
             </div>
-          </>
-        )}
-        
-        {comp.type === 'Alert' && (
-          <>
-            <div>
-              <label className="block text-sm font-medium mb-1">Message</label>
-              <input
-                type="text"
-                value={comp.props.message || ''}
-                onChange={(e) => handleComponentUpdate(selectedComponentIndex, { message: e.target.value })}
-                className="w-full px-3 py-2 border rounded"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">Type</label>
-              <select
-                value={comp.props.type || 'success'}
-                onChange={(e) => handleComponentUpdate(selectedComponentIndex, { type: e.target.value })}
-                className="w-full px-3 py-2 border rounded"
-              >
-                <option value="success">Success</option>
-                <option value="error">Error</option>
-                <option value="warning">Warning</option>
-                <option value="info">Info</option>
-              </select>
-            </div>
-          </>
-        )}
+          )}
+        </div>
+
+        {/* Position Controls */}
+        <div className="space-y-3">
+          <div className="font-semibold text-sm text-gray-700 border-b pb-2">🔄 Position</div>
+          
+          <div className="flex gap-2">
+            <button
+              onClick={() => {
+                if (selectedComponentIndex > 0) {
+                  const updated = [...projectComponents];
+                  [updated[selectedComponentIndex - 1], updated[selectedComponentIndex]] = 
+                  [updated[selectedComponentIndex], updated[selectedComponentIndex - 1]];
+                  setProjectComponents(updated);
+                  setSelectedComponentIndex(selectedComponentIndex - 1);
+                  saveProjectComponents(updated);
+                }
+              }}
+              disabled={selectedComponentIndex === 0}
+              className="flex-1 px-3 py-2 bg-gray-100 text-gray-700 rounded hover:bg-gray-200 text-sm disabled:opacity-50"
+            >
+              ⬆️ Move Up
+            </button>
+            <button
+              onClick={() => {
+                if (selectedComponentIndex < projectComponents.length - 1) {
+                  const updated = [...projectComponents];
+                  [updated[selectedComponentIndex], updated[selectedComponentIndex + 1]] = 
+                  [updated[selectedComponentIndex + 1], updated[selectedComponentIndex]];
+                  setProjectComponents(updated);
+                  setSelectedComponentIndex(selectedComponentIndex + 1);
+                  saveProjectComponents(updated);
+                }
+              }}
+              disabled={selectedComponentIndex === projectComponents.length - 1}
+              className="flex-1 px-3 py-2 bg-gray-100 text-gray-700 rounded hover:bg-gray-200 text-sm disabled:opacity-50"
+            >
+              ⬇️ Move Down
+            </button>
+          </div>
+        </div>
       </div>
     );
   };
