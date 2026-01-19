@@ -135,24 +135,31 @@ export function getDatabase(): DatabaseWrapper {
 }
 
 export async function initDatabase(): Promise<void> {
-  dbPath = process.env.DATABASE_PATH || 'data/generative-platform.db';
-  
-  // Ensure data directory exists
-  const dir = dirname(dbPath);
-  if (!existsSync(dir)) {
-    mkdirSync(dir, { recursive: true });
-  }
-  
   const SQL = await initSqlJs();
   
-  // Load existing database or create new one
-  if (existsSync(dbPath)) {
-    const fileBuffer = readFileSync(dbPath);
-    db = new SQL.Database(fileBuffer);
-    logger.info(`Database loaded from ${dbPath}`);
-  } else {
+  // In production (Vercel), use in-memory database
+  if (process.env.NODE_ENV === 'production') {
     db = new SQL.Database();
-    logger.info(`New database created at ${dbPath}`);
+    logger.info('In-memory database created for production');
+  } else {
+    // In development, use file-based database
+    dbPath = process.env.DATABASE_PATH || 'data/generative-platform.db';
+    
+    // Ensure data directory exists
+    const dir = dirname(dbPath);
+    if (!existsSync(dir)) {
+      mkdirSync(dir, { recursive: true });
+    }
+    
+    // Load existing database or create new one
+    if (existsSync(dbPath)) {
+      const fileBuffer = readFileSync(dbPath);
+      db = new SQL.Database(fileBuffer);
+      logger.info(`Database loaded from ${dbPath}`);
+    } else {
+      db = new SQL.Database();
+      logger.info(`New database created at ${dbPath}`);
+    }
   }
   
   wrappedDb = new SqlJsDatabaseWrapper(db);
@@ -163,10 +170,10 @@ export async function initDatabase(): Promise<void> {
   // Create tables
   createTables();
   
-  // Save initial database
+  // Save initial database (only in development)
   saveDatabase();
   
-  logger.info(`Database initialized at ${dbPath}`);
+  logger.info('Database initialized');
 }
 
 function createTables(): void {
