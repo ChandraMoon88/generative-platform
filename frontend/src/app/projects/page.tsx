@@ -48,6 +48,14 @@ function ProjectsContent() {
     if (skipGame === 'true') {
       setGameMode(false);
     }
+    
+    // Clear old cached game version
+    const currentVersion = '2.0.0';
+    const savedVersion = localStorage.getItem('gameVersion');
+    if (savedVersion !== currentVersion) {
+      localStorage.removeItem('gameProgress');
+      localStorage.setItem('gameVersion', currentVersion);
+    }
   }, []);
 
   useEffect(() => {
