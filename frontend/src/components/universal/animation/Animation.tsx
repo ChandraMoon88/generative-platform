@@ -398,7 +398,9 @@ export const Keyframe: React.FC<{
       detail: { component: 'Keyframe', action: 'start', duration, iterations }
     }));
 
-    return () => document.head.removeChild(style);
+    return () => {
+      document.head.removeChild(style);
+    };
   }, [keyframes, animationName, duration, iterations]);
 
   return (
