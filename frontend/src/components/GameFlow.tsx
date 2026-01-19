@@ -147,8 +147,21 @@ export default function GameFlow({ onAppCreated }: { onAppCreated: (components: 
   };
 
   const createComponentFromChoice = (componentType: string, choice: string) => {
-    // Generate unique component based on user's choice
+    // Generate unique component based on user's choice and environment
     const id = `comp-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    const domain = gameState.selectedDomain!;
+    
+    // Environment color schemes
+    const colorSchemes: any = {
+      sunset: { primary: '#FF6B6B', secondary: '#FFA500', bg: '#FFF5E6', text: '#2C1810' },
+      ocean: { primary: '#4A90E2', secondary: '#00CED1', bg: '#E6F7FF', text: '#003D5C' },
+      forest: { primary: '#228B22', secondary: '#90EE90', bg: '#F0FFF0', text: '#1B4D1B' },
+      cosmic: { primary: '#6A0DAD', secondary: '#9D4EDD', bg: '#1A0B2E', text: '#E0D8F0' },
+      sunrise: { primary: '#FFD700', secondary: '#FFA07A', bg: '#FFFACD', text: '#5C4033' },
+      midnight: { primary: '#1F1F1F', secondary: '#C0C0C0', bg: '#0A0A0A', text: '#F5F5F5' }
+    };
+
+    const colors = colorSchemes[domain] || colorSchemes.sunset;
     
     const componentMap: any = {
       hero: {
@@ -156,128 +169,71 @@ export default function GameFlow({ onAppCreated }: { onAppCreated: (components: 
         category: 'Layout & Containers',
         props: {
           title: choice,
-          content: 'Your creative vision comes to life here!',
-          backgroundColor: choice.includes('Cozy') ? '#FFF5E1' : choice.includes('Elegant') ? '#F8F9FA' : '#FFE5E5',
-          padding: '48px',
-          borderRadius: '16px',
-          fontSize: '24px',
+          content: 'Welcome to your creative space',
+          backgroundColor: colors.bg,
+          color: colors.text,
+          padding: '60px',
+          borderRadius: '24px',
+          fontSize: '32px',
+          fontWeight: 'bold',
+          textAlign: 'center',
+          borderWidth: '3px',
+          borderColor: colors.primary
+        }
+      },
+      theme: {
+        type: 'Card',
+        category: 'Layout & Containers',
+        props: {
+          title: `Mood: ${choice}`,
+          content: 'Color palette that sets the tone',
+          backgroundColor: colors.primary,
+          color: '#FFFFFF',
+          padding: '40px',
+          borderRadius: '20px',
+          fontSize: '20px',
           textAlign: 'center'
         }
       },
-      menu: {
+      content: {
         type: 'Card',
         category: 'Layout & Containers',
         props: {
-          title: `Featured: ${choice}`,
-          content: 'Delicious options crafted with care',
-          backgroundColor: '#FFFAF0',
-          padding: '32px',
-          borderRadius: '12px'
+          title: 'Your Story',
+          content: `Presented with ${choice}`,
+          backgroundColor: colors.bg,
+          color: colors.text,
+          padding: '36px',
+          borderRadius: '16px',
+          borderWidth: '2px',
+          borderColor: colors.secondary
         }
       },
-      about: {
-        type: 'Card',
-        category: 'Layout & Containers',
-        props: {
-          title: 'Our Story',
-          content: `Discover through ${choice}`,
-          backgroundColor: '#F0F8FF',
-          padding: '32px'
-        }
-      },
-      booking: {
+      cta: {
         type: 'Button',
         category: 'Buttons & Actions',
         props: {
           text: choice,
-          backgroundColor: '#10B981',
+          backgroundColor: colors.primary,
           color: '#FFFFFF',
-          padding: '16px 32px',
-          fontSize: '18px',
-          borderRadius: '8px',
-          fontWeight: 'bold'
+          padding: '20px 48px',
+          fontSize: '22px',
+          borderRadius: '12px',
+          fontWeight: 'bold',
+          width: 'auto'
         }
       },
-      testimonials: {
-        type: 'Alert',
-        category: 'Feedback & Status',
-        props: {
-          message: `⭐⭐⭐⭐⭐ "${choice}" - Amazing experience!`,
-          backgroundColor: '#FEF3C7',
-          padding: '24px',
-          borderRadius: '12px'
-        }
-      },
-      products: {
+      layout: {
         type: 'Card',
         category: 'Layout & Containers',
         props: {
-          title: 'Shop Collection',
-          content: `Displayed as ${choice}`,
-          backgroundColor: '#F3F4F6',
-          padding: '32px'
-        }
-      },
-      details: {
-        type: 'Card',
-        category: 'Layout & Containers',
-        props: {
-          title: 'Product Details',
-          content: `Enhanced with ${choice}`,
-          backgroundColor: '#FFFFFF',
-          padding: '24px',
-          borderWidth: '2px',
-          borderColor: '#E5E7EB'
-        }
-      },
-      cart: {
-        type: 'Button',
-        category: 'Buttons & Actions',
-        props: {
-          text: `${choice} Checkout`,
-          backgroundColor: '#3B82F6',
-          color: '#FFFFFF',
-          padding: '16px 32px',
-          borderRadius: '8px'
-        }
-      },
-      trust: {
-        type: 'Alert',
-        category: 'Feedback & Status',
-        props: {
-          message: `✓ Trusted Choice: ${choice}`,
-          backgroundColor: '#D1FAE5',
-          padding: '20px'
-        }
-      },
-      portfolio: {
-        type: 'Card',
-        category: 'Layout & Containers',
-        props: {
-          title: 'Projects',
-          content: `Shown in ${choice}`,
-          backgroundColor: '#F9FAFB',
-          padding: '40px'
-        }
-      },
-      contact: {
-        type: 'Button',
-        category: 'Buttons & Actions',
-        props: {
-          text: `Connect via ${choice}`,
-          backgroundColor: '#8B5CF6',
-          color: '#FFFFFF',
-          padding: '16px 32px'
-        }
-      },
-      proof: {
-        type: 'Card',
-        category: 'Layout & Containers',
-        props: {
-          title: 'Credentials',
-          content: `Featuring ${choice}`,
-          backgroundColor: '#EEF2FF',
-          padding: '24px'
+          title: 'Layout Style',
+          content: `Organized with ${choice}`,
+          backgroundColor: colors.secondary,
+          color: colors.text,
+          padding: '32px',
+          borderRadius: '16px',
+          fontSize: '18px'
         }
       }
     };
@@ -336,18 +292,18 @@ export default function GameFlow({ onAppCreated }: { onAppCreated: (components: 
             <h1 className="text-6xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-pink-600">
               Choose Your Adventure
             </h1>
-            <p className="text-2xl text-gray-600">What world will you create today?</p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-6">
-            {domains.map((domain) => (
-              <button
-                key={domain.id}
-                onClick={() => handleDomainSelect(domain.id)}
-                className="group relative overflow-hidden rounded-3xl p-8 text-left transform transition-all hover:scale-105 hover:shadow-2xl"
-              >
-                <div className={`absolute inset-0 bg-gradient-to-br ${domain.color} opacity-90 group-hover:opacity-100 transition-opacity`}></div>
-                <div className="relative z-10 text-white">
+            <p classNametext-center text-white space-y-8">
+          <div className="text-8xl mb-6 animate-bounce">🎨</div>
+          <h1 className="text-7xl font-bold mb-4">Creative Universe</h1>
+          <p className="text-3xl mb-8">Design Beautiful Environments Through Play!</p>
+          <p className="text-xl mb-12 opacity-90">
+            Every choice you make paints a unique world. Ready to see what's possible?
+          </p>
+          <button
+            onClick={() => setGameState({ ...gameState, phase: 'demo' })}
+            className="bg-white text-purple-600 px-12 py-6 rounded-full text-2xl font-bold hover:scale-110 transform transition-all shadow-2xl"
+          >
+            See The Magic"relative z-10 text-white">
                   <div className="text-7xl mb-4">{domain.emoji}</div>
                   <h3 className="text-3xl font-bold mb-2">{domain.name}</h3>
                   <p className="text-lg opacity-90">{domain.description}</p>
@@ -366,7 +322,7 @@ export default function GameFlow({ onAppCreated }: { onAppCreated: (components: 
   // Gameplay Phase
   if (gameState.phase === 'gameplay') {
     const domain = gameState.selectedDomain!;
-    const tasks = gameTasks[domain as keyof typeof gameTasks] || gameTasks.restaurant;
+    constEnvironme gameTasks[domain as keyof typeof gameTasks] || gameTasks.restaurant;
     const currentTask = tasks[currentTaskIndex];
     const progress = ((currentTaskIndex + 1) / tasks.length) * 100;
 
@@ -378,9 +334,9 @@ export default function GameFlow({ onAppCreated }: { onAppCreated: (components: 
             <div className="flex justify-between items-center mb-2">
               <span className="text-sm font-medium text-gray-600">Quest Progress</span>
               <span className="text-sm font-medium text-purple-600">
-                {currentTaskIndex + 1} of {tasks.length}
-              </span>
-            </div>
+                {currentTaEnvironment
+            </h1>
+            <p className="text-2xl text-gray-600">What world will you paint
             <div className="w-full bg-gray-200 rounded-full h-4">
               <div
                 className="bg-gradient-to-r from-purple-600 to-pink-600 h-4 rounded-full transition-all duration-500"
