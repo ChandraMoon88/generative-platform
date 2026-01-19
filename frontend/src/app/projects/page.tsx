@@ -756,9 +756,11 @@ function ProjectsContent() {
     );
   }
 
-  // Show game mode for new users (no projects and first time)
-  if (gameMode && !projectId && projects.length === 0) {
-    return <GameFlow onAppCreated={handleGameAppCreated} />;
+  // Show game mode for new users (no projects and must complete game first)
+  const gameCompleted = typeof window !== 'undefined' && localStorage.getItem('gameCompleted') === 'true';
+  
+  if (!gameCompleted && projects.length === 0) {
+    return <CreativeUniverseGame onGameComplete={handleGameAppCreated} />;
   }
 
   // If a project ID is in the URL, show the project detail view
