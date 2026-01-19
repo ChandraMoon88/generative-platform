@@ -75,7 +75,7 @@ interface RestaurantState {
   deleteStaff: (id: string) => void;
   
   // Table Actions
-  addTable: (table: Table | Omit<Table, 'id'>) => Table;
+  addTable: (table: Table | Omit<Table, 'id' | 'createdAt' | 'updatedAt'>) => Table;
   updateTable: (id: string, updates: Partial<Table>) => void;
   deleteTable: (id: string) => void;
   updateTableStatus: (id: string, status: Table['status'], orderId?: string) => void;
