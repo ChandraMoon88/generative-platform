@@ -39,6 +39,11 @@ class EventTracker {
    * Get or create a session ID
    */
   private getOrCreateSessionId(): string {
+    // Check if running in browser environment
+    if (typeof window === 'undefined' || typeof sessionStorage === 'undefined') {
+      return `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    }
+    
     let sessionId = sessionStorage.getItem('generative_session_id');
     if (!sessionId) {
       sessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
