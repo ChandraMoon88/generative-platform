@@ -101,21 +101,22 @@ projectsRouter.get('/:id', authenticateUser, async (req: Request, res: Response)
   try {
     const { id } = req.params;
     const user = (req as any).user;
-    const db = getDatabase();
     
-    const project = db.prepare(`
+    const result = await query(`
       SELECT p.*, u.name as user_name, u.email as user_email
       FROM projects p
       LEFT JOIN users u ON p.user_id = u.id
-      WHERE p.id = ?
-    `).get(id) as any;
+      WHERE p.id = $1
+    `, [id]);
     
-    if (!project) {
+    if (result.rows.length === 0) {
       return res.status(404).json({
         success: false,
         message: 'Project not found',
       });
     }
+    
+    const project = result.rows[0];
     
     // Access control: clients can only see their own projects
     if (user.role !== 'admin' && project.user_id !== user.id) {
@@ -161,14 +162,13 @@ projectsRouter.post('/', authenticateUser, async (req: Request, res: Response) =
       });
     }
     
-    const db = getDatabase();
     const projectId = uuidv4();
     const now = Date.now();
     
-    db.prepare(`
-      INSERT INTO projects (id, user_id, name, description, model_id, status, config, created_at, updated_at)
-      VALUES (?, ?, ?, ?, ?, 'draft', ?, ?, ?)
-    `).run(
+    await query(`
+      INSERT INTO projects (id, user_id, name, description, app_model_id, status, config, created_at, updated_at)
+      VALUES ($1, $2, $3, $4, $5, 'draft', $6, $7, $8)
+    `, [
       projectId,
       user.id,
       name,
@@ -177,7 +177,7 @@ projectsRouter.post('/', authenticateUser, async (req: Request, res: Response) =
       config ? JSON.stringify(config) : null,
       now,
       now
-    );
+    ]);
     
     logger.info(`User ${user.id} created project ${projectId}: ${name}`);
     
