@@ -31,8 +31,11 @@ class EventTracker {
 
   constructor() {
     this.sessionId = this.getOrCreateSessionId();
-    this.startFlushInterval();
-    this.trackPageView();
+    // Only start flush interval in browser environment
+    if (typeof window !== 'undefined') {
+      this.startFlushInterval();
+      this.trackPageView();
+    }
   }
 
   /**
