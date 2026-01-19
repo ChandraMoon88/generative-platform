@@ -31,7 +31,7 @@ export const ComponentShowcase: React.FC<ComponentShowcaseProps> = ({ onComponen
       Modal: (
         <div className="p-4 border-2 border-dashed border-gray-300 rounded-lg bg-gray-50 text-center text-sm text-gray-600">
           <div className="text-4xl mb-2">🪟</div>
-          Modal Dialog Component
+          <div className="font-medium">Modal Dialog</div>
         </div>
       ),
       Alert: (
@@ -42,9 +42,61 @@ export const ComponentShowcase: React.FC<ComponentShowcaseProps> = ({ onComponen
       ),
     };
 
-    return examples[componentName] || (
-      <div className="text-gray-400 text-center py-4 text-sm">Preview not available</div>
-    );
+    // If no specific example exists, show a generic component icon
+    if (!examples[componentName]) {
+      const icons: Record<string, string> = {
+        ButtonGroup: '🔘',
+        IconButton: '⭕',
+        FloatingActionButton: '🔵',
+        Navbar: '📋',
+        Sidebar: '📑',
+        Breadcrumbs: '🔗',
+        Tabs: '📑',
+        Pagination: '⏭️',
+        Dropdown: '▼',
+        Card: '🃏',
+        Accordion: '📂',
+        Tooltip: '💭',
+        Popover: '💬',
+        Input: '✏️',
+        Textarea: '📝',
+        Select: '⬇️',
+        Checkbox: '☑️',
+        Radio: '🔘',
+        Switch: '🔀',
+        Slider: '🎚️',
+        DatePicker: '📅',
+        Table: '📊',
+        List: '📋',
+        Grid: '▦',
+        Avatar: '👤',
+        Badge: '🏷️',
+        Tag: '🔖',
+        Chip: '🏷️',
+        Progress: '⏳',
+        Spinner: '⏳',
+        Skeleton: '⬜',
+        Toast: '🔔',
+        Snackbar: '💬',
+        Dialog: '💬',
+        Drawer: '◫',
+        Menu: '☰',
+        Stepper: '➡️',
+        Timeline: '📅',
+        Chart: '📈',
+        Map: '🗺️',
+      };
+      
+      const icon = icons[componentName] || '🧩';
+      return (
+        <div className="flex flex-col items-center justify-center py-6 text-gray-400">
+          <div className="text-5xl mb-2">{icon}</div>
+          <div className="text-xs font-medium">{componentName}</div>
+        </div>
+      );
+    }
+
+    return examples[componentName];
   };
 
   const handleAddComponent = (component: ComponentInfo) => {
