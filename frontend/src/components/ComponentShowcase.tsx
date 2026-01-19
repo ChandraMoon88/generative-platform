@@ -65,37 +65,35 @@ export const ComponentShowcase: React.FC<ComponentShowcaseProps> = ({ onComponen
         <>
           {/* Component Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {Object.entries(COMPONENT_CATALOG).map(([category, components]) => (
-              components.map((component) => (
-                <div
-                  key={component.name}
-                  className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
-                  onClick={() => setSelectedComponent(component)}
-                >
-                  {/* Component Preview */}
-                  <div className="p-4 bg-gray-50 border-b border-gray-200 min-h-32 flex items-center justify-center">
-                    {getComponentExample(component.name)}
+            {COMPONENT_CATALOG.map((component) => (
+              <div
+                key={component.name}
+                className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
+                onClick={() => setSelectedComponent(component)}
+              >
+                {/* Component Preview */}
+                <div className="p-4 bg-gray-50 border-b border-gray-200 min-h-32 flex items-center justify-center">
+                  {getComponentExample(component.name)}
+                </div>
+                
+                {/* Component Info */}
+                <div className="p-4">
+                  <div className="flex items-start justify-between mb-2">
+                    <h3 className="font-semibold text-gray-900">{component.name}</h3>
+                    {addedComponents.includes(component.name) && (
+                      <span className="text-green-600 text-xs">✓ Added</span>
+                    )}
                   </div>
-                  
-                  {/* Component Info */}
-                  <div className="p-4">
-                    <div className="flex items-start justify-between mb-2">
-                      <h3 className="font-semibold text-gray-900">{component.name}</h3>
-                      {addedComponents.includes(component.name) && (
-                        <span className="text-green-600 text-xs">✓ Added</span>
-                      )}
-                    </div>
-                    <p className="text-sm text-gray-600 line-clamp-2">
-                      {component.description}
-                    </p>
-                    <div className="mt-3">
-                      <span className="text-xs px-2 py-1 bg-blue-100 text-blue-800 rounded">
-                        {component.category}
-                      </span>
-                    </div>
+                  <p className="text-sm text-gray-600 line-clamp-2">
+                    {component.description}
+                  </p>
+                  <div className="mt-3">
+                    <span className="text-xs px-2 py-1 bg-blue-100 text-blue-800 rounded">
+                      {component.category}
+                    </span>
                   </div>
                 </div>
-              ))
+              </div>
             ))}
           </div>
         </>
