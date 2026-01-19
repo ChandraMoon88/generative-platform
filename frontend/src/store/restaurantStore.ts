@@ -193,7 +193,7 @@ export const useRestaurantStore = create<RestaurantState>((set, get) => ({
       if (index === -1) return state;
       
       const oldItem = state.ingredients[index];
-      const updatedItem = { ...oldItem, ...updates, updatedAt: new Date().toISOString() };
+      const updatedItem = { ...oldItem, ...updates, updatedAt: Date.now() };
       const newIngredients = [...state.ingredients];
       newIngredients[index] = updatedItem;
       
