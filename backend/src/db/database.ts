@@ -344,6 +344,108 @@ function createTables(): void {
   db.exec(`CREATE INDEX IF NOT EXISTS idx_user_assets_session ON user_assets(session_id)`);
   db.exec(`CREATE INDEX IF NOT EXISTS idx_user_assets_type ON user_assets(type)`);
   
+  // EcoSphere Environmental Entities
+  // Water Sources table
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS water_sources (
+      id TEXT PRIMARY KEY,
+      project_id TEXT NOT NULL,
+      name TEXT NOT NULL,
+      overall_health TEXT CHECK(overall_health IN ('critical', 'polluted', 'at-risk', 'healthy')),
+      created_at INTEGER NOT NULL,
+      updated_at INTEGER NOT NULL,
+      FOREIGN KEY (project_id) REFERENCES projects(id)
+    )
+  `);
+  
+  // Water Sections table
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS water_sections (
+      id TEXT PRIMARY KEY,
+      water_source_id TEXT NOT NULL,
+      section_number INTEGER NOT NULL,
+      temperature REAL,
+      ph REAL,
+      dissolved_oxygen REAL,
+      turbidity REAL,
+      pollutant_level TEXT CHECK(pollutant_level IN ('none', 'low', 'medium', 'high', 'critical')),
+      latitude REAL,
+      longitude REAL,
+      created_at INTEGER NOT NULL,
+      FOREIGN KEY (water_source_id) REFERENCES water_sources(id)
+    )
+  `);
+  
+  // Pollution Sources table
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS pollution_sources (
+      id TEXT PRIMARY KEY,
+      project_id TEXT NOT NULL,
+      name TEXT NOT NULL,
+      source_type TEXT CHECK(source_type IN ('industrial', 'agricultural', 'urban', 'illegal', 'natural')),
+      severity INTEGER CHECK(severity BETWEEN 1 AND 10),
+      frequency TEXT CHECK(frequency IN ('constant', 'daily', 'weekly', 'seasonal', 'one-time')),
+      pollutants TEXT,
+      responsibility TEXT,
+      accessibility TEXT CHECK(accessibility IN ('easy', 'moderate', 'difficult', 'requires-authority')),
+      priority INTEGER,
+      created_at INTEGER NOT NULL,
+      FOREIGN KEY (project_id) REFERENCES projects(id)
+    )
+  `);
+  
+  // Restoration Plans table
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS restoration_plans (
+      id TEXT PRIMARY KEY,
+      project_id TEXT NOT NULL,
+      name TEXT NOT NULL,
+      approach TEXT CHECK(approach IN ('sequential', 'parallel')),
+      total_budget REAL,
+      total_duration INTEGER,
+      created_at INTEGER NOT NULL,
+      FOREIGN KEY (project_id) REFERENCES projects(id)
+    )
+  `);
+  
+  // Workflow Steps table
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS workflow_steps (
+      id TEXT PRIMARY KEY,
+      plan_id TEXT NOT NULL,
+      name TEXT NOT NULL,
+      description TEXT,
+      action_type TEXT,
+      estimated_duration INTEGER,
+      estimated_cost REAL,
+      prerequisites TEXT,
+      success_criteria TEXT,
+      risk_factors TEXT,
+      status TEXT DEFAULT 'planned' CHECK(status IN ('planned', 'in-progress', 'completed', 'blocked')),
+      created_at INTEGER NOT NULL,
+      FOREIGN KEY (plan_id) REFERENCES restoration_plans(id)
+    )
+  `);
+  
+  // Team Members table
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS team_members (
+      id TEXT PRIMARY KEY,
+      project_id TEXT NOT NULL,
+      name TEXT NOT NULL,
+      role TEXT NOT NULL,
+      specialty TEXT,
+      skills TEXT,
+      cost_per_month REAL,
+      availability TEXT CHECK(availability IN ('full-time', 'part-time')),
+      personality_traits TEXT,
+      experience INTEGER DEFAULT 0,
+      morale INTEGER DEFAULT 100,
+      created_at INTEGER NOT NULL,
+      FOREIGN KEY (project_id) REFERENCES projects(id)
+    )
+  `);
+  
   // Insert default pattern definitions
   insertDefaultPatternDefinitions();
 }
