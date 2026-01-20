@@ -200,7 +200,7 @@ export function useInstrumentation(options: UseInstrumentationOptions) {
     
     logInteraction(
       'scroll',
-      { tagName: 'list', attributes: { 'data-entity': entity || '' } },
+      { type: 'list', label: entity || '' },
       createSemanticAction('list_view', 'read', `Viewing ${entity} list`),
       { itemCount, filters }
     );
