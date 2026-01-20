@@ -1167,7 +1167,7 @@ function Level4Execution({ progress, setProgress }: { progress: GameProgress; se
         name: step.name,
         progress: 0,
         startDay: 0,
-        duration: step.duration
+        duration: step.estimatedDuration || 30
       }));
       setActiveActions(initialActions);
       
