@@ -4891,9 +4891,9 @@ function Level12Innovation({ progress, setProgress }: { progress: GameProgress; 
   ]);
 
   const [experiments, setExperiments] = useState([
-    { id: 'ex1', name: 'Wetland Buffer Zones', status: 'not-started', success: null, impact: 0 },
-    { id: 'ex2', name: 'Native Species Reintroduction', status: 'not-started', success: null, impact: 0 },
-    { id: 'ex3', name: 'Green Infrastructure', status: 'not-started', success: null, impact: 0 },
+    { id: 'ex1', name: 'Wetland Buffer Zones', status: 'not-started', success: null as boolean | null, impact: 0 },
+    { id: 'ex2', name: 'Native Species Reintroduction', status: 'not-started', success: null as boolean | null, impact: 0 },
+    { id: 'ex3', name: 'Green Infrastructure', status: 'not-started', success: null as boolean | null, impact: 0 },
   ]);
 
   const [pilots, setPilots] = useState([
