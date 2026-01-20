@@ -4862,6 +4862,563 @@ function Level11Projects({ progress, setProgress }: { progress: GameProgress; se
   );
 }
 
+// LEVEL 12: Innovation Lab Component
+function Level12Innovation({ progress, setProgress }: { progress: GameProgress; setProgress: (p: GameProgress) => void }) {
+  const [selectedTab, setSelectedTab] = useState<'research' | 'experiments' | 'pilots' | 'results'>('research');
+  const [researchAreas, setResearchAreas] = useState([
+    { id: 'biochar', name: 'Biochar Soil Enhancement', progress: 0, potential: 85, status: 'available', cost: 15000 },
+    { id: 'phyto', name: 'Phytoremediation Techniques', progress: 0, potential: 90, status: 'available', cost: 20000 },
+    { id: 'aqua', name: 'Aquatic Microbe Cultivation', progress: 0, potential: 75, status: 'available', cost: 12000 },
+    { id: 'myco', name: 'Mycorrhizal Networks', progress: 0, potential: 95, status: 'available', cost: 25000 },
+  ]);
+
+  const [experiments, setExperiments] = useState([
+    { id: 'ex1', name: 'Wetland Buffer Zones', status: 'not-started', success: null, impact: 0 },
+    { id: 'ex2', name: 'Native Species Reintroduction', status: 'not-started', success: null, impact: 0 },
+    { id: 'ex3', name: 'Green Infrastructure', status: 'not-started', success: null, impact: 0 },
+  ]);
+
+  const [pilots, setPilots] = useState([
+    { id: 'p1', name: 'Community Science Program', status: 'planning', participants: 0, results: null },
+    { id: 'p2', name: 'Riparian Restoration Pilot', status: 'planning', participants: 0, results: null },
+    { id: 'p3', name: 'Urban Green Corridors', status: 'planning', participants: 0, results: null },
+  ]);
+
+  const [budget, setBudget] = useState(75000);
+  const [innovations, setInnovations] = useState<string[]>([]);
+  const [experimentChallenge, setExperimentChallenge] = useState(false);
+  const [challengeHandled, setChallengeHandled] = useState(false);
+  const [pilotLaunched, setPilotLaunched] = useState(false);
+  const [levelComplete, setLevelComplete] = useState(false);
+
+  const fundResearch = (areaId: string) => {
+    const area = researchAreas.find(a => a.id === areaId);
+    if (!area || budget < area.cost) return;
+
+    setBudget(budget - area.cost);
+    setResearchAreas(prev => prev.map(a => 
+      a.id === areaId ? { ...a, status: 'in-progress', progress: 50 } : a
+    ));
+
+    setTimeout(() => {
+      setResearchAreas(prev => prev.map(a => 
+        a.id === areaId ? { ...a, status: 'complete', progress: 100 } : a
+      ));
+      setInnovations(prev => [...prev, area.name]);
+    }, 2000);
+  };
+
+  const runExperiment = (experimentId: string, approach: string) => {
+    const successRate = approach === 'rigorous' ? 0.9 : approach === 'balanced' ? 0.7 : 0.5;
+    const success = Math.random() < successRate;
+    
+    setExperiments(prev => prev.map(e => 
+      e.id === experimentId 
+        ? { ...e, status: 'complete', success, impact: success ? (approach === 'rigorous' ? 85 : 70) : 30 }
+        : e
+    ));
+  };
+
+  const handleExperimentCrisis = (response: string) => {
+    if (response === 'iterate') {
+      setExperiments(prev => prev.map(e => 
+        e.success === false ? { ...e, success: true, impact: 60 } : e
+      ));
+    } else if (response === 'pivot') {
+      setInnovations(prev => [...prev, 'Adaptive Learning Framework']);
+    }
+    setChallengeHandled(true);
+  };
+
+  const launchPilot = (pilotId: string) => {
+    setPilots(prev => prev.map(p => 
+      p.id === pilotId 
+        ? { ...p, status: 'active', participants: Math.floor(Math.random() * 100) + 50, results: 'positive' }
+        : p
+    ));
+    setPilotLaunched(true);
+  };
+
+  const completeLevel = () => {
+    setLevelComplete(true);
+    setTimeout(() => {
+      setProgress({
+        ...progress,
+        phase: 'completion' as GamePhase,
+        completedPhases: [...(progress.completedPhases || []), 'level-12-innovation']
+      });
+    }, 2000);
+  };
+
+  const completedResearch = researchAreas.filter(r => r.status === 'complete').length;
+  const completedExperiments = experiments.filter(e => e.status === 'complete').length;
+  const activePilots = pilots.filter(p => p.status === 'active').length;
+  const successfulExperiments = experiments.filter(e => e.success === true).length;
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-teal-900 via-cyan-900 to-blue-900 py-8 px-4">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <h1 className="text-5xl font-bold text-white mb-3">
+            🔬 Level 12: Innovation Lab
+          </h1>
+          <p className="text-2xl text-cyan-200">
+            Research new methods and pilot innovative solutions
+          </p>
+        </div>
+
+        {/* Innovation Dashboard */}
+        <div className="grid md:grid-cols-4 gap-4 mb-6">
+          <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 text-white">
+            <div className="text-sm opacity-75 mb-2">Research Complete</div>
+            <div className="text-4xl font-bold text-blue-400">{completedResearch}/{researchAreas.length}</div>
+          </div>
+
+          <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 text-white">
+            <div className="text-sm opacity-75 mb-2">Successful Experiments</div>
+            <div className="text-4xl font-bold text-green-400">{successfulExperiments}/{experiments.length}</div>
+          </div>
+
+          <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 text-white">
+            <div className="text-sm opacity-75 mb-2">Active Pilots</div>
+            <div className="text-4xl font-bold text-purple-400">{activePilots}/{pilots.length}</div>
+          </div>
+
+          <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 text-white">
+            <div className="text-sm opacity-75 mb-2">Research Budget</div>
+            <div className="text-4xl font-bold text-yellow-400">${(budget / 1000).toFixed(0)}K</div>
+          </div>
+        </div>
+
+        {/* Tab Navigation */}
+        <div className="flex gap-4 mb-6">
+          <button
+            onClick={() => setSelectedTab('research')}
+            className={`flex-1 py-4 rounded-xl font-bold text-lg transition-all ${
+              selectedTab === 'research'
+                ? 'bg-gradient-to-r from-blue-500 to-cyan-600 text-white'
+                : 'bg-white/10 text-white/60 hover:bg-white/20'
+            }`}
+          >
+            🔬 Research
+          </button>
+          <button
+            onClick={() => setSelectedTab('experiments')}
+            className={`flex-1 py-4 rounded-xl font-bold text-lg transition-all ${
+              selectedTab === 'experiments'
+                ? 'bg-gradient-to-r from-green-500 to-emerald-600 text-white'
+                : 'bg-white/10 text-white/60 hover:bg-white/20'
+            }`}
+          >
+            🧪 Experiments
+          </button>
+          <button
+            onClick={() => setSelectedTab('pilots')}
+            className={`flex-1 py-4 rounded-xl font-bold text-lg transition-all ${
+              selectedTab === 'pilots'
+                ? 'bg-gradient-to-r from-purple-500 to-pink-600 text-white'
+                : 'bg-white/10 text-white/60 hover:bg-white/20'
+            }`}
+          >
+            🚀 Pilot Programs
+          </button>
+          <button
+            onClick={() => setSelectedTab('results')}
+            className={`flex-1 py-4 rounded-xl font-bold text-lg transition-all ${
+              selectedTab === 'results'
+                ? 'bg-gradient-to-r from-yellow-500 to-orange-600 text-white'
+                : 'bg-white/10 text-white/60 hover:bg-white/20'
+            }`}
+          >
+            📊 Results
+          </button>
+        </div>
+
+        {/* Research Tab */}
+        {selectedTab === 'research' && (
+          <div className="space-y-6">
+            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 text-white">
+              <h3 className="text-2xl font-bold mb-4">🔬 Research & Development</h3>
+              <p className="text-lg mb-6 opacity-90">
+                Fund cutting-edge research to discover innovative restoration techniques.
+              </p>
+
+              <div className="grid md:grid-cols-2 gap-4">
+                {researchAreas.map(area => (
+                  <div key={area.id} className="bg-black/30 rounded-xl p-5">
+                    <div className="flex justify-between items-start mb-3">
+                      <div>
+                        <h4 className="text-xl font-bold">{area.name}</h4>
+                        <div className="text-sm opacity-75">Cost: ${(area.cost / 1000).toFixed(0)}K</div>
+                      </div>
+                      <span className={`px-3 py-1 rounded-full text-xs font-bold ${
+                        area.status === 'complete' ? 'bg-green-500' :
+                        area.status === 'in-progress' ? 'bg-yellow-500' :
+                        'bg-gray-600'
+                      }`}>
+                        {area.status === 'complete' ? '✓ Complete' :
+                         area.status === 'in-progress' ? '⏳ In Progress' :
+                         'Available'}
+                      </span>
+                    </div>
+
+                    <div className="mb-4">
+                      <div className="flex justify-between text-sm mb-1">
+                        <span>Impact Potential</span>
+                        <span className="font-bold">{area.potential}%</span>
+                      </div>
+                      <div className="bg-black/40 rounded-full h-3">
+                        <div 
+                          className="bg-gradient-to-r from-green-400 to-emerald-500 h-full rounded-full"
+                          style={{ width: `${area.potential}%` }}
+                        ></div>
+                      </div>
+                    </div>
+
+                    {area.status === 'in-progress' && (
+                      <div className="mb-3">
+                        <div className="text-sm opacity-75 mb-1">Research Progress</div>
+                        <div className="bg-black/40 rounded-full h-2">
+                          <div 
+                            className="bg-gradient-to-r from-yellow-400 to-orange-500 h-full rounded-full animate-pulse"
+                            style={{ width: `${area.progress}%` }}
+                          ></div>
+                        </div>
+                      </div>
+                    )}
+
+                    {area.status === 'available' && budget >= area.cost && (
+                      <button
+                        onClick={() => fundResearch(area.id)}
+                        className="w-full px-4 py-2 bg-gradient-to-r from-blue-500 to-cyan-600 rounded-lg font-bold hover:scale-105 transition-all"
+                      >
+                        Fund Research
+                      </button>
+                    )}
+
+                    {area.status === 'available' && budget < area.cost && (
+                      <div className="text-center text-sm text-red-400">
+                        Insufficient Budget
+                      </div>
+                    )}
+
+                    {area.status === 'complete' && (
+                      <div className="bg-green-500/20 border border-green-400 rounded-lg p-2 text-center text-sm">
+                        ✅ Research Completed - Innovation Unlocked!
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              {innovations.length > 0 && (
+                <div className="mt-6 bg-blue-500/20 border border-blue-400 rounded-xl p-4">
+                  <h4 className="font-bold mb-2">🎉 Innovations Unlocked:</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {innovations.map((innovation, idx) => (
+                      <span key={idx} className="px-3 py-1 bg-blue-500 rounded-full text-sm">
+                        {innovation}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Experiments Tab */}
+        {selectedTab === 'experiments' && (
+          <div className="space-y-6">
+            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 text-white">
+              <h3 className="text-2xl font-bold mb-4">🧪 Field Experiments</h3>
+              <p className="text-lg mb-6 opacity-90">
+                Test new restoration approaches through controlled experiments.
+              </p>
+
+              <div className="space-y-4 mb-6">
+                {experiments.map(experiment => (
+                  <div key={experiment.id} className="bg-black/30 rounded-xl p-5">
+                    <div className="flex justify-between items-start mb-3">
+                      <div>
+                        <h4 className="text-xl font-bold">{experiment.name}</h4>
+                      </div>
+                      {experiment.status === 'complete' && (
+                        <span className={`px-3 py-1 rounded-full text-xs font-bold ${
+                          experiment.success ? 'bg-green-500' : 'bg-red-500'
+                        }`}>
+                          {experiment.success ? '✓ Success' : '✗ Failed'}
+                        </span>
+                      )}
+                    </div>
+
+                    {experiment.status === 'not-started' && (
+                      <div className="grid md:grid-cols-3 gap-3">
+                        <button
+                          onClick={() => runExperiment(experiment.id, 'rigorous')}
+                          className="bg-white/10 hover:bg-white/20 rounded-lg p-3 transition-all text-sm"
+                        >
+                          <div className="font-bold">🔬 Rigorous Protocol</div>
+                          <div className="text-xs opacity-75 mt-1">90% success rate</div>
+                          <div className="text-xs text-green-400 mt-1">High impact if successful</div>
+                        </button>
+                        <button
+                          onClick={() => runExperiment(experiment.id, 'balanced')}
+                          className="bg-white/10 hover:bg-white/20 rounded-lg p-3 transition-all text-sm"
+                        >
+                          <div className="font-bold">⚖️ Balanced Approach</div>
+                          <div className="text-xs opacity-75 mt-1">70% success rate</div>
+                          <div className="text-xs text-yellow-400 mt-1">Moderate impact</div>
+                        </button>
+                        <button
+                          onClick={() => runExperiment(experiment.id, 'quick')}
+                          className="bg-white/10 hover:bg-white/20 rounded-lg p-3 transition-all text-sm"
+                        >
+                          <div className="font-bold">⚡ Quick Test</div>
+                          <div className="text-xs opacity-75 mt-1">50% success rate</div>
+                          <div className="text-xs text-red-400 mt-1">Lower impact</div>
+                        </button>
+                      </div>
+                    )}
+
+                    {experiment.status === 'complete' && (
+                      <div className={`border rounded-lg p-3 ${
+                        experiment.success 
+                          ? 'bg-green-500/20 border-green-400' 
+                          : 'bg-red-500/20 border-red-400'
+                      }`}>
+                        <div className="flex justify-between items-center">
+                          <span>Impact Score:</span>
+                          <span className="font-bold text-xl">{experiment.impact}%</span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              {!experimentChallenge && completedExperiments >= 2 && !challengeHandled && (
+                <div className="text-center">
+                  <button
+                    onClick={() => setExperimentChallenge(true)}
+                    className="px-6 py-3 bg-gradient-to-r from-orange-500 to-red-600 rounded-xl font-bold hover:scale-105 transition-all"
+                  >
+                    ⚠️ Handle Experiment Failure
+                  </button>
+                </div>
+              )}
+
+              {experimentChallenge && !challengeHandled && (
+                <div className="bg-orange-500/20 border-2 border-orange-400 rounded-xl p-6">
+                  <div className="text-5xl mb-4">⚠️</div>
+                  <h4 className="text-2xl font-bold mb-4">Experiment Setback</h4>
+                  <p className="text-lg mb-4">
+                    One of your experiments failed. How do you respond to this setback?
+                  </p>
+                  <div className="grid md:grid-cols-3 gap-4">
+                    <button
+                      onClick={() => handleExperimentCrisis('iterate')}
+                      className="bg-white/10 hover:bg-white/20 rounded-xl p-4 transition-all text-left"
+                    >
+                      <div className="text-3xl mb-2">🔄</div>
+                      <div className="font-bold">Iterate & Improve</div>
+                      <div className="text-sm opacity-75 mt-2">
+                        Learn from failure, refine approach, try again
+                      </div>
+                      <div className="text-xs text-green-400 mt-2">✓ Convert failure to success</div>
+                    </button>
+                    <button
+                      onClick={() => handleExperimentCrisis('pivot')}
+                      className="bg-white/10 hover:bg-white/20 rounded-xl p-4 transition-all text-left"
+                    >
+                      <div className="text-3xl mb-2">🎯</div>
+                      <div className="font-bold">Pivot Strategy</div>
+                      <div className="text-sm opacity-75 mt-2">
+                        Use insights to develop new approach
+                      </div>
+                      <div className="text-xs text-blue-400 mt-2">✓ Unlock adaptive framework</div>
+                    </button>
+                    <button
+                      onClick={() => handleExperimentCrisis('accept')}
+                      className="bg-white/10 hover:bg-white/20 rounded-xl p-4 transition-all text-left"
+                    >
+                      <div className="text-3xl mb-2">✅</div>
+                      <div className="font-bold">Accept & Document</div>
+                      <div className="text-sm opacity-75 mt-2">
+                        Document failure as valuable learning
+                      </div>
+                      <div className="text-xs text-yellow-400 mt-2">⚠ Add to knowledge base</div>
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Pilot Programs Tab */}
+        {selectedTab === 'pilots' && (
+          <div className="space-y-6">
+            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 text-white">
+              <h3 className="text-2xl font-bold mb-4">🚀 Pilot Programs</h3>
+              <p className="text-lg mb-6 opacity-90">
+                Launch pilot programs to test innovations at scale with community involvement.
+              </p>
+
+              <div className="grid md:grid-cols-3 gap-4">
+                {pilots.map(pilot => (
+                  <div key={pilot.id} className="bg-black/30 rounded-xl p-5">
+                    <div className="flex justify-between items-start mb-3">
+                      <h4 className="text-lg font-bold">{pilot.name}</h4>
+                      <span className={`px-3 py-1 rounded-full text-xs font-bold ${
+                        pilot.status === 'active' ? 'bg-green-500' :
+                        pilot.status === 'planning' ? 'bg-blue-500' :
+                        'bg-gray-600'
+                      }`}>
+                        {pilot.status === 'active' ? '✓ Active' : '📋 Planning'}
+                      </span>
+                    </div>
+
+                    {pilot.status === 'planning' && completedResearch >= 2 && (
+                      <button
+                        onClick={() => launchPilot(pilot.id)}
+                        className="w-full px-4 py-3 bg-gradient-to-r from-purple-500 to-pink-600 rounded-lg font-bold hover:scale-105 transition-all"
+                      >
+                        Launch Pilot
+                      </button>
+                    )}
+
+                    {pilot.status === 'planning' && completedResearch < 2 && (
+                      <div className="text-center text-sm text-yellow-400">
+                        Complete more research first
+                      </div>
+                    )}
+
+                    {pilot.status === 'active' && (
+                      <div>
+                        <div className="bg-green-500/20 border border-green-400 rounded-lg p-3 mb-3">
+                          <div className="flex justify-between text-sm">
+                            <span>Participants:</span>
+                            <span className="font-bold">{pilot.participants}</span>
+                          </div>
+                          <div className="flex justify-between text-sm mt-1">
+                            <span>Results:</span>
+                            <span className="font-bold text-green-400 capitalize">{pilot.results}</span>
+                          </div>
+                        </div>
+                        <div className="text-xs opacity-75 text-center">
+                          Pilot showing promising results!
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              {activePilots >= 2 && (
+                <div className="mt-6 bg-green-500/20 border-2 border-green-400 rounded-xl p-6 text-center">
+                  <div className="text-5xl mb-3">🎉</div>
+                  <h4 className="text-2xl font-bold">Multiple Pilots Running Successfully!</h4>
+                  <p className="opacity-90 mt-2">Your innovations are being tested in the field.</p>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Results Tab */}
+        {selectedTab === 'results' && (
+          <div className="space-y-6">
+            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 text-white">
+              <h3 className="text-2xl font-bold mb-4">📊 Innovation Impact</h3>
+              <p className="text-lg mb-6 opacity-90">
+                Review the outcomes of your research, experiments, and pilot programs.
+              </p>
+
+              <div className="grid md:grid-cols-2 gap-6 mb-6">
+                <div className="bg-black/30 rounded-xl p-5">
+                  <h4 className="text-xl font-bold mb-4 text-blue-400">Research Outcomes</h4>
+                  <div className="space-y-3">
+                    {researchAreas.filter(r => r.status === 'complete').map(area => (
+                      <div key={area.id} className="flex justify-between items-center">
+                        <span className="text-sm">{area.name}</span>
+                        <span className="text-green-400 font-bold">+{area.potential}% potential</span>
+                      </div>
+                    ))}
+                    {researchAreas.filter(r => r.status === 'complete').length === 0 && (
+                      <div className="text-sm opacity-50">No completed research yet</div>
+                    )}
+                  </div>
+                </div>
+
+                <div className="bg-black/30 rounded-xl p-5">
+                  <h4 className="text-xl font-bold mb-4 text-green-400">Experiment Results</h4>
+                  <div className="space-y-3">
+                    {experiments.filter(e => e.status === 'complete').map(exp => (
+                      <div key={exp.id} className="flex justify-between items-center">
+                        <span className="text-sm">{exp.name}</span>
+                        <span className={`font-bold ${exp.success ? 'text-green-400' : 'text-red-400'}`}>
+                          {exp.success ? `+${exp.impact}% impact` : 'Learning opportunity'}
+                        </span>
+                      </div>
+                    ))}
+                    {experiments.filter(e => e.status === 'complete').length === 0 && (
+                      <div className="text-sm opacity-50">No completed experiments yet</div>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-purple-500/20 border border-purple-400 rounded-xl p-6">
+                <h4 className="text-xl font-bold mb-4">🌟 Innovation Portfolio</h4>
+                <div className="grid md:grid-cols-3 gap-4 text-center">
+                  <div>
+                    <div className="text-4xl font-bold text-blue-400">{completedResearch}</div>
+                    <div className="text-sm opacity-75">Research Completed</div>
+                  </div>
+                  <div>
+                    <div className="text-4xl font-bold text-green-400">{successfulExperiments}</div>
+                    <div className="text-sm opacity-75">Successful Experiments</div>
+                  </div>
+                  <div>
+                    <div className="text-4xl font-bold text-purple-400">{activePilots}</div>
+                    <div className="text-sm opacity-75">Active Pilots</div>
+                  </div>
+                </div>
+              </div>
+
+              {completedResearch >= 2 && successfulExperiments >= 1 && pilotLaunched && challengeHandled && (
+                <div className="mt-6 text-center">
+                  <button
+                    onClick={completeLevel}
+                    className="px-8 py-4 bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl font-bold text-lg hover:scale-105 transition-all"
+                  >
+                    🎉 Complete Innovation Lab
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Transition Message */}
+        {levelComplete && (
+          <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50">
+            <div className="text-center text-white">
+              <div className="text-8xl mb-6 animate-bounce">🔬</div>
+              <h2 className="text-5xl font-bold mb-4">Innovation Mastered!</h2>
+              <p className="text-2xl opacity-80">
+                Moving to final celebration...
+              </p>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 // Completion Screen
 function CompletionScreen({ progress }: { progress: GameProgress; setProgress: (p: GameProgress) => void }) {
   return (
