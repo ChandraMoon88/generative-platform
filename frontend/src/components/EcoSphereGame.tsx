@@ -23,6 +23,7 @@ type GamePhase =
   | 'level-9-stakeholders'
   | 'level-10-compliance'
   | 'level-11-projects'
+  | 'level-12-innovation'
   | 'completion';
 
 // Landing Zone (Starting Domain)
@@ -482,6 +483,11 @@ export default function EcoSphereGame({ onGameComplete }: { onGameComplete: (app
   // LEVEL 11: Ecosystem Engineer
   if (progress.phase === 'level-11-projects') {
     return <Level11Projects progress={progress} setProgress={setProgress} />;
+  }
+
+  // LEVEL 12: Innovation Lab
+  if (progress.phase === 'level-12-innovation') {
+    return <Level12Innovation progress={progress} setProgress={setProgress} />;
   }
 
   // COMPLETION
@@ -4401,7 +4407,7 @@ function Level11Projects({ progress, setProgress }: { progress: GameProgress; se
     setTimeout(() => {
       setProgress({
         ...progress,
-        phase: 'completion' as GamePhase,
+        phase: 'level-12-innovation' as GamePhase,
         completedPhases: [...(progress.completedPhases || []), 'level-11-projects']
       });
     }, 2000);
