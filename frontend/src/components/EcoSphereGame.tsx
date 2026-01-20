@@ -449,6 +449,11 @@ export default function EcoSphereGame({ onGameComplete }: { onGameComplete: (app
     return <Level5Systems progress={progress} setProgress={setProgress} />;
   }
 
+  // LEVEL 6: Team Building
+  if (progress.phase === 'level-6-team') {
+    return <Level6Team progress={progress} setProgress={setProgress} />;
+  }
+
   // More levels...
   return <div>Game in progress...</div>;
 }
