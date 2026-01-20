@@ -6133,7 +6133,7 @@ function Level14Mentor({ progress, setProgress }: { progress: GameProgress; setP
     } else if (approach === 'support') {
       const updated = new Map(workshops);
       workshops.forEach((workshop, id) => {
-        if (workshop.status === 'completed') {
+        if (workshop.status === 'complete') {
           updated.set(id, { ...workshop, satisfaction: Math.min(100, workshop.satisfaction + 10) });
         }
       });
