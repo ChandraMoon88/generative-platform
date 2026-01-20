@@ -94,6 +94,7 @@ app.use('/api/webhook', webhookRouter);
 app.use('/api/events', eventsRouter);
 app.use('/api/sessions', sessionsRouter);
 app.use('/api/assets', assetsRouter);
+app.use('/api/ecosphere', ecosphereRouter);
 
 // Error handling
 app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
