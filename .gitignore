@@ -2,11 +2,12 @@
 # KEEP ADMIN/DEV FILES PRIVATE - DO NOT COMMIT
 # ========================================
 
-# Hide entire .dev folder (contains admin, backend, docs, scripts)
+# Hide entire .dev folder (contains admin, backend copy, docs, scripts)
 .dev/
 .dev/**
 **/.dev/**
 
+# ADMIN CONTROL - Keep admin panel private (you can access locally)
 admin/
 admin/**
 **/admin/**
@@ -17,11 +18,6 @@ ADMIN_*.md
 *ADMIN*.md
 VERCEL_DEPLOY_PUBLIC.md
 DEPLOY.md
-
-# Shared types - CRITICAL: Admin depends on these
-shared/
-shared/**
-**/shared/**
 
 # Internal documentation - KEEP PRIVATE
 ACCESS_CONTROL.md
@@ -60,12 +56,12 @@ deploy-to-vercel.ps1
 .env.production
 .env.production.example
 
-# Internal backend services
+# Backend - ADMIN ONLY files (others get public APIs only)
 backend/src/api/models.ts
 backend/src/api/patterns.ts
 backend/src/api/generator.ts
-backend/src/services/
-backend/src/services/**
+backend/src/services/modelSynthesizer.ts
+backend/src/services/PatternRecognitionEngine.ts
 backend/data/
 backend/logs/
 
