@@ -5,6 +5,7 @@ import { Droplet, TreePine, Factory, Sprout, Waves, Mountain, Check, Lock, Spark
 import Level1Game from './Level1Game';
 import Level2Game from './Level2Game';
 import Level3Game from './Level3Game';
+import RemainingLevelsGame from './RemainingLevelsGame';
 import { loadGameState, GameState } from '@/lib/gameState';
 
 // Level Icons Mapping
