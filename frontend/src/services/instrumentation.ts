@@ -198,13 +198,15 @@ export function logWorkflow(
     ...createBaseEvent('workflow', { semanticAction }),
     type: 'workflow',
     workflowId,
-    workflowName,
     action,
-    currentStep,
-    previousStep,
-    stepsCompleted,
-    stepsRemaining,
-    workflowData,
+    step: currentStep,
+    data: {
+      workflowName,
+      previousStep,
+      stepsCompleted,
+      stepsRemaining,
+      ...workflowData,
+    },
   };
   
   bufferEvent(event);
