@@ -4897,9 +4897,9 @@ function Level12Innovation({ progress, setProgress }: { progress: GameProgress; 
   ]);
 
   const [pilots, setPilots] = useState([
-    { id: 'p1', name: 'Community Science Program', status: 'planning', participants: 0, results: null },
-    { id: 'p2', name: 'Riparian Restoration Pilot', status: 'planning', participants: 0, results: null },
-    { id: 'p3', name: 'Urban Green Corridors', status: 'planning', participants: 0, results: null },
+    { id: 'p1', name: 'Community Science Program', status: 'planning', participants: 0, results: null as string | null },
+    { id: 'p2', name: 'Riparian Restoration Pilot', status: 'planning', participants: 0, results: null as string | null },
+    { id: 'p3', name: 'Urban Green Corridors', status: 'planning', participants: 0, results: null as string | null },
   ]);
 
   const [budget, setBudget] = useState(75000);
