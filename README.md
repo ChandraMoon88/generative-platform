@@ -1,19 +1,48 @@
-# 🎨 Component Library Platform
+# � Generative Platform with EcoSphere
 
-**Build applications faster with 150+ production-ready React components**
+**Build applications through play - featuring the revolutionary EcoSphere environmental restoration game**
 
-A comprehensive component library for building modern web applications. Browse, preview, and use universal components designed for any type of application.
+A next-generation platform that generates custom applications based on how you interact with engaging gameplay. No forms, no technical specifications - just play, create, and receive your perfect application.
 
 ---
 
-## ✨ Features
+## 🎮 EcoSphere: The Ultimate Environmental Restoration Game
 
-- 🧩 **150+ Components** - Buttons, forms, charts, animations, 3D, games, and more
-- 🔍 **Smart Search** - Find exactly what you need instantly  
+**Help heal a planet while unknowingly designing your perfect environmental management application**
+
+### The Revolutionary Concept
+
+Players become "Restoration Architects" tasked with healing EcoSphere's struggling ecosystems. Every action in the game - from scanning water quality to managing restoration teams - secretly defines how a real environmental management application works.
+
+**The magic:** Players never see the application being built. They only experience beautiful, meaningful gameplay. But every decision maps to application logic:
+- 🔬 Scanning ecosystems → Defining entity properties & data types
+- 📋 Creating restoration plans → Building workflows & state machines  
+- 💰 Managing budgets → Financial tracking systems
+- 👥 Building teams → User management & collaboration
+- 📊 Monitoring progress → Dashboard design & data visualization
+
+### Choose Your Path
+
+Start by selecting one of 6 environmental zones:
+- **🌊 The Weeping River Valley** - Water Quality Management
+- **🌲 The Silent Forest** - Biodiversity & Habitat Management
+- **🏙️ The Choking City** - Urban Environmental Management
+- **🌾 The Barren Fields** - Soil & Agriculture Management
+- **🏖️ The Dying Coast** - Marine & Coastal Management
+- **⛰️ The Wounded Mountains** - Land Restoration Management
+
+[📖 Complete EcoSphere Guide](./ECOSPHERE_GUIDE.md)
+
+---
+
+## ✨ Platform Features
+
+- 🎮 **EcoSphere Game** - Generate apps through environmental restoration gameplay
+- 🧩 **150+ Components** - Production-ready React components for any application
+- 🔍 **Smart Generation** - Applications built from your actual behavior patterns
 - 👁️ **Live Previews** - See components in action before using
-- 📱 **Project Management** - Organize your applications
-- 🎯 **30+ Categories** - From basic UI to advanced game development
-- 📝 **Code Examples** - Copy-paste ready implementations
+- 📱 **Project Management** - Organize your generated applications
+- 🎯 **30+ Categories** - From basic UI to advanced features
 - 🔐 **Secure** - Enterprise-grade security with encrypted passwords
 - ☁️ **Cloud Ready** - Deploy to Vercel, Netlify, or any platform
 
