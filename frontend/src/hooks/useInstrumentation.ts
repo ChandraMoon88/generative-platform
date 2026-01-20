@@ -148,7 +148,7 @@ export function useInstrumentation(options: UseInstrumentationOptions) {
   const trackRead = useCallback((id: string) => {
     logInteraction(
       'click',
-      { tagName: 'item', id },
+      { type: 'item', id },
       createSemanticAction('crud_read', 'read', `View ${entityType} ${id}`)
     );
   }, [entityType, createSemanticAction]);
