@@ -2803,6 +2803,531 @@ function Level7Budget({ progress, setProgress }: { progress: GameProgress; setPr
   );
 }
 
+// LEVEL 8: Data Analytics Component
+function Level8Analytics({ progress, setProgress }: { progress: GameProgress; setProgress: (p: GameProgress) => void }) {
+  const [selectedTab, setSelectedTab] = useState<'dashboard' | 'patterns' | 'predictions' | 'reports'>('dashboard');
+  const [discoveredPattern, setDiscoveredPattern] = useState<string | null>(null);
+  const [predictionAccuracy, setPredictionAccuracy] = useState(0);
+  const [generatingReport, setGeneratingReport] = useState(false);
+  const [reportGenerated, setReportGenerated] = useState(false);
+
+  // Sample data for visualizations
+  const waterQualityTrend = [
+    { week: 'Week 1', ph: 6.2, oxygen: 4.5, health: 42 },
+    { week: 'Week 2', ph: 6.4, oxygen: 5.1, health: 48 },
+    { week: 'Week 3', ph: 6.6, oxygen: 5.6, health: 55 },
+    { week: 'Week 4', ph: 6.8, oxygen: 6.2, health: 63 },
+    { week: 'Week 5', ph: 7.0, oxygen: 6.8, health: 72 },
+    { week: 'Week 6', ph: 7.2, oxygen: 7.3, health: 80 },
+    { week: 'Week 7', ph: 7.4, oxygen: 7.8, health: 88 },
+  ];
+
+  const pollutionSources = [
+    { name: 'Industrial', impact: 35, trend: 'decreasing' },
+    { name: 'Agricultural', impact: 28, trend: 'stable' },
+    { name: 'Urban', impact: 22, trend: 'decreasing' },
+    { name: 'Illegal Dumping', impact: 10, trend: 'eliminated' },
+    { name: 'Natural', impact: 5, trend: 'stable' },
+  ];
+
+  const speciesRecovery = [
+    { species: 'Trout', baseline: 12, current: 47, target: 60 },
+    { species: 'Mayfly', baseline: 23, current: 68, target: 80 },
+    { species: 'Otter', baseline: 3, current: 8, target: 15 },
+    { species: 'Heron', baseline: 5, current: 14, target: 20 },
+  ];
+
+  const costEfficiency = [
+    { category: 'Personnel', budgeted: 87500, spent: 83200, efficiency: 95 },
+    { category: 'Equipment', budgeted: 50000, spent: 45800, efficiency: 92 },
+    { category: 'Materials', budgeted: 37500, spent: 38900, efficiency: 96 },
+    { category: 'Permits', budgeted: 25000, spent: 22000, efficiency: 88 },
+  ];
+
+  const handlePatternDiscovery = (pattern: string) => {
+    setDiscoveredPattern(pattern);
+    setTimeout(() => setDiscoveredPattern(null), 3000);
+  };
+
+  const runPredictiveModel = () => {
+    let accuracy = 0;
+    const interval = setInterval(() => {
+      accuracy += 5;
+      setPredictionAccuracy(accuracy);
+      if (accuracy >= 85) {
+        clearInterval(interval);
+      }
+    }, 100);
+  };
+
+  const generateReport = () => {
+    setGeneratingReport(true);
+    setTimeout(() => {
+      setGeneratingReport(false);
+      setReportGenerated(true);
+    }, 2000);
+  };
+
+  const completeLevel = () => {
+    setTimeout(() => {
+      setProgress({
+        ...progress,
+        phase: 'completion' as GamePhase,
+        completedPhases: [...(progress.completedPhases || []), 'level-8-analytics']
+      });
+    }, 1000);
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 py-8 px-4">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <h1 className="text-5xl font-bold text-white mb-3">
+            📊 Level 8: Data Analytics
+          </h1>
+          <p className="text-2xl text-purple-200">
+            Transform data into insights and actionable intelligence
+          </p>
+        </div>
+
+        {/* Tab Navigation */}
+        <div className="flex gap-4 mb-6">
+          <button
+            onClick={() => setSelectedTab('dashboard')}
+            className={`flex-1 py-4 rounded-xl font-bold text-lg transition-all ${
+              selectedTab === 'dashboard'
+                ? 'bg-gradient-to-r from-blue-500 to-cyan-600 text-white'
+                : 'bg-white/10 text-white/60 hover:bg-white/20'
+            }`}
+          >
+            📈 Dashboard
+          </button>
+          <button
+            onClick={() => setSelectedTab('patterns')}
+            className={`flex-1 py-4 rounded-xl font-bold text-lg transition-all ${
+              selectedTab === 'patterns'
+                ? 'bg-gradient-to-r from-green-500 to-emerald-600 text-white'
+                : 'bg-white/10 text-white/60 hover:bg-white/20'
+            }`}
+          >
+            🔍 Pattern Discovery
+          </button>
+          <button
+            onClick={() => setSelectedTab('predictions')}
+            className={`flex-1 py-4 rounded-xl font-bold text-lg transition-all ${
+              selectedTab === 'predictions'
+                ? 'bg-gradient-to-r from-purple-500 to-pink-600 text-white'
+                : 'bg-white/10 text-white/60 hover:bg-white/20'
+            }`}
+          >
+            🔮 Predictions
+          </button>
+          <button
+            onClick={() => setSelectedTab('reports')}
+            className={`flex-1 py-4 rounded-xl font-bold text-lg transition-all ${
+              selectedTab === 'reports'
+                ? 'bg-gradient-to-r from-orange-500 to-red-600 text-white'
+                : 'bg-white/10 text-white/60 hover:bg-white/20'
+            }`}
+          >
+            📄 Reports
+          </button>
+        </div>
+
+        {/* Dashboard Tab */}
+        {selectedTab === 'dashboard' && (
+          <div className="grid lg:grid-cols-2 gap-6">
+            {/* Water Quality Trend */}
+            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 text-white">
+              <h3 className="text-2xl font-bold mb-4">💧 Water Quality Trend</h3>
+              <div className="space-y-3">
+                {waterQualityTrend.map((week, idx) => (
+                  <div key={week.week} className="bg-black/30 rounded-lg p-3">
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="font-semibold">{week.week}</span>
+                      <span className={`font-bold ${
+                        week.health >= 70 ? 'text-green-400' :
+                        week.health >= 50 ? 'text-yellow-400' :
+                        'text-red-400'
+                      }`}>
+                        {week.health}%
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2 text-sm">
+                      <div>pH: {week.ph}</div>
+                      <div>O₂: {week.oxygen} mg/L</div>
+                    </div>
+                    <div className="mt-2 bg-black/40 rounded-full h-2">
+                      <div 
+                        className="bg-gradient-to-r from-blue-400 to-green-500 h-full rounded-full transition-all"
+                        style={{ width: `${week.health}%` }}
+                      ></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Pollution Source Analysis */}
+            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 text-white">
+              <h3 className="text-2xl font-bold mb-4">🏭 Pollution Sources</h3>
+              <div className="space-y-4">
+                {pollutionSources.map(source => (
+                  <div key={source.name} className="bg-black/30 rounded-lg p-4">
+                    <div className="flex justify-between items-start mb-2">
+                      <div>
+                        <div className="font-bold">{source.name}</div>
+                        <div className="text-sm opacity-75">Impact: {source.impact}%</div>
+                      </div>
+                      <span className={`px-2 py-1 rounded text-xs font-bold ${
+                        source.trend === 'eliminated' ? 'bg-green-500' :
+                        source.trend === 'decreasing' ? 'bg-blue-500' :
+                        'bg-yellow-500'
+                      }`}>
+                        {source.trend}
+                      </span>
+                    </div>
+                    <div className="bg-black/40 rounded-full h-3">
+                      <div 
+                        className={`h-full rounded-full ${
+                          source.trend === 'eliminated' ? 'bg-green-500' :
+                          source.trend === 'decreasing' ? 'bg-blue-500' :
+                          'bg-yellow-500'
+                        }`}
+                        style={{ width: `${source.impact}%` }}
+                      ></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Species Recovery */}
+            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 text-white">
+              <h3 className="text-2xl font-bold mb-4">🦋 Species Recovery</h3>
+              <div className="space-y-4">
+                {speciesRecovery.map(species => {
+                  const progress = Math.round((species.current / species.target) * 100);
+                  return (
+                    <div key={species.species} className="bg-black/30 rounded-lg p-4">
+                      <div className="flex justify-between mb-2">
+                        <span className="font-bold">{species.species}</span>
+                        <span className="text-sm">
+                          {species.current}/{species.target} ({progress}%)
+                        </span>
+                      </div>
+                      <div className="bg-black/40 rounded-full h-3 mb-1">
+                        <div 
+                          className={`h-full rounded-full ${
+                            progress >= 80 ? 'bg-green-500' :
+                            progress >= 50 ? 'bg-yellow-500' :
+                            'bg-red-500'
+                          }`}
+                          style={{ width: `${progress}%` }}
+                        ></div>
+                      </div>
+                      <div className="flex justify-between text-xs opacity-75">
+                        <span>Baseline: {species.baseline}</span>
+                        <span>Current: {species.current}</span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Cost Efficiency */}
+            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 text-white">
+              <h3 className="text-2xl font-bold mb-4">💰 Cost Efficiency</h3>
+              <div className="space-y-4">
+                {costEfficiency.map(item => (
+                  <div key={item.category} className="bg-black/30 rounded-lg p-4">
+                    <div className="flex justify-between items-start mb-2">
+                      <div className="font-bold">{item.category}</div>
+                      <div className={`font-bold ${
+                        item.efficiency >= 90 ? 'text-green-400' :
+                        item.efficiency >= 80 ? 'text-yellow-400' :
+                        'text-red-400'
+                      }`}>
+                        {item.efficiency}%
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2 text-sm mb-2">
+                      <div>Budget: ${(item.budgeted / 1000).toFixed(0)}K</div>
+                      <div>Spent: ${(item.spent / 1000).toFixed(0)}K</div>
+                    </div>
+                    <div className="bg-black/40 rounded-full h-3">
+                      <div 
+                        className="bg-gradient-to-r from-green-400 to-emerald-500 h-full rounded-full"
+                        style={{ width: `${item.efficiency}%` }}
+                      ></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Pattern Discovery Tab */}
+        {selectedTab === 'patterns' && (
+          <div className="space-y-6">
+            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 text-white">
+              <h3 className="text-2xl font-bold mb-4">🔍 Discover Hidden Patterns</h3>
+              <p className="text-lg mb-6 opacity-90">
+                Analyze the data to uncover correlations and insights that can improve restoration outcomes.
+              </p>
+
+              <div className="grid md:grid-cols-2 gap-4">
+                <button
+                  onClick={() => handlePatternDiscovery('rainfall')}
+                  className="bg-white/10 hover:bg-white/20 rounded-xl p-6 transition-all text-left"
+                >
+                  <div className="text-4xl mb-3">🌧️</div>
+                  <h4 className="text-xl font-bold mb-2">Rainfall Correlation</h4>
+                  <p className="text-sm opacity-80">
+                    Discover how rainfall patterns affect water quality recovery rates
+                  </p>
+                </button>
+
+                <button
+                  onClick={() => handlePatternDiscovery('seasonal')}
+                  className="bg-white/10 hover:bg-white/20 rounded-xl p-6 transition-all text-left"
+                >
+                  <div className="text-4xl mb-3">🍂</div>
+                  <h4 className="text-xl font-bold mb-2">Seasonal Trends</h4>
+                  <p className="text-sm opacity-80">
+                    Identify seasonal patterns in species activity and pollution levels
+                  </p>
+                </button>
+
+                <button
+                  onClick={() => handlePatternDiscovery('upstream')}
+                  className="bg-white/10 hover:bg-white/20 rounded-xl p-6 transition-all text-left"
+                >
+                  <div className="text-4xl mb-3">⬆️</div>
+                  <h4 className="text-xl font-bold mb-2">Upstream Impact</h4>
+                  <p className="text-sm opacity-80">
+                    Analyze how upstream changes cascade through the ecosystem
+                  </p>
+                </button>
+
+                <button
+                  onClick={() => handlePatternDiscovery('intervention')}
+                  className="bg-white/10 hover:bg-white/20 rounded-xl p-6 transition-all text-left"
+                >
+                  <div className="text-4xl mb-3">⚡</div>
+                  <h4 className="text-xl font-bold mb-2">Intervention Effectiveness</h4>
+                  <p className="text-sm opacity-80">
+                    Compare effectiveness of different restoration techniques
+                  </p>
+                </button>
+              </div>
+
+              {discoveredPattern && (
+                <div className="mt-6 bg-green-500/20 border-2 border-green-400 rounded-xl p-6">
+                  <div className="flex items-start gap-4">
+                    <div className="text-5xl">💡</div>
+                    <div>
+                      <h4 className="text-xl font-bold mb-2">Pattern Discovered!</h4>
+                      <p className="opacity-90">
+                        {discoveredPattern === 'rainfall' && 'Heavy rainfall events correlate with 15% faster oxygen recovery. Schedule intensive restoration before rainy season!'}
+                        {discoveredPattern === 'seasonal' && 'Species return rates peak in spring (March-May). Plan major habitat work for late winter completion.'}
+                        {discoveredPattern === 'upstream' && 'Upstream improvements show 3-5 week lag before downstream benefits appear. Build this delay into projections.'}
+                        {discoveredPattern === 'intervention' && 'Natural filtration methods (wetland restoration) show 40% better long-term results than mechanical filtration.'}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Predictions Tab */}
+        {selectedTab === 'predictions' && (
+          <div className="space-y-6">
+            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 text-white">
+              <h3 className="text-2xl font-bold mb-4">🔮 Predictive Modeling</h3>
+              <p className="text-lg mb-6 opacity-90">
+                Use machine learning to forecast future outcomes and optimize strategy.
+              </p>
+
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="bg-black/30 rounded-xl p-6">
+                  <h4 className="text-xl font-bold mb-4">6-Month Projection</h4>
+                  <div className="space-y-4">
+                    <div>
+                      <div className="flex justify-between mb-1">
+                        <span>River Health</span>
+                        <span className="font-bold text-green-400">95%</span>
+                      </div>
+                      <div className="text-xs opacity-75">High confidence (+/- 3%)</div>
+                    </div>
+                    <div>
+                      <div className="flex justify-between mb-1">
+                        <span>Species Diversity</span>
+                        <span className="font-bold text-green-400">+47%</span>
+                      </div>
+                      <div className="text-xs opacity-75">Medium confidence (+/- 12%)</div>
+                    </div>
+                    <div>
+                      <div className="flex justify-between mb-1">
+                        <span>Remaining Budget</span>
+                        <span className="font-bold text-yellow-400">$28K</span>
+                      </div>
+                      <div className="text-xs opacity-75">High confidence (+/- $5K)</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-black/30 rounded-xl p-6">
+                  <h4 className="text-xl font-bold mb-4">Risk Assessment</h4>
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-3">
+                      <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                      <span>Weather disruption: 12% risk</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+                      <span>Budget overrun: 23% risk</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                      <span>Permit delays: 8% risk</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="w-3 h-3 rounded-full bg-red-500"></div>
+                      <span>Invasive species: 35% risk</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-6 text-center">
+                <button
+                  onClick={runPredictiveModel}
+                  disabled={predictionAccuracy > 0}
+                  className={`px-8 py-4 rounded-xl font-bold text-lg transition-all ${
+                    predictionAccuracy > 0
+                      ? 'bg-gray-600 cursor-not-allowed'
+                      : 'bg-gradient-to-r from-purple-500 to-pink-600 hover:scale-105'
+                  }`}
+                >
+                  {predictionAccuracy > 0 ? '⚙️ Model Running...' : '▶️ Run Predictive Model'}
+                </button>
+              </div>
+
+              {predictionAccuracy > 0 && (
+                <div className="mt-6 bg-purple-500/20 border-2 border-purple-400 rounded-xl p-6">
+                  <div className="mb-3">
+                    <div className="flex justify-between mb-1">
+                      <span className="font-bold">Model Accuracy</span>
+                      <span className="font-bold">{predictionAccuracy}%</span>
+                    </div>
+                    <div className="bg-black/40 rounded-full h-4">
+                      <div 
+                        className="bg-gradient-to-r from-purple-400 to-pink-500 h-full rounded-full transition-all duration-300"
+                        style={{ width: `${predictionAccuracy}%` }}
+                      ></div>
+                    </div>
+                  </div>
+                  {predictionAccuracy >= 85 && (
+                    <div className="text-center text-green-400 font-bold">
+                      ✅ Model Training Complete! High accuracy achieved.
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Reports Tab */}
+        {selectedTab === 'reports' && (
+          <div className="space-y-6">
+            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 text-white">
+              <h3 className="text-2xl font-bold mb-4">📄 Executive Reports</h3>
+              <p className="text-lg mb-6 opacity-90">
+                Generate comprehensive reports for stakeholders and decision-makers.
+              </p>
+
+              {!reportGenerated ? (
+                <>
+                  <div className="grid md:grid-cols-3 gap-4 mb-6">
+                    <div className="bg-black/30 rounded-xl p-4 text-center">
+                      <div className="text-3xl mb-2">📊</div>
+                      <div className="font-bold">Progress Report</div>
+                      <div className="text-sm opacity-75">7 weeks of data</div>
+                    </div>
+                    <div className="bg-black/30 rounded-xl p-4 text-center">
+                      <div className="text-3xl mb-2">💰</div>
+                      <div className="font-bold">Financial Summary</div>
+                      <div className="text-sm opacity-75">Budget analysis</div>
+                    </div>
+                    <div className="bg-black/30 rounded-xl p-4 text-center">
+                      <div className="text-3xl mb-2">🎯</div>
+                      <div className="font-bold">Impact Assessment</div>
+                      <div className="text-sm opacity-75">Ecological outcomes</div>
+                    </div>
+                  </div>
+
+                  <div className="text-center">
+                    <button
+                      onClick={generateReport}
+                      disabled={generatingReport}
+                      className={`px-8 py-4 rounded-xl font-bold text-lg transition-all ${
+                        generatingReport
+                          ? 'bg-gray-600 cursor-not-allowed'
+                          : 'bg-gradient-to-r from-green-500 to-emerald-600 hover:scale-105'
+                      }`}
+                    >
+                      {generatingReport ? '⚙️ Generating Report...' : '📄 Generate Comprehensive Report'}
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <div className="bg-green-500/20 border-2 border-green-400 rounded-xl p-8">
+                  <div className="text-center mb-6">
+                    <div className="text-7xl mb-4">📊</div>
+                    <h3 className="text-3xl font-bold mb-2">Report Generated Successfully!</h3>
+                    <p className="text-lg opacity-90">Comprehensive analysis complete</p>
+                  </div>
+
+                  <div className="grid md:grid-cols-3 gap-4 mb-6">
+                    <div className="bg-white/10 rounded-lg p-4">
+                      <div className="text-2xl font-bold text-green-400">88%</div>
+                      <div className="text-sm">Overall Success</div>
+                    </div>
+                    <div className="bg-white/10 rounded-lg p-4">
+                      <div className="text-2xl font-bold text-blue-400">$179K</div>
+                      <div className="text-sm">Budget Utilized</div>
+                    </div>
+                    <div className="bg-white/10 rounded-lg p-4">
+                      <div className="text-2xl font-bold text-purple-400">+156%</div>
+                      <div className="text-sm">Biodiversity Gain</div>
+                    </div>
+                  </div>
+
+                  <div className="text-center">
+                    <button
+                      onClick={completeLevel}
+                      className="px-8 py-4 bg-gradient-to-r from-purple-500 to-pink-600 rounded-xl font-bold text-lg hover:scale-105 transition-all"
+                    >
+                      🎉 Complete EcoSphere Journey
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 // Add CSS for animations
 const styles = `
   @keyframes spin-slow {
