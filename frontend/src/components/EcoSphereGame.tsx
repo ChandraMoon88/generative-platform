@@ -5425,6 +5425,574 @@ function Level12Innovation({ progress, setProgress }: { progress: GameProgress; 
   );
 }
 
+// LEVEL 13: Policy Maker Component
+function Level13Policy({ progress, setProgress }: { progress: GameProgress; setProgress: (p: GameProgress) => void }) {
+  const [selectedTab, setSelectedTab] = useState<'gaps' | 'advocacy' | 'legislation' | 'impact'>('gaps');
+  const [policyGaps, setPolicyGaps] = useState([
+    { id: 'wetland', name: 'Wetland Protection Gaps', severity: 'high', status: 'identified', support: 0 },
+    { id: 'pollution', name: 'Point-Source Pollution Rules', severity: 'high', status: 'identified', support: 0 },
+    { id: 'funding', name: 'Restoration Funding Mechanism', severity: 'medium', status: 'identified', support: 0 },
+    { id: 'enforcement', name: 'Enforcement Authority', severity: 'medium', status: 'identified', support: 0 },
+  ]);
+
+  const [advocacyCampaigns, setAdvocacyCampaigns] = useState([
+    { id: 'c1', name: 'Wetland Coalition Building', status: 'planning', reach: 0, impact: 0 },
+    { id: 'c2', name: 'Public Awareness Campaign', status: 'planning', reach: 0, impact: 0 },
+    { id: 'c3', name: 'Legislative Champion Recruitment', status: 'planning', reach: 0, impact: 0 },
+  ]);
+
+  const [legislation, setLegislation] = useState([
+    { id: 'bill1', name: 'River Restoration Act', stage: 'drafting', votes: 0, passed: null },
+    { id: 'bill2', name: 'Green Infrastructure Fund', stage: 'drafting', votes: 0, passed: null },
+  ]);
+
+  const [policyChallenge, setPolicyChallenge] = useState(false);
+  const [challengeHandled, setChallengeHandled] = useState(false);
+  const [billIntroduced, setBillIntroduced] = useState(false);
+  const [levelComplete, setLevelComplete] = useState(false);
+
+  const buildSupportForGap = (gapId: string) => {
+    setPolicyGaps(prev => prev.map(g => 
+      g.id === gapId ? { ...g, status: 'building-support', support: 50 } : g
+    ));
+
+    setTimeout(() => {
+      setPolicyGaps(prev => prev.map(g => 
+        g.id === gapId ? { ...g, status: 'ready', support: 85 } : g
+      ));
+    }, 1500);
+  };
+
+  const launchCampaign = (campaignId: string, strategy: string) => {
+    const reach = strategy === 'grassroots' ? 5000 : strategy === 'coalition' ? 3000 : 1500;
+    const impact = strategy === 'grassroots' ? 80 : strategy === 'coalition' ? 90 : 60;
+
+    setAdvocacyCampaigns(prev => prev.map(c => 
+      c.id === campaignId ? { ...c, status: 'active', reach, impact } : c
+    ));
+  };
+
+  const handlePolicyChallenge = (response: string) => {
+    if (response === 'negotiate') {
+      setLegislation(prev => prev.map(l => ({ ...l, votes: l.votes + 30 })));
+    } else if (response === 'educate') {
+      setAdvocacyCampaigns(prev => prev.map(c => 
+        c.status === 'active' ? { ...c, impact: c.impact + 15 } : c
+      ));
+    } else if (response === 'pressure') {
+      setLegislation(prev => prev.map(l => ({ ...l, votes: l.votes + 20 })));
+    }
+    setChallengeHandled(true);
+  };
+
+  const introduceBill = (billId: string) => {
+    setLegislation(prev => prev.map(l => 
+      l.id === billId ? { ...l, stage: 'committee' } : l
+    ));
+
+    setTimeout(() => {
+      setLegislation(prev => prev.map(l => 
+        l.id === billId ? { ...l, stage: 'floor-vote', votes: 45 } : l
+      ));
+    }, 1500);
+
+    setTimeout(() => {
+      const passed = Math.random() > 0.3;
+      setLegislation(prev => prev.map(l => 
+        l.id === billId ? { ...l, stage: 'completed', votes: passed ? 65 : 40, passed } : l
+      ));
+    }, 3000);
+
+    setBillIntroduced(true);
+  };
+
+  const completeLevel = () => {
+    setLevelComplete(true);
+    setTimeout(() => {
+      setProgress({
+        ...progress,
+        phase: 'level-14-mentor' as GamePhase,
+        completedPhases: [...(progress.completedPhases || []), 'level-13-policy']
+      });
+    }, 2000);
+  };
+
+  const gapsAddressed = policyGaps.filter(g => g.status === 'ready').length;
+  const activeCampaigns = advocacyCampaigns.filter(c => c.status === 'active').length;
+  const billsPassed = legislation.filter(l => l.passed === true).length;
+  const totalReach = advocacyCampaigns.reduce((sum, c) => sum + c.reach, 0);
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-red-900 via-orange-900 to-yellow-900 py-8 px-4">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <h1 className="text-5xl font-bold text-white mb-3">
+            🏛️ Level 13: Policy Maker
+          </h1>
+          <p className="text-2xl text-orange-200">
+            Shape policy, build coalitions, and drive systemic change
+          </p>
+        </div>
+
+        {/* Policy Dashboard */}
+        <div className="grid md:grid-cols-4 gap-4 mb-6">
+          <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 text-white">
+            <div className="text-sm opacity-75 mb-2">Policy Gaps Addressed</div>
+            <div className="text-4xl font-bold text-red-400">{gapsAddressed}/{policyGaps.length}</div>
+          </div>
+
+          <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 text-white">
+            <div className="text-sm opacity-75 mb-2">Active Campaigns</div>
+            <div className="text-4xl font-bold text-orange-400">{activeCampaigns}/{advocacyCampaigns.length}</div>
+          </div>
+
+          <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 text-white">
+            <div className="text-sm opacity-75 mb-2">Total Reach</div>
+            <div className="text-4xl font-bold text-yellow-400">{(totalReach / 1000).toFixed(1)}K</div>
+          </div>
+
+          <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 text-white">
+            <div className="text-sm opacity-75 mb-2">Bills Passed</div>
+            <div className="text-4xl font-bold text-green-400">{billsPassed}/{legislation.length}</div>
+          </div>
+        </div>
+
+        {/* Tab Navigation */}
+        <div className="flex gap-4 mb-6">
+          <button
+            onClick={() => setSelectedTab('gaps')}
+            className={`flex-1 py-4 rounded-xl font-bold text-lg transition-all ${
+              selectedTab === 'gaps'
+                ? 'bg-gradient-to-r from-red-500 to-orange-600 text-white'
+                : 'bg-white/10 text-white/60 hover:bg-white/20'
+            }`}
+          >
+            🔍 Policy Gaps
+          </button>
+          <button
+            onClick={() => setSelectedTab('advocacy')}
+            className={`flex-1 py-4 rounded-xl font-bold text-lg transition-all ${
+              selectedTab === 'advocacy'
+                ? 'bg-gradient-to-r from-orange-500 to-yellow-600 text-white'
+                : 'bg-white/10 text-white/60 hover:bg-white/20'
+            }`}
+          >
+            📢 Advocacy
+          </button>
+          <button
+            onClick={() => setSelectedTab('legislation')}
+            className={`flex-1 py-4 rounded-xl font-bold text-lg transition-all ${
+              selectedTab === 'legislation'
+                ? 'bg-gradient-to-r from-blue-500 to-cyan-600 text-white'
+                : 'bg-white/10 text-white/60 hover:bg-white/20'
+            }`}
+          >
+            📜 Legislation
+          </button>
+          <button
+            onClick={() => setSelectedTab('impact')}
+            className={`flex-1 py-4 rounded-xl font-bold text-lg transition-all ${
+              selectedTab === 'impact'
+                ? 'bg-gradient-to-r from-green-500 to-emerald-600 text-white'
+                : 'bg-white/10 text-white/60 hover:bg-white/20'
+            }`}
+          >
+            📊 Policy Impact
+          </button>
+        </div>
+
+        {/* Policy Gaps Tab */}
+        {selectedTab === 'gaps' && (
+          <div className="space-y-6">
+            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 text-white">
+              <h3 className="text-2xl font-bold mb-4">🔍 Identify & Address Policy Gaps</h3>
+              <p className="text-lg mb-6 opacity-90">
+                Analyze existing policies to find gaps that prevent effective restoration.
+              </p>
+
+              <div className="space-y-4">
+                {policyGaps.map(gap => (
+                  <div key={gap.id} className="bg-black/30 rounded-xl p-5">
+                    <div className="flex justify-between items-start mb-3">
+                      <div>
+                        <h4 className="text-xl font-bold">{gap.name}</h4>
+                        <span className={`text-xs px-2 py-1 rounded-full ${
+                          gap.severity === 'high' ? 'bg-red-500' : 'bg-orange-500'
+                        }`}>
+                          {gap.severity === 'high' ? '🔥 High Priority' : '⚠️ Medium Priority'}
+                        </span>
+                      </div>
+                      <span className={`px-3 py-1 rounded-full text-xs font-bold ${
+                        gap.status === 'ready' ? 'bg-green-500' :
+                        gap.status === 'building-support' ? 'bg-yellow-500' :
+                        'bg-gray-600'
+                      }`}>
+                        {gap.status === 'ready' ? '✓ Ready' :
+                         gap.status === 'building-support' ? '⏳ Building Support' :
+                         'Identified'}
+                      </span>
+                    </div>
+
+                    {gap.status !== 'identified' && (
+                      <div className="mb-3">
+                        <div className="flex justify-between text-sm mb-1">
+                          <span>Support Level</span>
+                          <span className="font-bold">{gap.support}%</span>
+                        </div>
+                        <div className="bg-black/40 rounded-full h-3">
+                          <div 
+                            className={`h-full rounded-full transition-all ${
+                              gap.status === 'building-support' 
+                                ? 'bg-gradient-to-r from-yellow-400 to-orange-500 animate-pulse'
+                                : 'bg-gradient-to-r from-green-400 to-emerald-500'
+                            }`}
+                            style={{ width: `${gap.support}%` }}
+                          ></div>
+                        </div>
+                      </div>
+                    )}
+
+                    {gap.status === 'identified' && (
+                      <button
+                        onClick={() => buildSupportForGap(gap.id)}
+                        className="w-full px-4 py-2 bg-gradient-to-r from-red-500 to-orange-600 rounded-lg font-bold hover:scale-105 transition-all"
+                      >
+                        Build Coalition Support
+                      </button>
+                    )}
+
+                    {gap.status === 'ready' && (
+                      <div className="bg-green-500/20 border border-green-400 rounded-lg p-2 text-center text-sm">
+                        ✅ Ready for Legislative Action
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Advocacy Tab */}
+        {selectedTab === 'advocacy' && (
+          <div className="space-y-6">
+            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 text-white">
+              <h3 className="text-2xl font-bold mb-4">📢 Advocacy Campaigns</h3>
+              <p className="text-lg mb-6 opacity-90">
+                Build public support and mobilize stakeholders for policy change.
+              </p>
+
+              <div className="space-y-4 mb-6">
+                {advocacyCampaigns.map(campaign => (
+                  <div key={campaign.id} className="bg-black/30 rounded-xl p-5">
+                    <div className="flex justify-between items-start mb-3">
+                      <h4 className="text-xl font-bold">{campaign.name}</h4>
+                      <span className={`px-3 py-1 rounded-full text-xs font-bold ${
+                        campaign.status === 'active' ? 'bg-green-500' : 'bg-blue-500'
+                      }`}>
+                        {campaign.status === 'active' ? '✓ Active' : '📋 Planning'}
+                      </span>
+                    </div>
+
+                    {campaign.status === 'planning' && (
+                      <div className="grid md:grid-cols-3 gap-3">
+                        <button
+                          onClick={() => launchCampaign(campaign.id, 'grassroots')}
+                          className="bg-white/10 hover:bg-white/20 rounded-lg p-3 transition-all text-sm"
+                        >
+                          <div className="font-bold">🌱 Grassroots</div>
+                          <div className="text-xs opacity-75 mt-1">5K reach, 80% impact</div>
+                          <div className="text-xs text-green-400 mt-1">Broad community support</div>
+                        </button>
+                        <button
+                          onClick={() => launchCampaign(campaign.id, 'coalition')}
+                          className="bg-white/10 hover:bg-white/20 rounded-lg p-3 transition-all text-sm"
+                        >
+                          <div className="font-bold">🤝 Coalition</div>
+                          <div className="text-xs opacity-75 mt-1">3K reach, 90% impact</div>
+                          <div className="text-xs text-blue-400 mt-1">Strong organizational backing</div>
+                        </button>
+                        <button
+                          onClick={() => launchCampaign(campaign.id, 'media')}
+                          className="bg-white/10 hover:bg-white/20 rounded-lg p-3 transition-all text-sm"
+                        >
+                          <div className="font-bold">📺 Media</div>
+                          <div className="text-xs opacity-75 mt-1">1.5K reach, 60% impact</div>
+                          <div className="text-xs text-yellow-400 mt-1">High visibility</div>
+                        </button>
+                      </div>
+                    )}
+
+                    {campaign.status === 'active' && (
+                      <div className="grid md:grid-cols-2 gap-4">
+                        <div className="bg-green-500/20 border border-green-400 rounded-lg p-3">
+                          <div className="text-sm opacity-75">Reach</div>
+                          <div className="text-2xl font-bold">{campaign.reach.toLocaleString()}</div>
+                        </div>
+                        <div className="bg-blue-500/20 border border-blue-400 rounded-lg p-3">
+                          <div className="text-sm opacity-75">Impact</div>
+                          <div className="text-2xl font-bold">{campaign.impact}%</div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              {!policyChallenge && activeCampaigns >= 2 && !challengeHandled && (
+                <div className="text-center">
+                  <button
+                    onClick={() => setPolicyChallenge(true)}
+                    className="px-6 py-3 bg-gradient-to-r from-orange-500 to-red-600 rounded-xl font-bold hover:scale-105 transition-all"
+                  >
+                    ⚠️ Handle Opposition
+                  </button>
+                </div>
+              )}
+
+              {policyChallenge && !challengeHandled && (
+                <div className="bg-orange-500/20 border-2 border-orange-400 rounded-xl p-6">
+                  <div className="text-5xl mb-4">⚠️</div>
+                  <h4 className="text-2xl font-bold mb-4">Industry Opposition</h4>
+                  <p className="text-lg mb-4">
+                    A powerful industry group is lobbying against your policy proposal. How do you respond?
+                  </p>
+                  <div className="grid md:grid-cols-3 gap-4">
+                    <button
+                      onClick={() => handlePolicyChallenge('negotiate')}
+                      className="bg-white/10 hover:bg-white/20 rounded-xl p-4 transition-all text-left"
+                    >
+                      <div className="text-3xl mb-2">🤝</div>
+                      <div className="font-bold">Negotiate Compromise</div>
+                      <div className="text-sm opacity-75 mt-2">
+                        Find middle ground, gain moderate support
+                      </div>
+                      <div className="text-xs text-green-400 mt-2">✓ +30 votes</div>
+                    </button>
+                    <button
+                      onClick={() => handlePolicyChallenge('educate')}
+                      className="bg-white/10 hover:bg-white/20 rounded-xl p-4 transition-all text-left"
+                    >
+                      <div className="text-3xl mb-2">📚</div>
+                      <div className="font-bold">Public Education</div>
+                      <div className="text-sm opacity-75 mt-2">
+                        Increase campaign impact with facts
+                      </div>
+                      <div className="text-xs text-blue-400 mt-2">✓ +15% campaign impact</div>
+                    </button>
+                    <button
+                      onClick={() => handlePolicyChallenge('pressure')}
+                      className="bg-white/10 hover:bg-white/20 rounded-xl p-4 transition-all text-left"
+                    >
+                      <div className="text-3xl mb-2">💪</div>
+                      <div className="font-bold">Apply Pressure</div>
+                      <div className="text-sm opacity-75 mt-2">
+                        Mobilize supporters, demand action
+                      </div>
+                      <div className="text-xs text-yellow-400 mt-2">⚠ +20 votes, risk backlash</div>
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Legislation Tab */}
+        {selectedTab === 'legislation' && (
+          <div className="space-y-6">
+            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 text-white">
+              <h3 className="text-2xl font-bold mb-4">📜 Legislative Process</h3>
+              <p className="text-lg mb-6 opacity-90">
+                Navigate the legislative process to turn policy ideas into law.
+              </p>
+
+              <div className="space-y-4">
+                {legislation.map(bill => (
+                  <div key={bill.id} className="bg-black/30 rounded-xl p-5">
+                    <div className="flex justify-between items-start mb-4">
+                      <div>
+                        <h4 className="text-2xl font-bold">{bill.name}</h4>
+                        <div className="text-sm opacity-75 mt-1">Legislative Stage: 
+                          <span className="font-bold capitalize ml-1">
+                            {bill.stage.replace('-', ' ')}
+                          </span>
+                        </div>
+                      </div>
+                      {bill.passed !== null && (
+                        <span className={`px-3 py-1 rounded-full text-xs font-bold ${
+                          bill.passed ? 'bg-green-500' : 'bg-red-500'
+                        }`}>
+                          {bill.passed ? '✓ Passed' : '✗ Failed'}
+                        </span>
+                      )}
+                    </div>
+
+                    <div className="mb-4">
+                      <div className="flex gap-2 mb-3">
+                        {['drafting', 'committee', 'floor-vote', 'completed'].map((stage, idx) => (
+                          <div key={stage} className="flex-1">
+                            <div className={`h-2 rounded-full ${
+                              bill.stage === stage || idx < ['drafting', 'committee', 'floor-vote', 'completed'].indexOf(bill.stage)
+                                ? 'bg-gradient-to-r from-blue-400 to-cyan-500'
+                                : 'bg-gray-600'
+                            }`}></div>
+                            <div className="text-xs mt-1 capitalize">{stage.replace('-', ' ')}</div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {bill.stage === 'floor-vote' && (
+                      <div className="bg-blue-500/20 border border-blue-400 rounded-lg p-3 mb-3">
+                        <div className="flex justify-between text-sm mb-2">
+                          <span>Current Support</span>
+                          <span className="font-bold">{bill.votes}/100 votes</span>
+                        </div>
+                        <div className="bg-black/40 rounded-full h-3">
+                          <div 
+                            className={`h-full rounded-full transition-all ${
+                              bill.votes >= 51 
+                                ? 'bg-gradient-to-r from-green-400 to-emerald-500'
+                                : 'bg-gradient-to-r from-red-400 to-orange-500'
+                            }`}
+                            style={{ width: `${bill.votes}%` }}
+                          ></div>
+                        </div>
+                        <div className="text-xs mt-2 opacity-75">Need 51 votes to pass</div>
+                      </div>
+                    )}
+
+                    {bill.stage === 'drafting' && gapsAddressed >= 2 && (
+                      <button
+                        onClick={() => introduceBill(bill.id)}
+                        className="w-full px-4 py-3 bg-gradient-to-r from-blue-500 to-cyan-600 rounded-lg font-bold hover:scale-105 transition-all"
+                      >
+                        Introduce Bill to Legislature
+                      </button>
+                    )}
+
+                    {bill.stage === 'drafting' && gapsAddressed < 2 && (
+                      <div className="text-center text-sm text-yellow-400">
+                        Build more support before introducing bill
+                      </div>
+                    )}
+
+                    {bill.passed === true && (
+                      <div className="bg-green-500/20 border-2 border-green-400 rounded-lg p-4 text-center">
+                        <div className="text-3xl mb-2">🎉</div>
+                        <div className="font-bold">Bill Signed Into Law!</div>
+                        <div className="text-sm opacity-90 mt-1">Your policy will create lasting change</div>
+                      </div>
+                    )}
+
+                    {bill.passed === false && (
+                      <div className="bg-red-500/20 border border-red-400 rounded-lg p-3 text-center text-sm">
+                        Bill did not receive enough support. Consider revisions.
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Policy Impact Tab */}
+        {selectedTab === 'impact' && (
+          <div className="space-y-6">
+            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 text-white">
+              <h3 className="text-2xl font-bold mb-4">📊 Policy Impact Assessment</h3>
+              <p className="text-lg mb-6 opacity-90">
+                Measure the systemic impact of your policy work.
+              </p>
+
+              <div className="grid md:grid-cols-2 gap-6 mb-6">
+                <div className="bg-black/30 rounded-xl p-5">
+                  <h4 className="text-xl font-bold mb-4 text-red-400">Policy Gaps</h4>
+                  <div className="space-y-3">
+                    {policyGaps.map(gap => (
+                      <div key={gap.id} className="flex justify-between items-center">
+                        <span className="text-sm">{gap.name}</span>
+                        <span className={`text-xs px-2 py-1 rounded-full ${
+                          gap.status === 'ready' ? 'bg-green-500' :
+                          gap.status === 'building-support' ? 'bg-yellow-500' :
+                          'bg-gray-600'
+                        }`}>
+                          {gap.status === 'ready' ? 'Ready' :
+                           gap.status === 'building-support' ? 'In Progress' :
+                           'Identified'}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="bg-black/30 rounded-xl p-5">
+                  <h4 className="text-xl font-bold mb-4 text-orange-400">Advocacy Reach</h4>
+                  <div className="space-y-3">
+                    {advocacyCampaigns.map(campaign => (
+                      <div key={campaign.id} className="flex justify-between items-center">
+                        <span className="text-sm">{campaign.name}</span>
+                        <span className="font-bold text-green-400">
+                          {campaign.status === 'active' ? `${(campaign.reach / 1000).toFixed(1)}K` : 'Planned'}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-gradient-to-r from-green-900/40 to-emerald-900/40 border-2 border-green-400 rounded-xl p-6">
+                <h4 className="text-2xl font-bold mb-4">🌟 Systemic Change Potential</h4>
+                <div className="grid md:grid-cols-3 gap-4 text-center">
+                  <div>
+                    <div className="text-4xl font-bold text-red-400">{gapsAddressed}</div>
+                    <div className="text-sm opacity-75">Gaps Addressed</div>
+                  </div>
+                  <div>
+                    <div className="text-4xl font-bold text-orange-400">{(totalReach / 1000).toFixed(1)}K</div>
+                    <div className="text-sm opacity-75">People Reached</div>
+                  </div>
+                  <div>
+                    <div className="text-4xl font-bold text-green-400">{billsPassed}</div>
+                    <div className="text-sm opacity-75">Laws Passed</div>
+                  </div>
+                </div>
+              </div>
+
+              {gapsAddressed >= 2 && activeCampaigns >= 2 && billIntroduced && challengeHandled && (
+                <div className="mt-6 text-center">
+                  <button
+                    onClick={completeLevel}
+                    className="px-8 py-4 bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl font-bold text-lg hover:scale-105 transition-all"
+                  >
+                    🎉 Complete Policy Maker
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Transition Message */}
+        {levelComplete && (
+          <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50">
+            <div className="text-center text-white">
+              <div className="text-8xl mb-6 animate-bounce">🏛️</div>
+              <h2 className="text-5xl font-bold mb-4">Policy Change Achieved!</h2>
+              <p className="text-2xl opacity-80">
+                Moving to mentorship phase...
+              </p>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 // Completion Screen
 function CompletionScreen({ progress }: { progress: GameProgress; setProgress: (p: GameProgress) => void }) {
   return (
