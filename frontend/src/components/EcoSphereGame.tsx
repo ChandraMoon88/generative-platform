@@ -6015,9 +6015,9 @@ function Level14Mentor({ progress, setProgress }: { progress: GameProgress; setP
     ['course-4', { id: 'course-4', name: 'Policy & Advocacy Training', modules: 0, students: 0, status: 'draft' as 'draft' | 'ready' | 'active', completion: 0 }],
   ]));
   const [workshops, setWorkshops] = useState(new Map([
-    ['workshop-1', { id: 'workshop-1', name: 'Field Assessment Training', participants: 0, status: 'planning' as const, satisfaction: 0 }],
-    ['workshop-2', { id: 'workshop-2', name: 'Data Collection Methods', participants: 0, status: 'planning' as const, satisfaction: 0 }],
-    ['workshop-3', { id: 'workshop-3', name: 'Community Facilitation', participants: 0, status: 'planning' as const, satisfaction: 0 }],
+    ['workshop-1', { id: 'workshop-1', name: 'Field Assessment Training', participants: 0, status: 'planning' as 'planning' | 'in-progress' | 'complete', satisfaction: 0 }],
+    ['workshop-2', { id: 'workshop-2', name: 'Data Collection Methods', participants: 0, status: 'planning' as 'planning' | 'in-progress' | 'complete', satisfaction: 0 }],
+    ['workshop-3', { id: 'workshop-3', name: 'Community Facilitation', participants: 0, status: 'planning' as 'planning' | 'in-progress' | 'complete', satisfaction: 0 }],
   ]));
   const [trainers, setTrainers] = useState(new Map([
     ['trainer-1', { id: 'trainer-1', name: 'Sarah Chen', expertise: 'Ecology', level: 'beginner' as const, certified: false, trainees: 0 }],
