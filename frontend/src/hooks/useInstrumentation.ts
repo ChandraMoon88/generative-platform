@@ -154,11 +154,11 @@ export function useInstrumentation(options: UseInstrumentationOptions) {
   }, [entityType, createSemanticAction]);
   
   const trackUpdate = useCallback((id: string, previousData: unknown, newData: unknown) => {
-    logStateChange('update', `${entityType}/${id}`, componentName, previousData, newData);
+    logStateChange('update', entityType, newData, previousData);
   }, [entityType, componentName]);
   
   const trackDelete = useCallback((id: string, data: unknown) => {
-    logStateChange('delete', `${entityType}/${id}`, componentName, data, undefined);
+    logStateChange('delete', entityType, data);
   }, [entityType, componentName]);
 
   // Combined CRUD tracking (convenience method)
