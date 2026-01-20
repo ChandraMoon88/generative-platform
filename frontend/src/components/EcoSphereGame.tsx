@@ -4926,6 +4926,11 @@ function CompletionScreen({ progress }: { progress: GameProgress; setProgress: (
               <div className="text-3xl font-bold mb-2">Level 10</div>
               <div className="text-sm opacity-75">Compliance</div>
             </div>
+            <div className="bg-white/10 rounded-xl p-6">
+              <div className="text-5xl mb-3">🔧</div>
+              <div className="text-3xl font-bold mb-2">Level 11</div>
+              <div className="text-sm opacity-75">Multi-Project</div>
+            </div>
           </div>
         </div>
 
@@ -4976,6 +4981,9 @@ function CompletionScreen({ progress }: { progress: GameProgress; setProgress: (
               <div>✅ Regulatory Compliance Framework</div>
               <div>✅ Permit Management System</div>
               <div>✅ Inspection Tracking</div>
+              <div>✅ Multi-Project Portfolio Manager</div>
+              <div>✅ Resource Allocation Engine</div>
+              <div>✅ Dependency Management</div>
             </div>
           </div>
           <p className="text-2xl font-bold text-yellow-300">
