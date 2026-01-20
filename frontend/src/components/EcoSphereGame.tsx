@@ -466,6 +466,11 @@ export default function EcoSphereGame({ onGameComplete }: { onGameComplete: (app
     return <Level8Analytics progress={progress} setProgress={setProgress} />;
   }
 
+  // COMPLETION
+  if (progress.phase === 'completion') {
+    return <CompletionScreen progress={progress} setProgress={setProgress} />;
+  }
+
   // More levels...
   return <div>Game in progress...</div>;
 }
