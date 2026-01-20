@@ -10,6 +10,7 @@ admin/**
 ADMIN_*.md
 *ADMIN*.md
 VERCEL_DEPLOY_PUBLIC.md
+DEPLOY.md
 
 # Shared types - CRITICAL: Admin depends on these
 shared/
