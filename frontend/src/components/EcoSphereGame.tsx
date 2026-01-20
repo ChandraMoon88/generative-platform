@@ -148,8 +148,22 @@ export default function EcoSphereGame() {
   const [completedLevels, setCompletedLevels] = useState<Set<number>>(new Set([0]));
   const [showLevelSelect, setShowLevelSelect] = useState<boolean>(false);
   const [gameStarted, setGameStarted] = useState<boolean>(false);
+  const [gameState, setGameState] = useState<GameState | null>(null);
 
-  const maxUnlockedLevel = Math.max(...Array.from(completedLevels)) + 1;
+  // Load game state on mount
+  useEffect(() => {
+    const saved = loadGameState();
+    if (saved) {
+      setGameState(saved);
+      setCurrentLevel(saved.currentLevel);
+      setCompletedLevels(new Set(saved.completedLevels));
+      if (saved.currentLevel > 0) {
+        setGameStarted(true);
+      }
+    }
+  }, []);
+
+  const maxUnlockedLevel = gameState ? gameState.maxUnlockedLevel : 1;
   const currentLevelData = levels[currentLevel - 1];
   const Icon = levelIcons[currentLevel - 1];
 
