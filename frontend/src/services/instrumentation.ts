@@ -225,10 +225,12 @@ export function logError(
     type: 'error',
     errorType,
     message,
-    code,
     stack,
-    userAction,
-    recoverable,
+    context: {
+      code,
+      userAction,
+      recoverable,
+    },
   };
   
   bufferEvent(event);
