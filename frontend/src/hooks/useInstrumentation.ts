@@ -142,7 +142,7 @@ export function useInstrumentation(options: UseInstrumentationOptions) {
   
   // Track CRUD operations
   const trackCreate = useCallback((data: Record<string, unknown>) => {
-    logStateChange('set', `${entityType}/create`, componentName, undefined, data);
+    logStateChange('create', entityType, data);
   }, [entityType, componentName]);
   
   const trackRead = useCallback((id: string) => {
@@ -185,7 +185,7 @@ export function useInstrumentation(options: UseInstrumentationOptions) {
         logStateChange('update', `${targetEntity}/${id}`, componentName, previousData, data);
         break;
       case 'delete':
-        logStateChange('delete', `${targetEntity}/${id}`, componentName, data, undefined);
+        logStateChange('delete', targetEntity, data);
         break;
     }
   }, [entityType, componentName, createSemanticAction]);
