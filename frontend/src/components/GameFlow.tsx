@@ -2,13 +2,15 @@
 
 import React, { useState } from 'react';
 import RestaurantDemo from './RestaurantDemo';
+import EcoSphereGame from './EcoSphereGame';
 
 interface GameState {
-  phase: 'welcome' | 'demo' | 'domain-selection' | 'gameplay' | 'reveal';
+  phase: 'welcome' | 'demo' | 'ecosphere-game' | 'domain-selection' | 'gameplay' | 'reveal';
   selectedDomain: string | null;
   completedTasks: string[];
   unlockedComponents: any[];
   score: number;
+  useEcoSphere: boolean;
 }
 
 const domains = [
