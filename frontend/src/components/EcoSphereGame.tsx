@@ -21,6 +21,7 @@ type GamePhase =
   | 'level-7-budget'
   | 'level-8-analytics'
   | 'level-9-stakeholders'
+  | 'level-10-compliance'
   | 'completion';
 
 // Landing Zone (Starting Domain)
@@ -470,6 +471,11 @@ export default function EcoSphereGame({ onGameComplete }: { onGameComplete: (app
   // LEVEL 9: Stakeholder Management
   if (progress.phase === 'level-9-stakeholders') {
     return <Level9Stakeholders progress={progress} setProgress={setProgress} />;
+  }
+
+  // LEVEL 10: Compliance Manager
+  if (progress.phase === 'level-10-compliance') {
+    return <Level10Compliance progress={progress} setProgress={setProgress} />;
   }
 
   // COMPLETION
@@ -3385,7 +3391,7 @@ function Level9Stakeholders({ progress, setProgress }: { progress: GameProgress;
     setTimeout(() => {
       setProgress({
         ...progress,
-        phase: 'completion' as GamePhase,
+        phase: 'level-10-compliance' as GamePhase,
         completedPhases: [...(progress.completedPhases || []), 'level-9-stakeholders']
       });
     }, 2000);
