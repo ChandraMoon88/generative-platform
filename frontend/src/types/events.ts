@@ -94,6 +94,7 @@ export interface FormEvent extends BaseEvent {
   action: 'start' | 'field_change' | 'validate' | 'submit' | 'error' | 'success';
   fields?: FormField[];
   errors?: ValidationError[];
+  formData?: Record<string, unknown>;
 }
 
 export interface FormField {
