@@ -1,6 +1,12 @@
 # ========================================
-# KEEP ADMIN PRIVATE - DO NOT COMMIT
+# KEEP ADMIN/DEV FILES PRIVATE - DO NOT COMMIT
 # ========================================
+
+# Hide entire .dev folder (contains admin, backend, docs, scripts)
+.dev/
+.dev/**
+**/.dev/**
+
 admin/
 admin/**
 **/admin/**
