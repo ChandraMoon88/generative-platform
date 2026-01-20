@@ -125,7 +125,7 @@ export const useRestaurantStore = create<RestaurantState>((set, get) => ({
     
     set((state) => {
       const newState = { menuItems: [...state.menuItems, newItem] };
-      logStateChange('set', 'menuItems/add', 'addMenuItem', undefined, newItem);
+      logStateChange('create', 'menuItems', newItem);
       return newState;
     });
     
@@ -142,7 +142,7 @@ export const useRestaurantStore = create<RestaurantState>((set, get) => ({
       const newMenuItems = [...state.menuItems];
       newMenuItems[index] = updatedItem;
       
-      logStateChange('update', `menuItems/${id}`, 'updateMenuItem', oldItem, updatedItem);
+      logStateChange('update', 'menuItems', updatedItem, oldItem);
       
       return { menuItems: newMenuItems };
     });
@@ -153,7 +153,7 @@ export const useRestaurantStore = create<RestaurantState>((set, get) => ({
       const item = state.menuItems.find((i) => i.id === id);
       const newMenuItems = state.menuItems.filter((i) => i.id !== id);
       
-      logStateChange('delete', `menuItems/${id}`, 'deleteMenuItem', item, undefined);
+      logStateChange('delete', 'menuItems', item);
       
       return { menuItems: newMenuItems };
     });
@@ -170,7 +170,7 @@ export const useRestaurantStore = create<RestaurantState>((set, get) => ({
     };
     
     set((state) => {
-      logStateChange('set', 'ingredients/add', 'addIngredient', undefined, newIngredient);
+      logStateChange('create', 'ingredients', newIngredient);
       return { ingredients: [...state.ingredients, newIngredient] };
     });
     
@@ -197,7 +197,7 @@ export const useRestaurantStore = create<RestaurantState>((set, get) => ({
       const newIngredients = [...state.ingredients];
       newIngredients[index] = updatedItem;
       
-      logStateChange('update', `ingredients/${id}`, 'updateIngredient', oldItem, updatedItem);
+      logStateChange('update', 'ingredients', updatedItem, oldItem);
       
       return { ingredients: newIngredients };
     });
@@ -206,7 +206,7 @@ export const useRestaurantStore = create<RestaurantState>((set, get) => ({
   deleteIngredient: (id) => {
     set((state) => {
       const item = state.ingredients.find((i) => i.id === id);
-      logStateChange('delete', `ingredients/${id}`, 'deleteIngredient', item, undefined);
+      logStateChange('delete', 'ingredients', item);
       return { ingredients: state.ingredients.filter((i) => i.id !== id) };
     });
   },
@@ -222,7 +222,7 @@ export const useRestaurantStore = create<RestaurantState>((set, get) => ({
     };
     
     set((state) => {
-      logStateChange('set', 'suppliers/add', 'addSupplier', undefined, newSupplier);
+      logStateChange('create', 'suppliers', newSupplier);
       return { suppliers: [...state.suppliers, newSupplier] };
     });
     
@@ -239,7 +239,7 @@ export const useRestaurantStore = create<RestaurantState>((set, get) => ({
       const newSuppliers = [...state.suppliers];
       newSuppliers[index] = updatedItem;
       
-      logStateChange('update', `suppliers/${id}`, 'updateSupplier', oldItem, updatedItem);
+      logStateChange('update', 'suppliers', updatedItem, oldItem);
       
       return { suppliers: newSuppliers };
     });
@@ -248,7 +248,7 @@ export const useRestaurantStore = create<RestaurantState>((set, get) => ({
   deleteSupplier: (id) => {
     set((state) => {
       const item = state.suppliers.find((i) => i.id === id);
-      logStateChange('delete', `suppliers/${id}`, 'deleteSupplier', item, undefined);
+      logStateChange('delete', 'suppliers', item);
       return { suppliers: state.suppliers.filter((i) => i.id !== id) };
     });
   },
@@ -256,7 +256,7 @@ export const useRestaurantStore = create<RestaurantState>((set, get) => ({
   // Order Actions
   addOrder: (order) => {
     set((state) => {
-      logStateChange('set', 'orders/add', 'addOrder', undefined, order);
+      logStateChange('create', 'orders', order);
       return { orders: [...state.orders, order] };
     });
   },
@@ -271,7 +271,7 @@ export const useRestaurantStore = create<RestaurantState>((set, get) => ({
       const newOrders = [...state.orders];
       newOrders[index] = updatedOrder;
       
-      logStateChange('update', `orders/${id}`, 'updateOrder', oldOrder, updatedOrder);
+      logStateChange('update', 'orders', updatedOrder, oldOrder);
       
       return { orders: newOrders };
     });
@@ -280,7 +280,7 @@ export const useRestaurantStore = create<RestaurantState>((set, get) => ({
   deleteOrder: (id) => {
     set((state) => {
       const order = state.orders.find((o) => o.id === id);
-      logStateChange('delete', `orders/${id}`, 'deleteOrder', order, undefined);
+      logStateChange('delete', 'orders', order);
       return { orders: state.orders.filter((o) => o.id !== id) };
     });
   },
@@ -305,7 +305,7 @@ export const useRestaurantStore = create<RestaurantState>((set, get) => ({
     };
     
     set((state) => {
-      logStateChange('set', 'orders/create', 'createOrder', undefined, newOrder);
+      logStateChange('create', 'orders', newOrder);
       return { orders: [...state.orders, newOrder] };
     });
     
@@ -356,7 +356,7 @@ export const useRestaurantStore = create<RestaurantState>((set, get) => ({
       const newOrders = [...state.orders];
       newOrders[orderIndex] = updatedOrder;
       
-      logStateChange('update', `orders/${orderId}/items`, 'addItemToOrder', order.items, newItems);
+      logStateChange('update', 'orders', updatedOrder, order);
       
       return { orders: newOrders };
     });
@@ -384,7 +384,7 @@ export const useRestaurantStore = create<RestaurantState>((set, get) => ({
       const newOrders = [...state.orders];
       newOrders[orderIndex] = updatedOrder;
       
-      logStateChange('delete', `orders/${orderId}/items/${orderItemId}`, 'removeItemFromOrder', order.items, newItems);
+      logStateChange('update', 'orders', updatedOrder, order);
       
       return { orders: newOrders };
     });
@@ -400,7 +400,7 @@ export const useRestaurantStore = create<RestaurantState>((set, get) => ({
       const newOrders = [...state.orders];
       newOrders[orderIndex] = updatedOrder;
       
-      logStateChange('update', `orders/${orderId}/status`, 'updateOrderStatus', order.status, status);
+      logStateChange('update', 'orders', updatedOrder, order);
       
       return { orders: newOrders };
     });
@@ -435,7 +435,7 @@ export const useRestaurantStore = create<RestaurantState>((set, get) => ({
       const newOrders = [...state.orders];
       newOrders[orderIndex] = updatedOrder;
       
-      logStateChange('update', `orders/${orderId}/items/${itemId}/status`, 'updateOrderItemStatus', order.items[itemIndex].status, status);
+      logStateChange('update', 'orders', updatedOrder, order);
       
       return { orders: newOrders };
     });
@@ -461,7 +461,7 @@ export const useRestaurantStore = create<RestaurantState>((set, get) => ({
       const newOrders = [...state.orders];
       newOrders[orderIndex] = updatedOrder;
       
-      logStateChange('update', `orders/${orderId}`, 'completeOrder', order, updatedOrder);
+      logStateChange('update', 'orders', updatedOrder, order);
       
       return { orders: newOrders };
     });
@@ -491,7 +491,7 @@ export const useRestaurantStore = create<RestaurantState>((set, get) => ({
       const newOrders = [...state.orders];
       newOrders[orderIndex] = updatedOrder;
       
-      logStateChange('update', `orders/${orderId}/status`, 'cancelOrder', order.status, 'cancelled');
+      logStateChange('update', 'orders', updatedOrder, order);
       
       return { orders: newOrders };
     });
@@ -514,7 +514,7 @@ export const useRestaurantStore = create<RestaurantState>((set, get) => ({
     };
     
     set((state) => {
-      logStateChange('set', 'staff/add', 'addStaff', undefined, newStaff);
+      logStateChange('create', 'staff', newStaff);
       return { staff: [...state.staff, newStaff] };
     });
     
@@ -531,7 +531,7 @@ export const useRestaurantStore = create<RestaurantState>((set, get) => ({
       const newStaff = [...state.staff];
       newStaff[index] = updatedStaff;
       
-      logStateChange('update', `staff/${id}`, 'updateStaff', oldStaff, updatedStaff);
+      logStateChange('update', 'staff', updatedStaff, oldStaff);
       
       return { staff: newStaff };
     });
@@ -540,7 +540,7 @@ export const useRestaurantStore = create<RestaurantState>((set, get) => ({
   deleteStaff: (id) => {
     set((state) => {
       const staff = state.staff.find((s) => s.id === id);
-      logStateChange('delete', `staff/${id}`, 'deleteStaff', staff, undefined);
+      logStateChange('delete', 'staff', staff);
       return { staff: state.staff.filter((s) => s.id !== id) };
     });
   },
@@ -561,7 +561,7 @@ export const useRestaurantStore = create<RestaurantState>((set, get) => ({
     };
     
     set((state) => {
-      logStateChange('set', 'tables/add', 'addTable', undefined, newTable);
+      logStateChange('create', 'tables', newTable);
       return { tables: [...state.tables, newTable] };
     });
     
@@ -578,7 +578,7 @@ export const useRestaurantStore = create<RestaurantState>((set, get) => ({
       const newTables = [...state.tables];
       newTables[index] = updatedTable;
       
-      logStateChange('update', `tables/${id}`, 'updateTable', oldTable, updatedTable);
+      logStateChange('update', 'tables', updatedTable, oldTable);
       
       return { tables: newTables };
     });
@@ -587,7 +587,7 @@ export const useRestaurantStore = create<RestaurantState>((set, get) => ({
   deleteTable: (id) => {
     set((state) => {
       const table = state.tables.find((t) => t.id === id);
-      logStateChange('delete', `tables/${id}`, 'deleteTable', table, undefined);
+      logStateChange('delete', 'tables', table);
       return { tables: state.tables.filter((t) => t.id !== id) };
     });
   },
@@ -606,7 +606,7 @@ export const useRestaurantStore = create<RestaurantState>((set, get) => ({
       const newTables = [...state.tables];
       newTables[index] = updatedTable;
       
-      logStateChange('update', `tables/${id}/status`, 'updateTableStatus', oldTable.status, status);
+      logStateChange('update', 'tables', updatedTable, oldTable);
       
       return { tables: newTables };
     });
@@ -631,7 +631,7 @@ export const useRestaurantStore = create<RestaurantState>((set, get) => ({
     };
     
     set((state) => {
-      logStateChange('set', 'reservations/add', 'addReservation', undefined, newReservation);
+      logStateChange('create', 'reservations', newReservation);
       return { reservations: [...state.reservations, newReservation] };
     });
     
@@ -648,7 +648,7 @@ export const useRestaurantStore = create<RestaurantState>((set, get) => ({
       const newReservations = [...state.reservations];
       newReservations[index] = updatedReservation;
       
-      logStateChange('update', `reservations/${id}`, 'updateReservation', oldReservation, updatedReservation);
+      logStateChange('update', 'reservations', updatedReservation, oldReservation);
       
       return { reservations: newReservations };
     });
@@ -657,7 +657,7 @@ export const useRestaurantStore = create<RestaurantState>((set, get) => ({
   deleteReservation: (id) => {
     set((state) => {
       const reservation = state.reservations.find((r) => r.id === id);
-      logStateChange('delete', `reservations/${id}`, 'deleteReservation', reservation, undefined);
+      logStateChange('delete', 'reservations', reservation);
       return { reservations: state.reservations.filter((r) => r.id !== id) };
     });
   },
@@ -672,7 +672,7 @@ export const useRestaurantStore = create<RestaurantState>((set, get) => ({
       const newReservations = [...state.reservations];
       newReservations[index] = updatedReservation;
       
-      logStateChange('update', `reservations/${id}/status`, 'cancelReservation', oldReservation.status, 'cancelled');
+      logStateChange('update', 'reservations', updatedReservation, oldReservation);
       
       return { reservations: newReservations };
     });
