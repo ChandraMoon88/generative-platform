@@ -309,6 +309,11 @@ export default function EcoSphereGame() {
     );
   }
 
+  // If on Level 1, render the actual interactive game
+  if (gameStarted && currentLevel === 1) {
+    return <Level1Game />;
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-900 via-teal-800 to-blue-900 p-4 md:p-8">
       <div className="max-w-7xl mx-auto mb-8">
