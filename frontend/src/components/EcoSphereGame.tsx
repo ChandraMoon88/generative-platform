@@ -136,6 +136,9 @@ interface GameProgress {
   unlockedAbilities: string[];
   playTime: number;
   generatedAppModel: ApplicationModel;
+  restorationPlan?: RestorationPlan;
+  completedPhases?: string[];
+  systemsStrategy?: 'river-only' | 'integrated' | 'prioritized';
 }
 
 // Application Model (What gets generated)
