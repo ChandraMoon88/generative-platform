@@ -118,12 +118,12 @@ interface TeamMember {
   role: string;
   portrait: string;
   specialty: string;
-  skills: Map<string, 'novice' | 'intermediate' | 'advanced' | 'expert' | 'master'>;
+  skills: string[];
   costPerMonth: number;
-  availability: 'full-time' | 'part-time';
-  personalityTraits: string[];
   experience: number;
-  morale: number;
+  compatibility: string[];
+  personality: string;
+  portfolio?: string;
 }
 
 // Game Progress
@@ -139,6 +139,7 @@ interface GameProgress {
   restorationPlan?: RestorationPlan;
   completedPhases?: string[];
   systemsStrategy?: 'river-only' | 'integrated' | 'prioritized';
+  teamMembers?: TeamMember[];
 }
 
 // Application Model (What gets generated)
