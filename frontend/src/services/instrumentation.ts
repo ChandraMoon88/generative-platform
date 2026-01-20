@@ -131,7 +131,7 @@ export function logInteraction(
 export function logNavigation(
   from: string,
   to: string,
-  method: NavigationEvent['method'] = 'click'
+  method: NavigationEvent['method'] = 'link'
 ): void {
   const event: NavigationEvent = {
     ...createBaseEvent('navigation'),
