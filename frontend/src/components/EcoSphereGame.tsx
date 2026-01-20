@@ -4323,6 +4323,539 @@ function Level10Compliance({ progress, setProgress }: { progress: GameProgress; 
   );
 }
 
+// LEVEL 11: Ecosystem Engineer - Multiple Projects Component
+function Level11Projects({ progress, setProgress }: { progress: GameProgress; setProgress: (p: GameProgress) => void }) {
+  const [selectedTab, setSelectedTab] = useState<'portfolio' | 'allocation' | 'dependencies' | 'optimization'>('portfolio');
+  const [projects, setProjects] = useState([
+    { id: 'river', name: 'River Restoration', zone: 'Weeping River', progress: 75, budget: 85000, team: 4, priority: 'high', status: 'active', health: 88 },
+    { id: 'forest', name: 'Forest Recovery', zone: 'Silent Forest', progress: 45, budget: 62000, team: 3, priority: 'high', status: 'active', health: 65 },
+    { id: 'wetland', name: 'Wetland Creation', zone: 'River Valley', progress: 20, budget: 45000, team: 2, priority: 'medium', status: 'planning', health: 40 },
+    { id: 'coast', name: 'Coastal Defense', zone: 'Dying Coast', progress: 10, budget: 78000, team: 0, priority: 'medium', status: 'not-started', health: 30 },
+  ]);
+
+  const [resources, setResources] = useState({
+    budget: 100000,
+    team: 12,
+    equipment: 8,
+  });
+
+  const [allocations, setAllocations] = useState<Map<string, { budget: number; team: number }>>(new Map([
+    ['river', { budget: 30000, team: 4 }],
+    ['forest', { budget: 25000, team: 3 }],
+    ['wetland', { budget: 20000, team: 2 }],
+    ['coast', { budget: 25000, team: 3 }],
+  ]));
+
+  const [dependencies, setDependencies] = useState([
+    { from: 'river', to: 'wetland', type: 'technical', resolved: true },
+    { from: 'wetland', to: 'coast', type: 'sequential', resolved: false },
+    { from: 'forest', to: 'river', type: 'resource', resolved: true },
+  ]);
+
+  const [allocationChallenge, setAllocationChallenge] = useState(false);
+  const [challengeHandled, setChallengeHandled] = useState(false);
+  const [optimizationRun, setOptimizationRun] = useState(false);
+  const [levelComplete, setLevelComplete] = useState(false);
+
+  const allocateResources = (projectId: string, budget: number, team: number) => {
+    const newAllocations = new Map(allocations);
+    newAllocations.set(projectId, { budget, team });
+    setAllocations(newAllocations);
+
+    setProjects(prev => prev.map(p => 
+      p.id === projectId 
+        ? { ...p, budget: p.budget + budget, team: team, status: team > 0 ? 'active' : p.status }
+        : p
+    ));
+  };
+
+  const handleAllocationCrisis = (strategy: string) => {
+    if (strategy === 'balanced') {
+      setProjects(prev => prev.map(p => ({ ...p, progress: p.progress + 5 })));
+    } else if (strategy === 'focus') {
+      setProjects(prev => prev.map(p => 
+        p.priority === 'high' ? { ...p, progress: p.progress + 15 } : { ...p, progress: p.progress - 5 }
+      ));
+    } else if (strategy === 'pause') {
+      setProjects(prev => prev.map(p => 
+        p.priority === 'medium' ? { ...p, status: 'paused' } : p
+      ));
+    }
+    setChallengeHandled(true);
+  };
+
+  const runOptimization = () => {
+    // Optimize based on dependencies and priorities
+    const optimizedProjects = projects.map(p => {
+      if (p.priority === 'high' && p.status === 'active') {
+        return { ...p, progress: Math.min(100, p.progress + 20), health: Math.min(100, p.health + 15) };
+      }
+      return { ...p, progress: Math.min(100, p.progress + 10), health: Math.min(100, p.health + 5) };
+    });
+    setProjects(optimizedProjects);
+    setOptimizationRun(true);
+  };
+
+  const completeLevel = () => {
+    setLevelComplete(true);
+    setTimeout(() => {
+      setProgress({
+        ...progress,
+        phase: 'completion' as GamePhase,
+        completedPhases: [...(progress.completedPhases || []), 'level-11-projects']
+      });
+    }, 2000);
+  };
+
+  const totalBudgetAllocated = Array.from(allocations.values()).reduce((sum, a) => sum + a.budget, 0);
+  const totalTeamAllocated = Array.from(allocations.values()).reduce((sum, a) => sum + a.team, 0);
+  const averageProgress = Math.round(projects.reduce((sum, p) => sum + p.progress, 0) / projects.length);
+  const activeProjects = projects.filter(p => p.status === 'active').length;
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 py-8 px-4">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <h1 className="text-5xl font-bold text-white mb-3">
+            🔧 Level 11: Ecosystem Engineer
+          </h1>
+          <p className="text-2xl text-purple-200">
+            Manage multiple restoration projects simultaneously
+          </p>
+        </div>
+
+        {/* Portfolio Dashboard */}
+        <div className="grid md:grid-cols-4 gap-4 mb-6">
+          <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 text-white">
+            <div className="text-sm opacity-75 mb-2">Active Projects</div>
+            <div className="text-4xl font-bold text-green-400">{activeProjects}/{projects.length}</div>
+          </div>
+
+          <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 text-white">
+            <div className="text-sm opacity-75 mb-2">Average Progress</div>
+            <div className={`text-4xl font-bold ${
+              averageProgress >= 70 ? 'text-green-400' :
+              averageProgress >= 40 ? 'text-yellow-400' :
+              'text-red-400'
+            }`}>
+              {averageProgress}%
+            </div>
+          </div>
+
+          <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 text-white">
+            <div className="text-sm opacity-75 mb-2">Budget Used</div>
+            <div className="text-4xl font-bold text-blue-400">
+              ${(totalBudgetAllocated / 1000).toFixed(0)}K
+            </div>
+            <div className="text-xs opacity-75">of ${(resources.budget / 1000).toFixed(0)}K</div>
+          </div>
+
+          <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 text-white">
+            <div className="text-sm opacity-75 mb-2">Team Deployed</div>
+            <div className="text-4xl font-bold text-purple-400">
+              {totalTeamAllocated}/{resources.team}
+            </div>
+          </div>
+        </div>
+
+        {/* Tab Navigation */}
+        <div className="flex gap-4 mb-6">
+          <button
+            onClick={() => setSelectedTab('portfolio')}
+            className={`flex-1 py-4 rounded-xl font-bold text-lg transition-all ${
+              selectedTab === 'portfolio'
+                ? 'bg-gradient-to-r from-blue-500 to-cyan-600 text-white'
+                : 'bg-white/10 text-white/60 hover:bg-white/20'
+            }`}
+          >
+            📊 Portfolio
+          </button>
+          <button
+            onClick={() => setSelectedTab('allocation')}
+            className={`flex-1 py-4 rounded-xl font-bold text-lg transition-all ${
+              selectedTab === 'allocation'
+                ? 'bg-gradient-to-r from-green-500 to-emerald-600 text-white'
+                : 'bg-white/10 text-white/60 hover:bg-white/20'
+            }`}
+          >
+            💰 Resource Allocation
+          </button>
+          <button
+            onClick={() => setSelectedTab('dependencies')}
+            className={`flex-1 py-4 rounded-xl font-bold text-lg transition-all ${
+              selectedTab === 'dependencies'
+                ? 'bg-gradient-to-r from-orange-500 to-red-600 text-white'
+                : 'bg-white/10 text-white/60 hover:bg-white/20'
+            }`}
+          >
+            🔗 Dependencies
+          </button>
+          <button
+            onClick={() => setSelectedTab('optimization')}
+            className={`flex-1 py-4 rounded-xl font-bold text-lg transition-all ${
+              selectedTab === 'optimization'
+                ? 'bg-gradient-to-r from-purple-500 to-pink-600 text-white'
+                : 'bg-white/10 text-white/60 hover:bg-white/20'
+            }`}
+          >
+            ⚡ Optimization
+          </button>
+        </div>
+
+        {/* Portfolio Tab */}
+        {selectedTab === 'portfolio' && (
+          <div className="space-y-6">
+            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 text-white">
+              <h3 className="text-2xl font-bold mb-4">📊 Project Portfolio</h3>
+              <p className="text-lg mb-6 opacity-90">
+                Monitor all active restoration projects across different ecosystems.
+              </p>
+
+              <div className="space-y-4">
+                {projects.map(project => (
+                  <div key={project.id} className="bg-black/30 rounded-xl p-5">
+                    <div className="flex justify-between items-start mb-3">
+                      <div>
+                        <h4 className="text-2xl font-bold">{project.name}</h4>
+                        <div className="text-sm opacity-75">{project.zone}</div>
+                      </div>
+                      <div className="flex gap-2">
+                        <span className={`px-3 py-1 rounded-full text-xs font-bold ${
+                          project.status === 'active' ? 'bg-green-500' :
+                          project.status === 'planning' ? 'bg-blue-500' :
+                          project.status === 'paused' ? 'bg-yellow-500' :
+                          'bg-gray-600'
+                        }`}>
+                          {project.status === 'active' ? '✓ Active' :
+                           project.status === 'planning' ? '📋 Planning' :
+                           project.status === 'paused' ? '⏸ Paused' :
+                           'Not Started'}
+                        </span>
+                        <span className={`px-3 py-1 rounded-full text-xs font-bold ${
+                          project.priority === 'high' ? 'bg-red-500' : 'bg-orange-500'
+                        }`}>
+                          {project.priority === 'high' ? '🔥 High' : '⚠️ Medium'}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="grid md:grid-cols-3 gap-4 mb-3">
+                      <div>
+                        <div className="text-sm opacity-75 mb-1">Progress</div>
+                        <div className="flex items-center gap-2">
+                          <div className="flex-1 bg-black/40 rounded-full h-3">
+                            <div 
+                              className="bg-gradient-to-r from-blue-400 to-cyan-500 h-full rounded-full transition-all"
+                              style={{ width: `${project.progress}%` }}
+                            ></div>
+                          </div>
+                          <span className="text-sm font-bold">{project.progress}%</span>
+                        </div>
+                      </div>
+
+                      <div>
+                        <div className="text-sm opacity-75 mb-1">Ecosystem Health</div>
+                        <div className="flex items-center gap-2">
+                          <div className="flex-1 bg-black/40 rounded-full h-3">
+                            <div 
+                              className={`h-full rounded-full transition-all ${
+                                project.health >= 70 ? 'bg-gradient-to-r from-green-400 to-emerald-500' :
+                                project.health >= 40 ? 'bg-gradient-to-r from-yellow-400 to-orange-500' :
+                                'bg-gradient-to-r from-red-400 to-pink-500'
+                              }`}
+                              style={{ width: `${project.health}%` }}
+                            ></div>
+                          </div>
+                          <span className="text-sm font-bold">{project.health}%</span>
+                        </div>
+                      </div>
+
+                      <div>
+                        <div className="text-sm opacity-75 mb-1">Resources</div>
+                        <div className="flex gap-3 text-sm">
+                          <span>💰 ${(project.budget / 1000).toFixed(0)}K</span>
+                          <span>👥 {project.team} team</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {!allocationChallenge && !challengeHandled && (
+                <div className="mt-6 text-center">
+                  <button
+                    onClick={() => setAllocationChallenge(true)}
+                    className="px-6 py-3 bg-gradient-to-r from-orange-500 to-red-600 rounded-xl font-bold hover:scale-105 transition-all"
+                  >
+                    ⚠️ Handle Resource Crisis
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Resource Allocation Tab */}
+        {selectedTab === 'allocation' && (
+          <div className="space-y-6">
+            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 text-white">
+              <h3 className="text-2xl font-bold mb-4">💰 Resource Allocation</h3>
+              <p className="text-lg mb-6 opacity-90">
+                Distribute budget and team members across projects strategically.
+              </p>
+
+              {allocationChallenge && !challengeHandled && (
+                <div className="bg-orange-500/20 border-2 border-orange-400 rounded-xl p-6 mb-6">
+                  <div className="text-5xl mb-4">⚠️</div>
+                  <h4 className="text-2xl font-bold mb-4">Budget Cut Emergency</h4>
+                  <p className="text-lg mb-4">
+                    Your funding has been reduced by 30%. How do you handle resource allocation?
+                  </p>
+                  <div className="grid md:grid-cols-3 gap-4">
+                    <button
+                      onClick={() => handleAllocationCrisis('balanced')}
+                      className="bg-white/10 hover:bg-white/20 rounded-xl p-4 transition-all text-left"
+                    >
+                      <div className="text-3xl mb-2">⚖️</div>
+                      <div className="font-bold">Balanced Reduction</div>
+                      <div className="text-sm opacity-75 mt-2">
+                        Cut all projects equally, maintain momentum
+                      </div>
+                      <div className="text-xs text-green-400 mt-2">✓ All projects continue slowly</div>
+                    </button>
+                    <button
+                      onClick={() => handleAllocationCrisis('focus')}
+                      className="bg-white/10 hover:bg-white/20 rounded-xl p-4 transition-all text-left"
+                    >
+                      <div className="text-3xl mb-2">🎯</div>
+                      <div className="font-bold">Focus on Priorities</div>
+                      <div className="text-sm opacity-75 mt-2">
+                        Fully fund high-priority projects, reduce others
+                      </div>
+                      <div className="text-xs text-yellow-400 mt-2">⚠ Some projects slow down</div>
+                    </button>
+                    <button
+                      onClick={() => handleAllocationCrisis('pause')}
+                      className="bg-white/10 hover:bg-white/20 rounded-xl p-4 transition-all text-left"
+                    >
+                      <div className="text-3xl mb-2">⏸️</div>
+                      <div className="font-bold">Pause Medium Priority</div>
+                      <div className="text-sm opacity-75 mt-2">
+                        Pause lower priority projects completely
+                      </div>
+                      <div className="text-xs text-red-400 mt-2">✗ Some projects halted</div>
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              <div className="grid md:grid-cols-2 gap-4">
+                {projects.map(project => {
+                  const allocation = allocations.get(project.id) || { budget: 0, team: 0 };
+                  return (
+                    <div key={project.id} className="bg-black/30 rounded-xl p-4">
+                      <h4 className="text-lg font-bold mb-3">{project.name}</h4>
+                      <div className="space-y-3">
+                        <div>
+                          <div className="flex justify-between text-sm mb-1">
+                            <span>Budget Allocated</span>
+                            <span className="font-bold">${(allocation.budget / 1000).toFixed(0)}K</span>
+                          </div>
+                          <div className="bg-black/40 rounded-full h-2">
+                            <div 
+                              className="bg-gradient-to-r from-green-400 to-emerald-500 h-full rounded-full"
+                              style={{ width: `${(allocation.budget / resources.budget) * 100}%` }}
+                            ></div>
+                          </div>
+                        </div>
+                        <div>
+                          <div className="flex justify-between text-sm mb-1">
+                            <span>Team Members</span>
+                            <span className="font-bold">{allocation.team} members</span>
+                          </div>
+                          <div className="bg-black/40 rounded-full h-2">
+                            <div 
+                              className="bg-gradient-to-r from-blue-400 to-cyan-500 h-full rounded-full"
+                              style={{ width: `${(allocation.team / resources.team) * 100}%` }}
+                            ></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Dependencies Tab */}
+        {selectedTab === 'dependencies' && (
+          <div className="space-y-6">
+            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 text-white">
+              <h3 className="text-2xl font-bold mb-4">🔗 Project Dependencies</h3>
+              <p className="text-lg mb-6 opacity-90">
+                Manage interdependencies between restoration projects.
+              </p>
+
+              <div className="space-y-4 mb-6">
+                {dependencies.map((dep, idx) => {
+                  const fromProject = projects.find(p => p.id === dep.from);
+                  const toProject = projects.find(p => p.id === dep.to);
+                  return (
+                    <div key={idx} className="bg-black/30 rounded-xl p-4">
+                      <div className="flex items-center gap-4">
+                        <div className="flex-1">
+                          <div className="font-bold">{fromProject?.name}</div>
+                          <div className="text-sm opacity-75">{fromProject?.zone}</div>
+                        </div>
+                        <div className="text-3xl opacity-50">→</div>
+                        <div className="flex-1">
+                          <div className="font-bold">{toProject?.name}</div>
+                          <div className="text-sm opacity-75">{toProject?.zone}</div>
+                        </div>
+                        <div>
+                          <span className={`px-3 py-1 rounded-full text-xs font-bold ${
+                            dep.type === 'technical' ? 'bg-blue-500' :
+                            dep.type === 'sequential' ? 'bg-purple-500' :
+                            'bg-orange-500'
+                          }`}>
+                            {dep.type}
+                          </span>
+                          {dep.resolved ? (
+                            <div className="text-xs text-green-400 mt-1">✓ Resolved</div>
+                          ) : (
+                            <div className="text-xs text-yellow-400 mt-1">⏳ Pending</div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              <div className="bg-blue-500/20 border border-blue-400 rounded-xl p-6">
+                <h4 className="text-xl font-bold mb-3">Dependency Types</h4>
+                <div className="grid md:grid-cols-3 gap-4 text-sm">
+                  <div>
+                    <div className="font-bold text-blue-400">Technical</div>
+                    <div className="opacity-75">Knowledge/methods transfer between projects</div>
+                  </div>
+                  <div>
+                    <div className="font-bold text-purple-400">Sequential</div>
+                    <div className="opacity-75">One project must complete before another starts</div>
+                  </div>
+                  <div>
+                    <div className="font-bold text-orange-400">Resource</div>
+                    <div className="opacity-75">Shared resources or team members</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Optimization Tab */}
+        {selectedTab === 'optimization' && (
+          <div className="space-y-6">
+            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 text-white">
+              <h3 className="text-2xl font-bold mb-4">⚡ Portfolio Optimization</h3>
+              <p className="text-lg mb-6 opacity-90">
+                Use AI-powered optimization to maximize ecosystem impact.
+              </p>
+
+              {!optimizationRun ? (
+                <div className="text-center">
+                  <div className="bg-black/30 rounded-xl p-8 mb-6">
+                    <div className="text-6xl mb-4">🤖</div>
+                    <h4 className="text-2xl font-bold mb-4">AI Portfolio Optimizer</h4>
+                    <p className="text-lg opacity-90 mb-4">
+                      Analyze project dependencies, resource constraints, and ecosystem priorities 
+                      to recommend optimal resource allocation.
+                    </p>
+                    <div className="grid md:grid-cols-3 gap-4 text-left mb-6">
+                      <div className="bg-white/10 rounded-lg p-3">
+                        <div className="text-sm opacity-75">Analysis Factors</div>
+                        <div className="text-xs mt-2">• Project priorities<br/>• Dependencies<br/>• Resource efficiency</div>
+                      </div>
+                      <div className="bg-white/10 rounded-lg p-3">
+                        <div className="text-sm opacity-75">Optimization Goals</div>
+                        <div className="text-xs mt-2">• Maximize health<br/>• Minimize delays<br/>• Balance portfolio</div>
+                      </div>
+                      <div className="bg-white/10 rounded-lg p-3">
+                        <div className="text-sm opacity-75">Expected Results</div>
+                        <div className="text-xs mt-2">• +10-20% progress<br/>• +5-15% health<br/>• Better coordination</div>
+                      </div>
+                    </div>
+                  </div>
+                  <button
+                    onClick={runOptimization}
+                    className="px-8 py-4 bg-gradient-to-r from-purple-500 to-pink-600 rounded-xl font-bold text-lg hover:scale-105 transition-all"
+                  >
+                    🚀 Run Optimization
+                  </button>
+                </div>
+              ) : (
+                <div>
+                  <div className="bg-green-500/20 border-2 border-green-400 rounded-xl p-6 mb-6 text-center">
+                    <div className="text-5xl mb-4">✅</div>
+                    <h4 className="text-2xl font-bold mb-2">Optimization Complete!</h4>
+                    <p className="opacity-90">All projects have been optimized for maximum impact.</p>
+                  </div>
+
+                  <div className="grid md:grid-cols-2 gap-4 mb-6">
+                    {projects.map(project => (
+                      <div key={project.id} className="bg-black/30 rounded-xl p-4">
+                        <h4 className="font-bold mb-2">{project.name}</h4>
+                        <div className="space-y-2 text-sm">
+                          <div className="flex justify-between">
+                            <span>Progress Impact:</span>
+                            <span className="text-green-400 font-bold">+{Math.min(20, 100 - (project.progress - 20))}%</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>Health Impact:</span>
+                            <span className="text-green-400 font-bold">+{Math.min(15, 100 - (project.health - 15))}%</span>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {challengeHandled && averageProgress >= 50 && (
+                    <div className="text-center">
+                      <button
+                        onClick={completeLevel}
+                        className="px-8 py-4 bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl font-bold text-lg hover:scale-105 transition-all"
+                      >
+                        🎉 Complete Multi-Project Management
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Transition Message */}
+        {levelComplete && (
+          <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50">
+            <div className="text-center text-white">
+              <div className="text-8xl mb-6 animate-bounce">🔧</div>
+              <h2 className="text-5xl font-bold mb-4">Multi-Project Mastery!</h2>
+              <p className="text-2xl opacity-80">
+                Moving to final celebration...
+              </p>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 // Completion Screen
 function CompletionScreen({ progress }: { progress: GameProgress; setProgress: (p: GameProgress) => void }) {
   return (
