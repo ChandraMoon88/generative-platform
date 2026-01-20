@@ -2369,7 +2369,7 @@ function Level6Team({ progress, setProgress }: { progress: GameProgress; setProg
 // LEVEL 7: Budget Management Component
 function Level7Budget({ progress, setProgress }: { progress: GameProgress; setProgress: (p: GameProgress) => void }) {
   const [selectedTab, setSelectedTab] = useState<'overview' | 'planning' | 'tracking' | 'optimization'>('overview');
-  const [budgetStrategy, setBudgetStrategy] = useState<'aggressive' | 'balanced' | 'conservative' | null>(null);
+  const [budgetStrategy, setBudgetStrategy] = useState<'aggressive' | 'balanced' | 'conservative' | undefined>(undefined);
   const [allocations, setAllocations] = useState({
     personnel: 35,
     equipment: 20,
