@@ -59,7 +59,7 @@ export function useInstrumentation(options: UseInstrumentationOptions) {
     description?: string
   ) => {
     const target = typeof elementOrId === 'string' 
-      ? { tagName: 'button', id: elementOrId, attributes: {} }
+      ? { type: 'button', id: elementOrId, label: elementOrId }
       : extractElementTarget(elementOrId);
     const pattern: PatternType = (typeof patternOrEntity === 'string' && !['crud_create', 'crud_read', 'crud_update', 'crud_delete'].includes(patternOrEntity))
       ? 'crud_read' 
