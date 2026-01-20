@@ -1435,12 +1435,30 @@ const styles = `
     50% { transform: translateY(-20px); }
   }
   
+  @keyframes water-flow {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+  
+  @keyframes swim {
+    0% { transform: translateX(-50px); }
+    100% { transform: translateX(calc(100vw - 50px)); }
+  }
+  
   .animate-spin-slow {
     animation: spin-slow 20s linear infinite;
   }
   
   .animate-float {
     animation: float 3s ease-in-out infinite;
+  }
+  
+  .animate-water-flow {
+    animation: water-flow 3s linear infinite;
+  }
+  
+  .animate-swim {
+    animation: swim 8s linear infinite;
   }
 `;
 
