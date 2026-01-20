@@ -2654,7 +2654,7 @@ function Level7Budget({ progress, setProgress }: { progress: GameProgress; setPr
                 <div className="flex items-center justify-between mb-6">
                   <h3 className="text-2xl font-bold">Budget Plan: {budgetStrategy.charAt(0).toUpperCase() + budgetStrategy.slice(1)}</h3>
                   <button
-                    onClick={() => setBudgetStrategy(null)}
+                    onClick={() => setBudgetStrategy(undefined)}
                     className="px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-sm"
                   >
                     Change Strategy
