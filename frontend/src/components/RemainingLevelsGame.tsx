@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Play, CheckCircle2, Clock, Target, Users, DollarSign, Zap, Heart, Shield, Trophy, Star, Award } from 'lucide-react';
+import { Play, CheckCircle2, Clock, Target, Users, DollarSign, Zap, Heart, Shield, Trophy, Star, Award, AlertTriangle } from 'lucide-react';
 
 interface LevelConfig {
   level: number;
