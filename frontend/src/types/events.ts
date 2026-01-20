@@ -130,7 +130,7 @@ export interface ErrorEvent extends BaseEvent {
 
 export interface SystemEvent extends BaseEvent {
   type: 'system';
-  action: 'page_load' | 'page_unload' | 'visibility_change' | 'network_change';
+  action: 'page_load' | 'page_unload' | 'visibility_change' | 'network_change' | 'session_start';
   data?: any;
 }
 
