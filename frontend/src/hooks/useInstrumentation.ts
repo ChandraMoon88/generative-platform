@@ -213,7 +213,7 @@ export function useInstrumentation(options: UseInstrumentationOptions) {
     
     logInteraction(
       'input',
-      { tagName: 'filter' },
+      { type: 'filter' },
       createSemanticAction('filter', undefined, `Filtering ${entity}`),
       actualFilters
     );
@@ -227,7 +227,7 @@ export function useInstrumentation(options: UseInstrumentationOptions) {
     
     logInteraction(
       'click',
-      { tagName: 'sort', attributes: { 'data-field': field } },
+      { type: 'sort', label: field },
       createSemanticAction('sort', undefined, `Sorting ${entity} by ${field}`),
       { field, direction: dir }
     );
