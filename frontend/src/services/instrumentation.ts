@@ -174,7 +174,7 @@ export function logFormEvent(
     ...createBaseEvent('form', { semanticAction }),
     type: 'form',
     formId,
-    formAction,
+    action: formAction,
     field,
     formData,
     validationErrors,
