@@ -6005,6 +6005,650 @@ function Level13Policy({ progress, setProgress }: { progress: GameProgress; setP
   );
 }
 
+// LEVEL 14: The Mentor - Teaching & Knowledge Transfer
+function Level14Mentor({ progress, setProgress }: { progress: GameProgress; setProgress: (p: GameProgress) => void }) {
+  const [activeTab, setActiveTab] = useState<'curriculum' | 'workshops' | 'trainers' | 'impact'>('curriculum');
+  const [courses, setCourses] = useState(new Map([
+    ['course-1', { id: 'course-1', name: 'Ecosystem Restoration Basics', modules: 0, students: 0, status: 'draft' as const, completion: 0 }],
+    ['course-2', { id: 'course-2', name: 'Systems Thinking Workshop', modules: 0, students: 0, status: 'draft' as const, completion: 0 }],
+    ['course-3', { id: 'course-3', name: 'Stakeholder Engagement', modules: 0, students: 0, status: 'draft' as const, completion: 0 }],
+    ['course-4', { id: 'course-4', name: 'Policy & Advocacy Training', modules: 0, students: 0, status: 'draft' as const, completion: 0 }],
+  ]));
+  const [workshops, setWorkshops] = useState(new Map([
+    ['workshop-1', { id: 'workshop-1', name: 'Field Assessment Training', participants: 0, status: 'planning' as const, satisfaction: 0 }],
+    ['workshop-2', { id: 'workshop-2', name: 'Data Collection Methods', participants: 0, status: 'planning' as const, satisfaction: 0 }],
+    ['workshop-3', { id: 'workshop-3', name: 'Community Facilitation', participants: 0, status: 'planning' as const, satisfaction: 0 }],
+  ]));
+  const [trainers, setTrainers] = useState(new Map([
+    ['trainer-1', { id: 'trainer-1', name: 'Sarah Chen', expertise: 'Ecology', level: 'beginner' as const, certified: false, trainees: 0 }],
+    ['trainer-2', { id: 'trainer-2', name: 'Marcus Reid', expertise: 'Community', level: 'beginner' as const, certified: false, trainees: 0 }],
+    ['trainer-3', { id: 'trainer-3', name: 'Elena Vasquez', expertise: 'Policy', level: 'beginner' as const, certified: false, trainees: 0 }],
+  ]));
+  const [knowledgeBase, setKnowledgeBase] = useState({
+    articles: 8,
+    videos: 5,
+    casestudies: 3,
+  });
+  const [showChallenge, setShowChallenge] = useState(false);
+  const [challengeResolved, setChallengeResolved] = useState(false);
+  const [levelComplete, setLevelComplete] = useState(false);
+
+  const developCourse = (courseId: string) => {
+    const course = courses.get(courseId);
+    if (course && course.status === 'draft') {
+      const newModules = Math.floor(Math.random() * 3) + 4; // 4-6 modules
+      const updated = new Map(courses);
+      updated.set(courseId, { ...course, modules: newModules, status: 'ready' });
+      setCourses(updated);
+    }
+  };
+
+  const launchCourse = (courseId: string) => {
+    const course = courses.get(courseId);
+    if (course && course.status === 'ready') {
+      const newStudents = Math.floor(Math.random() * 30) + 20; // 20-50 students
+      const updated = new Map(courses);
+      updated.set(courseId, { ...course, students: newStudents, status: 'active', completion: 0 });
+      setCourses(updated);
+      
+      setTimeout(() => {
+        const completion = Math.floor(Math.random() * 20) + 70; // 70-90%
+        const updated2 = new Map(courses);
+        updated2.set(courseId, { ...course, students: newStudents, status: 'active', completion });
+        setCourses(updated2);
+      }, 2000);
+    }
+  };
+
+  const deliverWorkshop = (workshopId: string) => {
+    const workshop = workshops.get(workshopId);
+    if (workshop && workshop.status === 'planning') {
+      const updated = new Map(workshops);
+      updated.set(workshopId, { ...workshop, status: 'in-progress' });
+      setWorkshops(updated);
+      
+      setTimeout(() => {
+        const participants = Math.floor(Math.random() * 15) + 15; // 15-30
+        const satisfaction = Math.floor(Math.random() * 20) + 75; // 75-95%
+        const updated2 = new Map(workshops);
+        updated2.set(workshopId, { ...workshop, participants, satisfaction, status: 'completed' });
+        setWorkshops(updated2);
+      }, 2000);
+    }
+  };
+
+  const trainTrainer = (trainerId: string) => {
+    const trainer = trainers.get(trainerId);
+    if (trainer) {
+      const nextLevel = trainer.level === 'beginner' ? 'intermediate' : 'advanced';
+      const updated = new Map(trainers);
+      updated.set(trainerId, { ...trainer, level: nextLevel as any });
+      setTrainers(updated);
+      
+      if (nextLevel === 'advanced') {
+        setTimeout(() => {
+          const updated2 = new Map(trainers);
+          updated2.set(trainerId, { ...trainer, level: 'advanced', certified: true });
+          setTrainers(updated2);
+        }, 1000);
+      }
+    }
+  };
+
+  const assignTrainees = (trainerId: string) => {
+    const trainer = trainers.get(trainerId);
+    if (trainer && trainer.certified) {
+      const newTrainees = Math.floor(Math.random() * 5) + 5; // 5-10 trainees
+      const updated = new Map(trainers);
+      updated.set(trainerId, { ...trainer, trainees: trainer.trainees + newTrainees });
+      setTrainers(updated);
+    }
+  };
+
+  const expandKnowledge = () => {
+    setKnowledgeBase({
+      articles: knowledgeBase.articles + Math.floor(Math.random() * 3) + 2,
+      videos: knowledgeBase.videos + Math.floor(Math.random() * 2) + 1,
+      casestudies: knowledgeBase.casestudies + 1,
+    });
+  };
+
+  const triggerChallenge = () => {
+    setShowChallenge(true);
+  };
+
+  const handleChallengeResponse = (approach: 'adapt' | 'support' | 'structure') => {
+    setChallengeResolved(true);
+    setShowChallenge(false);
+    
+    // Positive outcomes for all approaches
+    if (approach === 'adapt') {
+      const updated = new Map(courses);
+      courses.forEach((course, id) => {
+        if (course.status === 'active') {
+          updated.set(id, { ...course, completion: Math.min(100, course.completion + 15) });
+        }
+      });
+      setCourses(updated);
+    } else if (approach === 'support') {
+      const updated = new Map(workshops);
+      workshops.forEach((workshop, id) => {
+        if (workshop.status === 'completed') {
+          updated.set(id, { ...workshop, satisfaction: Math.min(100, workshop.satisfaction + 10) });
+        }
+      });
+      setWorkshops(updated);
+    } else {
+      expandKnowledge();
+    }
+  };
+
+  const completeLevel = () => {
+    setLevelComplete(true);
+    setTimeout(() => {
+      setProgress({
+        ...progress,
+        phase: 'level-15-visionary',
+        completedPhases: [...progress.completedPhases, 'level-14-mentor']
+      });
+    }, 3000);
+  };
+
+  const activeCourses = Array.from(courses.values()).filter(c => c.status === 'active').length;
+  const completedWorkshops = Array.from(workshops.values()).filter(w => w.status === 'completed').length;
+  const certifiedTrainers = Array.from(trainers.values()).filter(t => t.certified).length;
+  const totalStudents = Array.from(courses.values()).reduce((sum, c) => sum + c.students, 0);
+  const totalTrainees = Array.from(trainers.values()).reduce((sum, t) => sum + t.trainees, 0);
+  const avgSatisfaction = Array.from(workshops.values())
+    .filter(w => w.satisfaction > 0)
+    .reduce((sum, w, _, arr) => sum + w.satisfaction / arr.length, 0);
+
+  const canComplete = activeCourses >= 3 && completedWorkshops >= 2 && certifiedTrainers >= 2 && challengeResolved;
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-purple-900 via-indigo-900 to-blue-900 p-6">
+      <div className="max-w-6xl mx-auto">
+        {/* Header */}
+        <div className="bg-white/10 backdrop-blur-md rounded-3xl p-8 mb-8 text-white">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h1 className="text-5xl font-bold mb-2">👨‍🏫 Level 14: The Mentor</h1>
+              <p className="text-xl opacity-80">Share knowledge and build capacity for lasting change</p>
+            </div>
+            <div className="text-right">
+              <div className="text-4xl font-bold text-yellow-400">{totalStudents + totalTrainees}</div>
+              <div className="text-sm opacity-75">People Trained</div>
+            </div>
+          </div>
+
+          {/* Key Metrics */}
+          <div className="grid grid-cols-4 gap-4">
+            <div className="bg-blue-500/20 rounded-xl p-4 border-2 border-blue-400">
+              <div className="text-3xl font-bold text-blue-300">{activeCourses}</div>
+              <div className="text-sm opacity-75">Active Courses</div>
+            </div>
+            <div className="bg-green-500/20 rounded-xl p-4 border-2 border-green-400">
+              <div className="text-3xl font-bold text-green-300">{completedWorkshops}</div>
+              <div className="text-sm opacity-75">Workshops Delivered</div>
+            </div>
+            <div className="bg-purple-500/20 rounded-xl p-4 border-2 border-purple-400">
+              <div className="text-3xl font-bold text-purple-300">{certifiedTrainers}</div>
+              <div className="text-sm opacity-75">Certified Trainers</div>
+            </div>
+            <div className="bg-yellow-500/20 rounded-xl p-4 border-2 border-yellow-400">
+              <div className="text-3xl font-bold text-yellow-300">{avgSatisfaction > 0 ? Math.round(avgSatisfaction) : 0}%</div>
+              <div className="text-sm opacity-75">Satisfaction</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Tabs */}
+        <div className="flex gap-4 mb-6">
+          <button
+            onClick={() => setActiveTab('curriculum')}
+            className={`flex-1 py-4 rounded-xl font-bold transition-all ${
+              activeTab === 'curriculum'
+                ? 'bg-blue-500 text-white scale-105'
+                : 'bg-white/10 text-white/70 hover:bg-white/20'
+            }`}
+          >
+            📚 Curriculum Development
+          </button>
+          <button
+            onClick={() => setActiveTab('workshops')}
+            className={`flex-1 py-4 rounded-xl font-bold transition-all ${
+              activeTab === 'workshops'
+                ? 'bg-green-500 text-white scale-105'
+                : 'bg-white/10 text-white/70 hover:bg-white/20'
+            }`}
+          >
+            🎯 Workshop Delivery
+          </button>
+          <button
+            onClick={() => setActiveTab('trainers')}
+            className={`flex-1 py-4 rounded-xl font-bold transition-all ${
+              activeTab === 'trainers'
+                ? 'bg-purple-500 text-white scale-105'
+                : 'bg-white/10 text-white/70 hover:bg-white/20'
+            }`}
+          >
+            🎓 Train-the-Trainer
+          </button>
+          <button
+            onClick={() => setActiveTab('impact')}
+            className={`flex-1 py-4 rounded-xl font-bold transition-all ${
+              activeTab === 'impact'
+                ? 'bg-yellow-500 text-white scale-105'
+                : 'bg-white/10 text-white/70 hover:bg-white/20'
+            }`}
+          >
+            📊 Impact Assessment
+          </button>
+        </div>
+
+        {/* Challenge Modal */}
+        {showChallenge && (
+          <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-6">
+            <div className="bg-gradient-to-br from-red-900 to-orange-900 rounded-3xl p-8 max-w-2xl border-4 border-red-500 text-white">
+              <h3 className="text-3xl font-bold mb-4">🚨 Teaching Challenge!</h3>
+              <p className="text-xl mb-6">
+                Several students are struggling with complex concepts and showing frustration. 
+                Workshop satisfaction scores are dropping. How do you respond?
+              </p>
+              <div className="space-y-3">
+                <button
+                  onClick={() => handleChallengeResponse('adapt')}
+                  className="w-full p-4 bg-blue-600/40 hover:bg-blue-600 rounded-xl border-2 border-blue-400 text-left transition-all"
+                >
+                  <div className="font-bold mb-1">🔄 Adapt Teaching Methods</div>
+                  <div className="text-sm opacity-90">Break down complex topics, use more hands-on activities</div>
+                </button>
+                <button
+                  onClick={() => handleChallengeResponse('support')}
+                  className="w-full p-4 bg-green-600/40 hover:bg-green-600 rounded-xl border-2 border-green-400 text-left transition-all"
+                >
+                  <div className="font-bold mb-1">🤝 Provide Extra Support</div>
+                  <div className="text-sm opacity-90">Offer one-on-one mentoring and peer learning groups</div>
+                </button>
+                <button
+                  onClick={() => handleChallengeResponse('structure')}
+                  className="w-full p-4 bg-purple-600/40 hover:bg-purple-600 rounded-xl border-2 border-purple-400 text-left transition-all"
+                >
+                  <div className="font-bold mb-1">📖 Enhance Learning Resources</div>
+                  <div className="text-sm opacity-90">Create visual guides, videos, and practice exercises</div>
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Tab Content */}
+        {activeTab === 'curriculum' && (
+          <div className="bg-white/10 backdrop-blur-md rounded-3xl p-8 text-white">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-3xl font-bold">📚 Course Development</h2>
+              <button
+                onClick={expandKnowledge}
+                className="px-6 py-3 bg-gradient-to-r from-blue-500 to-cyan-600 rounded-xl font-bold hover:scale-105 transition-all"
+              >
+                📖 Expand Knowledge Base
+              </button>
+            </div>
+
+            <p className="text-lg mb-6 opacity-90">
+              Develop comprehensive courses to educate the next generation of conservationists.
+            </p>
+
+            <div className="grid md:grid-cols-2 gap-6 mb-6">
+              {Array.from(courses.values()).map(course => (
+                <div key={course.id} className="bg-black/30 rounded-xl p-6 border-2 border-blue-400">
+                  <h3 className="text-xl font-bold mb-3">{course.name}</h3>
+                  <div className="space-y-2 mb-4">
+                    <div className="flex justify-between text-sm">
+                      <span>Status:</span>
+                      <span className={`font-bold ${
+                        course.status === 'active' ? 'text-green-400' :
+                        course.status === 'ready' ? 'text-yellow-400' :
+                        'text-gray-400'
+                      }`}>
+                        {course.status === 'active' ? 'Active' : course.status === 'ready' ? 'Ready' : 'Draft'}
+                      </span>
+                    </div>
+                    {course.modules > 0 && (
+                      <div className="flex justify-between text-sm">
+                        <span>Modules:</span>
+                        <span className="font-bold text-blue-400">{course.modules}</span>
+                      </div>
+                    )}
+                    {course.students > 0 && (
+                      <div className="flex justify-between text-sm">
+                        <span>Students:</span>
+                        <span className="font-bold text-green-400">{course.students}</span>
+                      </div>
+                    )}
+                    {course.completion > 0 && (
+                      <div>
+                        <div className="flex justify-between text-sm mb-1">
+                          <span>Completion:</span>
+                          <span className="font-bold text-yellow-400">{course.completion}%</span>
+                        </div>
+                        <div className="h-2 bg-black/50 rounded-full overflow-hidden">
+                          <div
+                            className="h-full bg-gradient-to-r from-yellow-500 to-orange-500 transition-all"
+                            style={{ width: `${course.completion}%` }}
+                          />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  {course.status === 'draft' && (
+                    <button
+                      onClick={() => developCourse(course.id)}
+                      className="w-full py-2 bg-blue-600 hover:bg-blue-700 rounded-lg font-bold transition-all"
+                    >
+                      ✏️ Develop Course
+                    </button>
+                  )}
+                  {course.status === 'ready' && (
+                    <button
+                      onClick={() => launchCourse(course.id)}
+                      className="w-full py-2 bg-green-600 hover:bg-green-700 rounded-lg font-bold transition-all"
+                    >
+                      🚀 Launch Course
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            <div className="bg-gradient-to-r from-purple-900/40 to-blue-900/40 border-2 border-purple-400 rounded-xl p-6">
+              <h3 className="text-2xl font-bold mb-4">📚 Knowledge Base</h3>
+              <div className="grid grid-cols-3 gap-4">
+                <div className="bg-black/30 rounded-lg p-4">
+                  <div className="text-3xl font-bold text-blue-400 mb-1">{knowledgeBase.articles}</div>
+                  <div className="text-sm opacity-75">Articles</div>
+                </div>
+                <div className="bg-black/30 rounded-lg p-4">
+                  <div className="text-3xl font-bold text-green-400 mb-1">{knowledgeBase.videos}</div>
+                  <div className="text-sm opacity-75">Video Tutorials</div>
+                </div>
+                <div className="bg-black/30 rounded-lg p-4">
+                  <div className="text-3xl font-bold text-purple-400 mb-1">{knowledgeBase.casestudies}</div>
+                  <div className="text-sm opacity-75">Case Studies</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'workshops' && (
+          <div className="bg-white/10 backdrop-blur-md rounded-3xl p-8 text-white">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-3xl font-bold">🎯 Hands-On Training</h2>
+              {!showChallenge && !challengeResolved && completedWorkshops >= 1 && (
+                <button
+                  onClick={triggerChallenge}
+                  className="px-6 py-3 bg-gradient-to-r from-red-500 to-orange-600 rounded-xl font-bold hover:scale-105 transition-all animate-pulse"
+                >
+                  ⚠️ Teaching Challenge
+                </button>
+              )}
+            </div>
+
+            <p className="text-lg mb-6 opacity-90">
+              Deliver practical workshops that give participants real-world skills.
+            </p>
+
+            <div className="grid md:grid-cols-2 gap-6">
+              {Array.from(workshops.values()).map(workshop => (
+                <div key={workshop.id} className="bg-black/30 rounded-xl p-6 border-2 border-green-400">
+                  <h3 className="text-xl font-bold mb-3">{workshop.name}</h3>
+                  <div className="space-y-2 mb-4">
+                    <div className="flex justify-between text-sm">
+                      <span>Status:</span>
+                      <span className={`font-bold ${
+                        workshop.status === 'completed' ? 'text-green-400' :
+                        workshop.status === 'in-progress' ? 'text-yellow-400' :
+                        'text-gray-400'
+                      }`}>
+                        {workshop.status === 'completed' ? 'Completed' :
+                         workshop.status === 'in-progress' ? 'In Progress' :
+                         'Planning'}
+                      </span>
+                    </div>
+                    {workshop.participants > 0 && (
+                      <div className="flex justify-between text-sm">
+                        <span>Participants:</span>
+                        <span className="font-bold text-blue-400">{workshop.participants}</span>
+                      </div>
+                    )}
+                    {workshop.satisfaction > 0 && (
+                      <div>
+                        <div className="flex justify-between text-sm mb-1">
+                          <span>Satisfaction:</span>
+                          <span className={`font-bold ${
+                            workshop.satisfaction >= 85 ? 'text-green-400' :
+                            workshop.satisfaction >= 70 ? 'text-yellow-400' :
+                            'text-red-400'
+                          }`}>
+                            {workshop.satisfaction}%
+                          </span>
+                        </div>
+                        <div className="h-2 bg-black/50 rounded-full overflow-hidden">
+                          <div
+                            className={`h-full transition-all ${
+                              workshop.satisfaction >= 85 ? 'bg-gradient-to-r from-green-500 to-emerald-500' :
+                              workshop.satisfaction >= 70 ? 'bg-gradient-to-r from-yellow-500 to-orange-500' :
+                              'bg-gradient-to-r from-red-500 to-pink-500'
+                            }`}
+                            style={{ width: `${workshop.satisfaction}%` }}
+                          />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  {workshop.status === 'planning' && (
+                    <button
+                      onClick={() => deliverWorkshop(workshop.id)}
+                      className="w-full py-2 bg-green-600 hover:bg-green-700 rounded-lg font-bold transition-all"
+                    >
+                      🎯 Deliver Workshop
+                    </button>
+                  )}
+                  {workshop.status === 'in-progress' && (
+                    <div className="text-center py-2 text-yellow-400 font-bold animate-pulse">
+                      ⏳ In Progress...
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'trainers' && (
+          <div className="bg-white/10 backdrop-blur-md rounded-3xl p-8 text-white">
+            <h2 className="text-3xl font-bold mb-6">🎓 Building Teaching Capacity</h2>
+            <p className="text-lg mb-6 opacity-90">
+              Train others to become educators, creating a cascade of knowledge transfer.
+            </p>
+
+            <div className="grid md:grid-cols-3 gap-6">
+              {Array.from(trainers.values()).map(trainer => (
+                <div key={trainer.id} className="bg-black/30 rounded-xl p-6 border-2 border-purple-400">
+                  <div className="flex items-center justify-between mb-3">
+                    <h3 className="text-xl font-bold">{trainer.name}</h3>
+                    {trainer.certified && <div className="text-2xl">🏆</div>}
+                  </div>
+                  <div className="space-y-2 mb-4">
+                    <div className="flex justify-between text-sm">
+                      <span>Expertise:</span>
+                      <span className="font-bold text-blue-400">{trainer.expertise}</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span>Level:</span>
+                      <span className={`font-bold ${
+                        trainer.level === 'advanced' ? 'text-purple-400' :
+                        trainer.level === 'intermediate' ? 'text-yellow-400' :
+                        'text-gray-400'
+                      }`}>
+                        {trainer.level.charAt(0).toUpperCase() + trainer.level.slice(1)}
+                      </span>
+                    </div>
+                    {trainer.certified && (
+                      <div className="flex justify-between text-sm">
+                        <span>Trainees:</span>
+                        <span className="font-bold text-green-400">{trainer.trainees}</span>
+                      </div>
+                    )}
+                  </div>
+                  {!trainer.certified && (
+                    <button
+                      onClick={() => trainTrainer(trainer.id)}
+                      className="w-full py-2 bg-purple-600 hover:bg-purple-700 rounded-lg font-bold transition-all"
+                    >
+                      📚 Train Trainer
+                    </button>
+                  )}
+                  {trainer.certified && (
+                    <button
+                      onClick={() => assignTrainees(trainer.id)}
+                      className="w-full py-2 bg-green-600 hover:bg-green-700 rounded-lg font-bold transition-all"
+                    >
+                      👥 Assign Trainees
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            {certifiedTrainers >= 2 && (
+              <div className="mt-6 bg-gradient-to-r from-green-900/40 to-emerald-900/40 border-2 border-green-400 rounded-xl p-6">
+                <h3 className="text-2xl font-bold mb-3">🌟 Multiplier Effect</h3>
+                <p className="text-lg mb-2">
+                  Your certified trainers are now teaching others, exponentially expanding your impact!
+                </p>
+                <div className="text-3xl font-bold text-green-400">
+                  {totalTrainees} people trained through cascade
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {activeTab === 'impact' && (
+          <div className="bg-white/10 backdrop-blur-md rounded-3xl p-8 text-white">
+            <h2 className="text-3xl font-bold mb-6">📊 Educational Impact</h2>
+            <p className="text-lg mb-6 opacity-90">
+              Measure the reach and effectiveness of your teaching programs.
+            </p>
+
+            <div className="grid md:grid-cols-2 gap-6 mb-6">
+              <div className="bg-black/30 rounded-xl p-6">
+                <h3 className="text-xl font-bold mb-4 text-blue-400">Course Metrics</h3>
+                <div className="space-y-3">
+                  {Array.from(courses.values()).map(course => (
+                    <div key={course.id}>
+                      <div className="flex justify-between text-sm mb-1">
+                        <span>{course.name}</span>
+                        <span className="font-bold text-green-400">{course.students} students</span>
+                      </div>
+                      {course.completion > 0 && (
+                        <div className="h-2 bg-black/50 rounded-full overflow-hidden">
+                          <div
+                            className="h-full bg-gradient-to-r from-blue-500 to-cyan-500"
+                            style={{ width: `${course.completion}%` }}
+                          />
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="bg-black/30 rounded-xl p-6">
+                <h3 className="text-xl font-bold mb-4 text-green-400">Workshop Success</h3>
+                <div className="space-y-3">
+                  {Array.from(workshops.values()).map(workshop => (
+                    <div key={workshop.id} className="flex justify-between items-center">
+                      <span className="text-sm">{workshop.name}</span>
+                      {workshop.satisfaction > 0 ? (
+                        <span className={`font-bold ${
+                          workshop.satisfaction >= 85 ? 'text-green-400' :
+                          workshop.satisfaction >= 70 ? 'text-yellow-400' :
+                          'text-red-400'
+                        }`}>
+                          {workshop.satisfaction}% satisfied
+                        </span>
+                      ) : (
+                        <span className="text-gray-400 text-sm">Not delivered</span>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-gradient-to-r from-purple-900/40 to-pink-900/40 border-2 border-purple-400 rounded-xl p-6">
+              <h3 className="text-2xl font-bold mb-4">🌟 Overall Teaching Impact</h3>
+              <div className="grid grid-cols-3 gap-4 mb-4">
+                <div className="bg-black/30 rounded-lg p-4">
+                  <div className="text-4xl font-bold text-blue-400 mb-1">{totalStudents}</div>
+                  <div className="text-sm opacity-75">Total Students</div>
+                </div>
+                <div className="bg-black/30 rounded-lg p-4">
+                  <div className="text-4xl font-bold text-green-400 mb-1">{totalTrainees}</div>
+                  <div className="text-sm opacity-75">Cascade Trainees</div>
+                </div>
+                <div className="bg-black/30 rounded-lg p-4">
+                  <div className="text-4xl font-bold text-purple-400 mb-1">
+                    {knowledgeBase.articles + knowledgeBase.videos + knowledgeBase.casestudies}
+                  </div>
+                  <div className="text-sm opacity-75">Resources Created</div>
+                </div>
+              </div>
+              
+              {canComplete && (
+                <div className="text-center">
+                  <p className="text-lg mb-4">
+                    ✨ You've built a comprehensive education program that will continue teaching long after you're gone!
+                  </p>
+                  <button
+                    onClick={completeLevel}
+                    className="px-8 py-4 bg-gradient-to-r from-purple-500 to-pink-600 rounded-xl font-bold text-lg hover:scale-105 transition-all"
+                  >
+                    🎉 Complete Mentorship Level
+                  </button>
+                </div>
+              )}
+              {!canComplete && (
+                <div className="bg-yellow-500/20 border-2 border-yellow-400 rounded-xl p-4">
+                  <p className="text-sm">
+                    <strong>To complete:</strong> Launch 3+ courses, deliver 2+ workshops, certify 2+ trainers, and handle the teaching challenge
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Transition Message */}
+        {levelComplete && (
+          <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50">
+            <div className="text-center text-white">
+              <div className="text-8xl mb-6 animate-bounce">👨‍🏫</div>
+              <h2 className="text-5xl font-bold mb-4">Knowledge Transferred!</h2>
+              <p className="text-2xl opacity-80">
+                Becoming the visionary leader...
+              </p>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 // Completion Screen
 function CompletionScreen({ progress }: { progress: GameProgress; setProgress: (p: GameProgress) => void }) {
   return (
