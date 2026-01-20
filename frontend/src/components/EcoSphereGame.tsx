@@ -6020,9 +6020,9 @@ function Level14Mentor({ progress, setProgress }: { progress: GameProgress; setP
     ['workshop-3', { id: 'workshop-3', name: 'Community Facilitation', participants: 0, status: 'planning' as 'planning' | 'in-progress' | 'complete', satisfaction: 0 }],
   ]));
   const [trainers, setTrainers] = useState(new Map([
-    ['trainer-1', { id: 'trainer-1', name: 'Sarah Chen', expertise: 'Ecology', level: 'beginner' as const, certified: false, trainees: 0 }],
-    ['trainer-2', { id: 'trainer-2', name: 'Marcus Reid', expertise: 'Community', level: 'beginner' as const, certified: false, trainees: 0 }],
-    ['trainer-3', { id: 'trainer-3', name: 'Elena Vasquez', expertise: 'Policy', level: 'beginner' as const, certified: false, trainees: 0 }],
+    ['trainer-1', { id: 'trainer-1', name: 'Sarah Chen', expertise: 'Ecology', level: 'beginner' as 'beginner' | 'intermediate' | 'advanced', certified: false, trainees: 0 }],
+    ['trainer-2', { id: 'trainer-2', name: 'Marcus Reid', expertise: 'Community', level: 'beginner' as 'beginner' | 'intermediate' | 'advanced', certified: false, trainees: 0 }],
+    ['trainer-3', { id: 'trainer-3', name: 'Elena Vasquez', expertise: 'Policy', level: 'beginner' as 'beginner' | 'intermediate' | 'advanced', certified: false, trainees: 0 }],
   ]));
   const [knowledgeBase, setKnowledgeBase] = useState({
     articles: 8,
