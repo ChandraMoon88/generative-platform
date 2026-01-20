@@ -3333,6 +3333,136 @@ function Level8Analytics({ progress, setProgress }: { progress: GameProgress; se
   );
 }
 
+// Completion Screen
+function CompletionScreen({ progress }: { progress: GameProgress; setProgress: (p: GameProgress) => void }) {
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-green-900 via-emerald-900 to-teal-900 py-12 px-4">
+      <div className="max-w-5xl mx-auto text-center">
+        {/* Celebration */}
+        <div className="mb-12">
+          <div className="text-9xl mb-6 animate-bounce">🎉</div>
+          <h1 className="text-7xl font-bold text-white mb-6 animate-pulse">
+            Congratulations!
+          </h1>
+          <p className="text-3xl text-green-200 mb-4">
+            You've completed the EcoSphere Journey
+          </p>
+        </div>
+
+        {/* Achievement Summary */}
+        <div className="bg-white/10 backdrop-blur-md rounded-3xl p-8 mb-8 text-white">
+          <h2 className="text-4xl font-bold mb-6">🏆 Your Journey</h2>
+          <div className="grid md:grid-cols-4 gap-6">
+            <div className="bg-white/10 rounded-xl p-6">
+              <div className="text-5xl mb-3">🌊</div>
+              <div className="text-3xl font-bold mb-2">Level 1</div>
+              <div className="text-sm opacity-75">Discovery</div>
+            </div>
+            <div className="bg-white/10 rounded-xl p-6">
+              <div className="text-5xl mb-3">🔍</div>
+              <div className="text-3xl font-bold mb-2">Level 2</div>
+              <div className="text-sm opacity-75">Investigation</div>
+            </div>
+            <div className="bg-white/10 rounded-xl p-6">
+              <div className="text-5xl mb-3">📋</div>
+              <div className="text-3xl font-bold mb-2">Level 3</div>
+              <div className="text-sm opacity-75">Planning</div>
+            </div>
+            <div className="bg-white/10 rounded-xl p-6">
+              <div className="text-5xl mb-3">🛠️</div>
+              <div className="text-3xl font-bold mb-2">Level 4</div>
+              <div className="text-sm opacity-75">Execution</div>
+            </div>
+            <div className="bg-white/10 rounded-xl p-6">
+              <div className="text-5xl mb-3">🔗</div>
+              <div className="text-3xl font-bold mb-2">Level 5</div>
+              <div className="text-sm opacity-75">Systems</div>
+            </div>
+            <div className="bg-white/10 rounded-xl p-6">
+              <div className="text-5xl mb-3">👥</div>
+              <div className="text-3xl font-bold mb-2">Level 6</div>
+              <div className="text-sm opacity-75">Team</div>
+            </div>
+            <div className="bg-white/10 rounded-xl p-6">
+              <div className="text-5xl mb-3">💰</div>
+              <div className="text-3xl font-bold mb-2">Level 7</div>
+              <div className="text-sm opacity-75">Budget</div>
+            </div>
+            <div className="bg-white/10 rounded-xl p-6">
+              <div className="text-5xl mb-3">📊</div>
+              <div className="text-3xl font-bold mb-2">Level 8</div>
+              <div className="text-sm opacity-75">Analytics</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Impact Statistics */}
+        <div className="bg-white/10 backdrop-blur-md rounded-3xl p-8 mb-8 text-white">
+          <h2 className="text-4xl font-bold mb-6">🌟 Your Impact</h2>
+          <div className="grid md:grid-cols-3 gap-6">
+            <div className="bg-gradient-to-br from-blue-500/20 to-cyan-500/20 rounded-xl p-6 border-2 border-blue-400">
+              <div className="text-5xl font-bold text-blue-300 mb-2">88%</div>
+              <div className="text-xl">River Health Restored</div>
+            </div>
+            <div className="bg-gradient-to-br from-green-500/20 to-emerald-500/20 rounded-xl p-6 border-2 border-green-400">
+              <div className="text-5xl font-bold text-green-300 mb-2">+156%</div>
+              <div className="text-xl">Biodiversity Increase</div>
+            </div>
+            <div className="bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-xl p-6 border-2 border-purple-400">
+              <div className="text-5xl font-bold text-purple-300 mb-2">$179K</div>
+              <div className="text-xl">Budget Managed</div>
+            </div>
+          </div>
+        </div>
+
+        {/* The Reveal */}
+        <div className="bg-gradient-to-br from-yellow-900/40 to-orange-900/40 backdrop-blur-md rounded-3xl p-8 border-2 border-yellow-400 text-white">
+          <div className="text-6xl mb-4">🌟</div>
+          <h2 className="text-4xl font-bold mb-4">The Truth Revealed</h2>
+          <p className="text-xl mb-6 leading-relaxed">
+            Throughout your journey, you weren't just playing a game... You were <span className="text-yellow-300 font-bold">designing a real application</span>.
+          </p>
+          <p className="text-lg mb-6 opacity-90">
+            Every decision you made, every workflow you created, every entity you discovered - 
+            all of it generated a complete, production-ready environmental management system 
+            tailored to your needs.
+          </p>
+          <div className="bg-white/10 rounded-xl p-6 mb-6">
+            <div className="text-sm opacity-75 mb-2">Your Generated Application Includes:</div>
+            <div className="grid md:grid-cols-2 gap-3 text-left">
+              <div>✅ Water Quality Management System</div>
+              <div>✅ Pollution Source Tracking</div>
+              <div>✅ Restoration Workflow Engine</div>
+              <div>✅ Team & Resource Management</div>
+              <div>✅ Financial Planning Tools</div>
+              <div>✅ Analytics Dashboard</div>
+              <div>✅ Systems Integration Framework</div>
+              <div>✅ Real-time Monitoring</div>
+            </div>
+          </div>
+          <p className="text-2xl font-bold text-yellow-300">
+            This is the future of software creation: Learning through doing.
+          </p>
+        </div>
+
+        {/* Gaia's Final Message */}
+        <div className="mt-8 bg-white/10 backdrop-blur-md rounded-3xl p-8 text-white">
+          <div className="text-7xl mb-4">🌍</div>
+          <h2 className="text-3xl font-bold mb-4">Gaia's Farewell</h2>
+          <p className="text-xl italic opacity-90 mb-4">
+            "You came to EcoSphere as a learner. You leave as a Restoration Architect.
+            The river you saved is real in its essence, and the skills you've gained 
+            will ripple through every system you touch."
+          </p>
+          <p className="text-lg opacity-75">
+            Thank you for playing EcoSphere. 🌱
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // Add CSS for animations
 const styles = `
   @keyframes spin-slow {
