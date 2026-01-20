@@ -321,53 +321,9 @@ export default function GameFlow({ onAppCreated }: { onAppCreated: (components: 
   // EcoSphere Game Phase
   if (gameState.phase === 'ecosphere-game' && gameState.useEcoSphere) {
     return <EcoSphereGame />;
-          
-          // Generate components from entities
-          if (appModel.entities) {
-            appModel.entities.forEach((entity: any) => {
-              components.push({
-                id: `entity-${entity.type}-list`,
-                type: 'DataTable',
-                category: 'Data Display',
-                props: {
-                  title: `${entity.type} Management`,
-                  data: []
-                }
-              });
-            });
-          }
-          
-          // Generate workflow components
-          if (appModel.workflows) {
-            appModel.workflows.forEach((workflow: any, idx: number) => {
-              components.push({
-                id: `workflow-${idx}`,
-                type: 'StepperForm',
-                category: 'Forms',
-                props: {
-                  title: workflow.type || 'Restoration Workflow',
-                  steps: workflow.steps || []
-                }
-              });
-            });
-          }
-          
-          // Add dashboard
-          if (appModel.uiPatterns && appModel.uiPatterns.includes('real-time-monitoring')) {
-            components.push({
-              id: 'dashboard-main',
-              type: 'Dashboard',
-              category: 'Layout & Containers',
-              props: {
-                title: 'Environmental Dashboard',
-                layout: 'grid'
-              }
-            });
-          }
-          
-          setGameState({
-            ...gameState,
-            phase: 'reveal',
+  }
+
+  // Reveal Phase: Show the magic of what was built
             unlockedComponents: components,
             score: appModel.score || 0
           });
