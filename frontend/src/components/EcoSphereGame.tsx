@@ -7260,44 +7260,85 @@ function CompletionScreen({ progress }: { progress: GameProgress; setProgress: (
 
         {/* Achievement Summary */}
         <div className="bg-white/10 backdrop-blur-md rounded-3xl p-8 mb-8 text-white">
-          <h2 className="text-4xl font-bold mb-6">🏆 Your Journey</h2>
-          <div className="grid md:grid-cols-3 gap-6">
-            <div className="bg-white/10 rounded-xl p-6">
-              <div className="text-5xl mb-3">🌊</div>
-              <div className="text-3xl font-bold mb-2">Level 1</div>
-              <div className="text-sm opacity-75">Discovery</div>
+          <h2 className="text-4xl font-bold mb-6">🏆 Complete 15-Level Journey</h2>
+          <div className="grid md:grid-cols-5 gap-4">
+            <div className="bg-white/10 rounded-xl p-4">
+              <div className="text-4xl mb-2">🌊</div>
+              <div className="text-2xl font-bold mb-1">Level 1</div>
+              <div className="text-xs opacity-75">Discovery</div>
             </div>
-            <div className="bg-white/10 rounded-xl p-6">
-              <div className="text-5xl mb-3">🔍</div>
-              <div className="text-3xl font-bold mb-2">Level 2</div>
-              <div className="text-sm opacity-75">Investigation</div>
+            <div className="bg-white/10 rounded-xl p-4">
+              <div className="text-4xl mb-2">🔍</div>
+              <div className="text-2xl font-bold mb-1">Level 2</div>
+              <div className="text-xs opacity-75">Investigation</div>
             </div>
-            <div className="bg-white/10 rounded-xl p-6">
-              <div className="text-5xl mb-3">📋</div>
-              <div className="text-3xl font-bold mb-2">Level 3</div>
-              <div className="text-sm opacity-75">Planning</div>
+            <div className="bg-white/10 rounded-xl p-4">
+              <div className="text-4xl mb-2">📋</div>
+              <div className="text-2xl font-bold mb-1">Level 3</div>
+              <div className="text-xs opacity-75">Planning</div>
             </div>
-            <div className="bg-white/10 rounded-xl p-6">
-              <div className="text-5xl mb-3">🛠️</div>
-              <div className="text-3xl font-bold mb-2">Level 4</div>
-              <div className="text-sm opacity-75">Execution</div>
+            <div className="bg-white/10 rounded-xl p-4">
+              <div className="text-4xl mb-2">🛠️</div>
+              <div className="text-2xl font-bold mb-1">Level 4</div>
+              <div className="text-xs opacity-75">Execution</div>
             </div>
-            <div className="bg-white/10 rounded-xl p-6">
-              <div className="text-5xl mb-3">🔗</div>
-              <div className="text-3xl font-bold mb-2">Level 5</div>
-              <div className="text-sm opacity-75">Systems</div>
+            <div className="bg-white/10 rounded-xl p-4">
+              <div className="text-4xl mb-2">🔗</div>
+              <div className="text-2xl font-bold mb-1">Level 5</div>
+              <div className="text-xs opacity-75">Systems</div>
             </div>
-            <div className="bg-white/10 rounded-xl p-6">
-              <div className="text-5xl mb-3">👥</div>
-              <div className="text-3xl font-bold mb-2">Level 6</div>
-              <div className="text-sm opacity-75">Team</div>
+            <div className="bg-white/10 rounded-xl p-4">
+              <div className="text-4xl mb-2">👥</div>
+              <div className="text-2xl font-bold mb-1">Level 6</div>
+              <div className="text-xs opacity-75">Team</div>
             </div>
-            <div className="bg-white/10 rounded-xl p-6">
-              <div className="text-5xl mb-3">💰</div>
-              <div className="text-3xl font-bold mb-2">Level 7</div>
-              <div className="text-sm opacity-75">Budget</div>
+            <div className="bg-white/10 rounded-xl p-4">
+              <div className="text-4xl mb-2">💰</div>
+              <div className="text-2xl font-bold mb-1">Level 7</div>
+              <div className="text-xs opacity-75">Budget</div>
             </div>
-            <div className="bg-white/10 rounded-xl p-6">
+            <div className="bg-white/10 rounded-xl p-4">
+              <div className="text-4xl mb-2">📊</div>
+              <div className="text-2xl font-bold mb-1">Level 8</div>
+              <div className="text-xs opacity-75">Analytics</div>
+            </div>
+            <div className="bg-white/10 rounded-xl p-4">
+              <div className="text-4xl mb-2">🤝</div>
+              <div className="text-2xl font-bold mb-1">Level 9</div>
+              <div className="text-xs opacity-75">Stakeholders</div>
+            </div>
+            <div className="bg-white/10 rounded-xl p-4">
+              <div className="text-4xl mb-2">🏛️</div>
+              <div className="text-2xl font-bold mb-1">Level 10</div>
+              <div className="text-xs opacity-75">Compliance</div>
+            </div>
+            <div className="bg-white/10 rounded-xl p-4">
+              <div className="text-4xl mb-2">🔧</div>
+              <div className="text-2xl font-bold mb-1">Level 11</div>
+              <div className="text-xs opacity-75">Projects</div>
+            </div>
+            <div className="bg-white/10 rounded-xl p-4">
+              <div className="text-4xl mb-2">🔬</div>
+              <div className="text-2xl font-bold mb-1">Level 12</div>
+              <div className="text-xs opacity-75">Innovation</div>
+            </div>
+            <div className="bg-white/10 rounded-xl p-4">
+              <div className="text-4xl mb-2">📜</div>
+              <div className="text-2xl font-bold mb-1">Level 13</div>
+              <div className="text-xs opacity-75">Policy</div>
+            </div>
+            <div className="bg-white/10 rounded-xl p-4">
+              <div className="text-4xl mb-2">👨‍🏫</div>
+              <div className="text-2xl font-bold mb-1">Level 14</div>
+              <div className="text-xs opacity-75">Mentor</div>
+            </div>
+            <div className="bg-white/10 rounded-xl p-4">
+              <div className="text-4xl mb-2">🌍</div>
+              <div className="text-2xl font-bold mb-1">Level 15</div>
+              <div className="text-xs opacity-75">Visionary</div>
+            </div>
+          </div>
+        </div>
               <div className="text-5xl mb-3">📊</div>
               <div className="text-3xl font-bold mb-2">Level 8</div>
               <div className="text-sm opacity-75">Analytics</div>
