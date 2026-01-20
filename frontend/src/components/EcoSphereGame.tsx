@@ -140,6 +140,7 @@ interface GameProgress {
   completedPhases?: string[];
   systemsStrategy?: 'river-only' | 'integrated' | 'prioritized';
   teamMembers?: TeamMember[];
+  budgetStrategy?: 'aggressive' | 'balanced' | 'conservative';
 }
 
 // Application Model (What gets generated)
@@ -2304,6 +2305,490 @@ function Level6Team({ progress, setProgress }: { progress: GameProgress; setProg
               <h2 className="text-5xl font-bold mb-4">Team Building Complete!</h2>
               <p className="text-2xl opacity-80">
                 Moving to Budget Management...
+              </p>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// LEVEL 7: Budget Management Component
+function Level7Budget({ progress, setProgress }: { progress: GameProgress; setProgress: (p: GameProgress) => void }) {
+  const [selectedTab, setSelectedTab] = useState<'overview' | 'planning' | 'tracking' | 'optimization'>('overview');
+  const [budgetStrategy, setBudgetStrategy] = useState<'aggressive' | 'balanced' | 'conservative' | null>(null);
+  const [allocations, setAllocations] = useState({
+    personnel: 35,
+    equipment: 20,
+    materials: 15,
+    permits: 10,
+    monitoring: 10,
+    contingency: 10
+  });
+  const [expenses, setExpenses] = useState<Array<{
+    id: string;
+    category: string;
+    description: string;
+    amount: number;
+    date: string;
+    status: 'pending' | 'approved' | 'paid';
+  }>>([
+    { id: 'e1', category: 'personnel', description: 'Team salaries (Month 1)', amount: 45000, date: 'Day 1', status: 'paid' },
+    { id: 'e2', category: 'equipment', description: 'Water testing equipment', amount: 12000, date: 'Day 3', status: 'paid' },
+    { id: 'e3', category: 'materials', description: 'Restoration materials', amount: 8500, date: 'Day 5', status: 'approved' },
+    { id: 'e4', category: 'permits', description: 'Environmental permits', amount: 5000, date: 'Day 7', status: 'pending' },
+  ]);
+  
+  const [grantApplications, setGrantApplications] = useState<Array<{
+    id: string;
+    name: string;
+    amount: number;
+    probability: number;
+    status: 'draft' | 'submitted' | 'approved' | 'denied';
+  }>>([
+    { id: 'g1', name: 'Federal EPA Grant', amount: 150000, probability: 60, status: 'draft' },
+    { id: 'g2', name: 'State Water Quality Fund', amount: 75000, probability: 75, status: 'draft' },
+    { id: 'g3', name: 'Private Foundation Grant', amount: 50000, probability: 45, status: 'draft' },
+  ]);
+
+  const [showOptimization, setShowOptimization] = useState(false);
+  const [optimizationComplete, setOptimizationComplete] = useState(false);
+
+  const totalBudget = 250000;
+  const totalSpent = expenses.filter(e => e.status === 'paid').reduce((sum, e) => sum + e.amount, 0);
+  const totalCommitted = expenses.filter(e => e.status !== 'pending').reduce((sum, e) => sum + e.amount, 0);
+  const remainingBudget = totalBudget - totalCommitted;
+
+  const getCategoryColor = (category: string) => {
+    const colors: any = {
+      personnel: 'bg-blue-500',
+      equipment: 'bg-purple-500',
+      materials: 'bg-green-500',
+      permits: 'bg-yellow-500',
+      monitoring: 'bg-orange-500',
+      contingency: 'bg-gray-500'
+    };
+    return colors[category] || 'bg-gray-500';
+  };
+
+  const handleStrategyChoice = (strategy: 'aggressive' | 'balanced' | 'conservative') => {
+    setBudgetStrategy(strategy);
+    
+    // Adjust allocations based on strategy
+    if (strategy === 'aggressive') {
+      setAllocations({ personnel: 40, equipment: 25, materials: 20, permits: 5, monitoring: 5, contingency: 5 });
+    } else if (strategy === 'balanced') {
+      setAllocations({ personnel: 35, equipment: 20, materials: 15, permits: 10, monitoring: 10, contingency: 10 });
+    } else {
+      setAllocations({ personnel: 30, equipment: 15, materials: 10, permits: 15, monitoring: 15, contingency: 15 });
+    }
+  };
+
+  const submitGrant = (grantId: string) => {
+    setGrantApplications(prev => prev.map(g => 
+      g.id === grantId ? { ...g, status: 'submitted' as const } : g
+    ));
+  };
+
+  const completeOptimization = () => {
+    setOptimizationComplete(true);
+    setTimeout(() => {
+      setProgress({
+        ...progress,
+        phase: 'level-8-analytics' as GamePhase,
+        completedPhases: [...(progress.completedPhases || []), 'level-7-budget'],
+        budgetStrategy
+      });
+    }, 2000);
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-green-900 via-teal-900 to-cyan-900 py-8 px-4">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <h1 className="text-5xl font-bold text-white mb-3">
+            💰 Level 7: Budget Management
+          </h1>
+          <p className="text-2xl text-green-200">
+            Master financial planning and resource allocation
+          </p>
+        </div>
+
+        {/* Budget Overview Cards */}
+        <div className="grid md:grid-cols-4 gap-4 mb-6">
+          <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 text-white">
+            <div className="text-sm opacity-75">Total Budget</div>
+            <div className="text-3xl font-bold text-blue-300">${(totalBudget / 1000).toFixed(0)}K</div>
+          </div>
+          <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 text-white">
+            <div className="text-sm opacity-75">Spent</div>
+            <div className="text-3xl font-bold text-red-300">${(totalSpent / 1000).toFixed(0)}K</div>
+          </div>
+          <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 text-white">
+            <div className="text-sm opacity-75">Committed</div>
+            <div className="text-3xl font-bold text-yellow-300">${(totalCommitted / 1000).toFixed(0)}K</div>
+          </div>
+          <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 text-white">
+            <div className="text-sm opacity-75">Remaining</div>
+            <div className={`text-3xl font-bold ${remainingBudget > 100000 ? 'text-green-300' : remainingBudget > 50000 ? 'text-yellow-300' : 'text-red-300'}`}>
+              ${(remainingBudget / 1000).toFixed(0)}K
+            </div>
+          </div>
+        </div>
+
+        {/* Tab Navigation */}
+        <div className="flex gap-4 mb-6">
+          <button
+            onClick={() => setSelectedTab('overview')}
+            className={`flex-1 py-4 rounded-xl font-bold text-lg transition-all ${
+              selectedTab === 'overview'
+                ? 'bg-gradient-to-r from-blue-500 to-cyan-600 text-white'
+                : 'bg-white/10 text-white/60 hover:bg-white/20'
+            }`}
+          >
+            📊 Overview
+          </button>
+          <button
+            onClick={() => setSelectedTab('planning')}
+            className={`flex-1 py-4 rounded-xl font-bold text-lg transition-all ${
+              selectedTab === 'planning'
+                ? 'bg-gradient-to-r from-purple-500 to-pink-600 text-white'
+                : 'bg-white/10 text-white/60 hover:bg-white/20'
+            }`}
+          >
+            📋 Planning
+          </button>
+          <button
+            onClick={() => setSelectedTab('tracking')}
+            className={`flex-1 py-4 rounded-xl font-bold text-lg transition-all ${
+              selectedTab === 'tracking'
+                ? 'bg-gradient-to-r from-green-500 to-emerald-600 text-white'
+                : 'bg-white/10 text-white/60 hover:bg-white/20'
+            }`}
+          >
+            💳 Tracking
+          </button>
+          <button
+            onClick={() => setSelectedTab('optimization')}
+            className={`flex-1 py-4 rounded-xl font-bold text-lg transition-all ${
+              selectedTab === 'optimization'
+                ? 'bg-gradient-to-r from-orange-500 to-red-600 text-white'
+                : 'bg-white/10 text-white/60 hover:bg-white/20'
+            }`}
+          >
+            ⚡ Optimization
+          </button>
+        </div>
+
+        {/* Overview Tab */}
+        {selectedTab === 'overview' && (
+          <div className="grid lg:grid-cols-2 gap-6">
+            {/* Budget Allocation Pie Chart (Visual) */}
+            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 text-white">
+              <h3 className="text-2xl font-bold mb-4">💼 Budget Allocation</h3>
+              <div className="space-y-3">
+                {Object.entries(allocations).map(([category, percentage]) => (
+                  <div key={category}>
+                    <div className="flex justify-between mb-1">
+                      <span className="capitalize">{category}</span>
+                      <span className="font-bold">{percentage}% (${((totalBudget * percentage) / 100 / 1000).toFixed(0)}K)</span>
+                    </div>
+                    <div className="bg-black/40 rounded-full h-3 overflow-hidden">
+                      <div 
+                        className={`${getCategoryColor(category)} h-full transition-all`}
+                        style={{ width: `${percentage}%` }}
+                      ></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Cash Flow Summary */}
+            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 text-white">
+              <h3 className="text-2xl font-bold mb-4">📈 Cash Flow</h3>
+              <div className="space-y-4">
+                <div className="bg-green-500/20 border-l-4 border-green-400 p-4 rounded">
+                  <div className="text-sm opacity-75">Income Sources</div>
+                  <div className="text-2xl font-bold">$250K</div>
+                  <div className="text-xs mt-1">Initial Grant Funding</div>
+                </div>
+                
+                <div className="bg-red-500/20 border-l-4 border-red-400 p-4 rounded">
+                  <div className="text-sm opacity-75">Expenses to Date</div>
+                  <div className="text-2xl font-bold">${(totalSpent / 1000).toFixed(0)}K</div>
+                  <div className="text-xs mt-1">{expenses.filter(e => e.status === 'paid').length} transactions</div>
+                </div>
+                
+                <div className="bg-blue-500/20 border-l-4 border-blue-400 p-4 rounded">
+                  <div className="text-sm opacity-75">Burn Rate</div>
+                  <div className="text-2xl font-bold">$15K/week</div>
+                  <div className="text-xs mt-1">Estimated runway: {Math.floor(remainingBudget / 15000)} weeks</div>
+                </div>
+
+                <div className="bg-purple-500/20 border-l-4 border-purple-400 p-4 rounded">
+                  <div className="text-sm opacity-75">Pending Grants</div>
+                  <div className="text-2xl font-bold">$275K</div>
+                  <div className="text-xs mt-1">{grantApplications.length} applications</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Planning Tab */}
+        {selectedTab === 'planning' && (
+          <div className="space-y-6">
+            {!budgetStrategy ? (
+              <div className="bg-white/10 backdrop-blur-md rounded-2xl p-8 text-white">
+                <h3 className="text-3xl font-bold mb-6 text-center">Choose Your Budget Strategy</h3>
+                <div className="grid md:grid-cols-3 gap-6">
+                  <button
+                    onClick={() => handleStrategyChoice('aggressive')}
+                    className="bg-white/10 hover:bg-white/20 rounded-xl p-6 transition-all transform hover:scale-105 text-left"
+                  >
+                    <div className="text-5xl mb-4">🚀</div>
+                    <h4 className="text-2xl font-bold mb-3">Aggressive</h4>
+                    <p className="text-sm opacity-80 mb-4">
+                      Maximize impact quickly. Front-load spending on personnel and equipment.
+                    </p>
+                    <div className="space-y-1 text-xs">
+                      <div className="text-green-400">✓ Fast results</div>
+                      <div className="text-green-400">✓ Maximum team</div>
+                      <div className="text-red-400">✗ Low contingency</div>
+                      <div className="text-red-400">✗ Higher risk</div>
+                    </div>
+                  </button>
+
+                  <button
+                    onClick={() => handleStrategyChoice('balanced')}
+                    className="bg-white/10 hover:bg-white/20 rounded-xl p-6 transition-all transform hover:scale-105 text-left"
+                  >
+                    <div className="text-5xl mb-4">⚖️</div>
+                    <h4 className="text-2xl font-bold mb-3">Balanced</h4>
+                    <p className="text-sm opacity-80 mb-4">
+                      Moderate pace with good coverage. Balance speed, safety, and flexibility.
+                    </p>
+                    <div className="space-y-1 text-xs">
+                      <div className="text-green-400">✓ Steady progress</div>
+                      <div className="text-green-400">✓ Reasonable buffer</div>
+                      <div className="text-yellow-400">~ Medium risk</div>
+                      <div className="text-yellow-400">~ Standard timeline</div>
+                    </div>
+                  </button>
+
+                  <button
+                    onClick={() => handleStrategyChoice('conservative')}
+                    className="bg-white/10 hover:bg-white/20 rounded-xl p-6 transition-all transform hover:scale-105 text-left"
+                  >
+                    <div className="text-5xl mb-4">🛡️</div>
+                    <h4 className="text-2xl font-bold mb-3">Conservative</h4>
+                    <p className="text-sm opacity-80 mb-4">
+                      Prioritize safety and compliance. Large contingency fund for surprises.
+                    </p>
+                    <div className="space-y-1 text-xs">
+                      <div className="text-green-400">✓ High safety</div>
+                      <div className="text-green-400">✓ Large buffer</div>
+                      <div className="text-yellow-400">~ Slower pace</div>
+                      <div className="text-yellow-400">~ Smaller team</div>
+                    </div>
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 text-white">
+                <div className="flex items-center justify-between mb-6">
+                  <h3 className="text-2xl font-bold">Budget Plan: {budgetStrategy.charAt(0).toUpperCase() + budgetStrategy.slice(1)}</h3>
+                  <button
+                    onClick={() => setBudgetStrategy(null)}
+                    className="px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-sm"
+                  >
+                    Change Strategy
+                  </button>
+                </div>
+                
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <h4 className="text-xl font-bold mb-3">Allocation Breakdown</h4>
+                    <div className="space-y-2">
+                      {Object.entries(allocations).map(([category, percentage]) => (
+                        <div key={category} className="flex justify-between items-center bg-black/30 p-3 rounded-lg">
+                          <span className="capitalize font-semibold">{category}</span>
+                          <span className="text-lg">{percentage}%</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <h4 className="text-xl font-bold mb-3">Grant Applications</h4>
+                    <div className="space-y-3">
+                      {grantApplications.map(grant => (
+                        <div key={grant.id} className="bg-black/30 p-4 rounded-lg">
+                          <div className="flex justify-between items-start mb-2">
+                            <div className="flex-1">
+                              <div className="font-bold">{grant.name}</div>
+                              <div className="text-sm opacity-75">${(grant.amount / 1000).toFixed(0)}K</div>
+                            </div>
+                            <span className={`px-2 py-1 rounded text-xs ${
+                              grant.status === 'draft' ? 'bg-gray-500' :
+                              grant.status === 'submitted' ? 'bg-blue-500' :
+                              grant.status === 'approved' ? 'bg-green-500' :
+                              'bg-red-500'
+                            }`}>
+                              {grant.status}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-2 mb-2">
+                            <div className="flex-1 bg-black/40 rounded-full h-2">
+                              <div 
+                                className="bg-gradient-to-r from-yellow-400 to-green-500 h-full rounded-full"
+                                style={{ width: `${grant.probability}%` }}
+                              ></div>
+                            </div>
+                            <span className="text-xs">{grant.probability}%</span>
+                          </div>
+                          {grant.status === 'draft' && (
+                            <button
+                              onClick={() => submitGrant(grant.id)}
+                              className="w-full mt-2 px-4 py-2 bg-blue-500 hover:bg-blue-600 rounded text-sm font-bold"
+                            >
+                              Submit Application
+                            </button>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Tracking Tab */}
+        {selectedTab === 'tracking' && (
+          <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 text-white">
+            <h3 className="text-2xl font-bold mb-4">💳 Expense Tracking</h3>
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b border-white/20">
+                    <th className="text-left py-3 px-4">Date</th>
+                    <th className="text-left py-3 px-4">Description</th>
+                    <th className="text-left py-3 px-4">Category</th>
+                    <th className="text-right py-3 px-4">Amount</th>
+                    <th className="text-center py-3 px-4">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {expenses.map(expense => (
+                    <tr key={expense.id} className="border-b border-white/10 hover:bg-white/5">
+                      <td className="py-3 px-4">{expense.date}</td>
+                      <td className="py-3 px-4">{expense.description}</td>
+                      <td className="py-3 px-4">
+                        <span className={`px-2 py-1 rounded text-xs ${getCategoryColor(expense.category)}`}>
+                          {expense.category}
+                        </span>
+                      </td>
+                      <td className="py-3 px-4 text-right font-bold">
+                        ${expense.amount.toLocaleString()}
+                      </td>
+                      <td className="py-3 px-4 text-center">
+                        <span className={`px-3 py-1 rounded-full text-xs font-bold ${
+                          expense.status === 'paid' ? 'bg-green-500' :
+                          expense.status === 'approved' ? 'bg-blue-500' :
+                          'bg-yellow-500'
+                        }`}>
+                          {expense.status}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+                <tfoot>
+                  <tr className="border-t-2 border-white/40 font-bold">
+                    <td colSpan={3} className="py-3 px-4 text-right">Total Spent:</td>
+                    <td className="py-3 px-4 text-right text-xl">${totalSpent.toLocaleString()}</td>
+                    <td></td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {/* Optimization Tab */}
+        {selectedTab === 'optimization' && (
+          <div className="space-y-6">
+            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 text-white">
+              <h3 className="text-2xl font-bold mb-4">⚡ Cost Optimization Challenge</h3>
+              <p className="text-lg mb-6 opacity-90">
+                Your budget is on track, but you've identified opportunities to reduce costs by 15% 
+                without compromising quality. Where should you optimize?
+              </p>
+
+              <div className="grid md:grid-cols-3 gap-4">
+                <button
+                  onClick={() => setShowOptimization(true)}
+                  className="bg-white/10 hover:bg-white/20 rounded-xl p-6 transition-all transform hover:scale-105 text-left"
+                >
+                  <div className="text-4xl mb-3">🤝</div>
+                  <h4 className="text-xl font-bold mb-2">Negotiate with Vendors</h4>
+                  <p className="text-sm opacity-80">Leverage bulk purchasing and long-term contracts</p>
+                  <div className="mt-3 text-xs text-green-400">Save: $22K</div>
+                </button>
+
+                <button
+                  onClick={() => setShowOptimization(true)}
+                  className="bg-white/10 hover:bg-white/20 rounded-xl p-6 transition-all transform hover:scale-105 text-left"
+                >
+                  <div className="text-4xl mb-3">♻️</div>
+                  <h4 className="text-xl font-bold mb-2">Use Recycled Materials</h4>
+                  <p className="text-sm opacity-80">Source sustainable alternatives at lower cost</p>
+                  <div className="mt-3 text-xs text-green-400">Save: $18K</div>
+                </button>
+
+                <button
+                  onClick={() => setShowOptimization(true)}
+                  className="bg-white/10 hover:bg-white/20 rounded-xl p-6 transition-all transform hover:scale-105 text-left"
+                >
+                  <div className="text-4xl mb-3">🎓</div>
+                  <h4 className="text-xl font-bold mb-2">Volunteer Programs</h4>
+                  <p className="text-sm opacity-80">Engage community volunteers for non-technical work</p>
+                  <div className="mt-3 text-xs text-green-400">Save: $25K</div>
+                </button>
+              </div>
+            </div>
+
+            {showOptimization && (
+              <div className="bg-green-500/20 border-2 border-green-400 rounded-2xl p-6 text-center text-white">
+                <div className="text-6xl mb-4">✅</div>
+                <h3 className="text-2xl font-bold mb-2">Optimization Applied!</h3>
+                <p className="text-lg opacity-90 mb-4">
+                  You've reduced costs while maintaining quality. Budget efficiency increased!
+                </p>
+                <button
+                  onClick={completeOptimization}
+                  className="px-8 py-4 bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl font-bold text-lg hover:scale-105 transition-all"
+                >
+                  Complete Budget Management
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Transition Message */}
+        {optimizationComplete && (
+          <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50">
+            <div className="text-center text-white">
+              <div className="text-8xl mb-6 animate-bounce">💰</div>
+              <h2 className="text-5xl font-bold mb-4">Budget Mastery Achieved!</h2>
+              <p className="text-2xl opacity-80">
+                Moving to Data Analytics...
               </p>
             </div>
           </div>
