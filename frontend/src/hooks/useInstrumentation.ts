@@ -177,7 +177,7 @@ export function useInstrumentation(options: UseInstrumentationOptions) {
       case 'read':
         logInteraction(
           'click',
-          { tagName: 'item', id: id || '' },
+          { type: 'item', id: id || '' },
           createSemanticAction('crud_read', 'read', `View ${targetEntity} ${id}`)
         );
         break;
