@@ -6802,7 +6802,7 @@ function Level15Visionary({ progress, setProgress }: { progress: GameProgress; s
       setProgress({
         ...progress,
         phase: 'completion',
-        completedPhases: [...progress.completedPhases, 'level-15-visionary']
+        completedPhases: [...(progress.completedPhases || []), 'level-15-visionary']
       });
     }, 3000);
   };
