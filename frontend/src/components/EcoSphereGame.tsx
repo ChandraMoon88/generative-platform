@@ -441,6 +441,11 @@ export default function EcoSphereGame({ onGameComplete }: { onGameComplete: (app
     return <Level4Execution progress={progress} setProgress={setProgress} />;
   }
 
+  // LEVEL 5: Systems Thinking
+  if (progress.phase === 'level-5-systems') {
+    return <Level5Systems progress={progress} setProgress={setProgress} />;
+  }
+
   // More levels...
   return <div>Game in progress...</div>;
 }
