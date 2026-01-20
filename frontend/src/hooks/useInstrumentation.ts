@@ -265,7 +265,7 @@ export function useInstrumentation(options: UseInstrumentationOptions) {
     logWorkflow(
       workflowId,
       workflowName,
-      'step',
+      'progress',
       currentStep,
       previousStep,
       stepsCompleted,
