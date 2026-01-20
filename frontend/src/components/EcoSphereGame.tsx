@@ -1785,6 +1785,11 @@ const styles = `
     100% { transform: translateX(calc(100vw - 50px)); }
   }
   
+  @keyframes pulse-slow {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.8; transform: scale(1.05); }
+  }
+  
   .animate-spin-slow {
     animation: spin-slow 20s linear infinite;
   }
@@ -1799,6 +1804,10 @@ const styles = `
   
   .animate-swim {
     animation: swim 8s linear infinite;
+  }
+  
+  .animate-pulse-slow {
+    animation: pulse-slow 2s ease-in-out infinite;
   }
 `;
 
