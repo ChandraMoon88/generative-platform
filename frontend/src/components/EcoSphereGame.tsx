@@ -6664,9 +6664,9 @@ function Level15Visionary({ progress, setProgress }: { progress: GameProgress; s
     ['leader-4', { id: 'leader-4', name: 'Carlos Fernandez', role: 'Technical Lead', trained: false, leading: 0 }],
   ]));
   const [partnerships, setPartnerships] = useState(new Map([
-    ['partner-1', { id: 'partner-1', name: 'Global Water Foundation', type: 'NGO', status: 'initial' as 'initial' | 'engaged' | 'committed', funding: 0 }],
-    ['partner-2', { id: 'partner-2', name: 'EcoTech Solutions', type: 'Corporate', status: 'initial' as 'initial' | 'engaged' | 'committed', funding: 0 }],
-    ['partner-3', { id: 'partner-3', name: 'International Rivers Network', type: 'Network', status: 'initial' as 'initial' | 'engaged' | 'committed', funding: 0 }],
+    ['partner-1', { id: 'partner-1', name: 'Global Water Foundation', type: 'NGO', status: 'initial' as 'initial' | 'engaged' | 'committed' | 'strategic', funding: 0 }],
+    ['partner-2', { id: 'partner-2', name: 'EcoTech Solutions', type: 'Corporate', status: 'initial' as 'initial' | 'engaged' | 'committed' | 'strategic', funding: 0 }],
+    ['partner-3', { id: 'partner-3', name: 'International Rivers Network', type: 'Network', status: 'initial' as 'initial' | 'engaged' | 'committed' | 'strategic', funding: 0 }],
   ]));
   const [vision, setVision] = useState({
     statement: '',
