@@ -1428,6 +1428,341 @@ function Level4Execution({ progress, setProgress }: { progress: GameProgress; se
   );
 }
 
+// LEVEL 5: Systems Thinking Component
+function Level5Systems({ progress, setProgress }: { progress: GameProgress; setProgress: (p: GameProgress) => void }) {
+  const [selectedSystem, setSelectedSystem] = useState<string | null>(null);
+  const [revealedSystems, setRevealedSystems] = useState<Set<string>>(new Set(['river']));
+  const [connections, setConnections] = useState<Array<{from: string; to: string; type: string}>>([]);
+  const [strategy, setStrategy] = useState<'river-only' | 'integrated' | 'prioritized' | null>(null);
+  const [showStrategyChoice, setShowStrategyChoice] = useState(false);
+
+  // Ecosystem nodes
+  const ecosystems = [
+    { id: 'river', name: 'Restored River', emoji: '🌊', x: 50, y: 50, tier: 'primary', health: 85 },
+    { id: 'wetlands', name: 'Adjacent Wetlands', emoji: '🦆', x: 20, y: 30, tier: 'direct', health: 45 },
+    { id: 'lake', name: 'Downstream Lake', emoji: '🏞️', x: 80, y: 30, tier: 'direct', health: 38 },
+    { id: 'groundwater', name: 'Groundwater Aquifer', emoji: '💧', x: 50, y: 85, tier: 'direct', health: 52 },
+    { id: 'forest', name: 'Riparian Forest', emoji: '🌲', x: 15, y: 65, tier: 'direct', health: 41 },
+    { id: 'farmland', name: 'Agricultural Land', emoji: '🌾', x: 85, y: 70, tier: 'direct', health: 35 },
+    { id: 'ocean', name: 'Ocean Delta', emoji: '🌊', x: 95, y: 15, tier: 'secondary', health: 30 },
+    { id: 'wildlife', name: 'Wildlife Corridor', emoji: '🦌', x: 10, y: 95, tier: 'secondary', health: 28 },
+    { id: 'urban', name: 'Urban Water Supply', emoji: '🏙️', x: 70, y: 90, tier: 'secondary', health: 48 },
+    { id: 'fishery', name: 'Commercial Fishery', emoji: '🎣', x: 90, y: 50, tier: 'secondary', health: 25 },
+  ];
+
+  // Connection relationships
+  const allConnections = [
+    { from: 'river', to: 'wetlands', type: 'Water Flow', impact: 'High' },
+    { from: 'river', to: 'lake', type: 'Drainage', impact: 'High' },
+    { from: 'river', to: 'groundwater', type: 'Infiltration', impact: 'Medium' },
+    { from: 'river', to: 'forest', type: 'Hydration', impact: 'Medium' },
+    { from: 'river', to: 'farmland', type: 'Irrigation', impact: 'Medium' },
+    { from: 'lake', to: 'ocean', type: 'Outflow', impact: 'Medium' },
+    { from: 'wetlands', to: 'wildlife', type: 'Habitat', impact: 'High' },
+    { from: 'groundwater', to: 'urban', type: 'Water Supply', impact: 'High' },
+    { from: 'lake', to: 'fishery', type: 'Ecosystem', impact: 'High' },
+  ];
+
+  useEffect(() => {
+    // Auto-reveal direct connections after 2 seconds
+    const timer = setTimeout(() => {
+      const directSystems = ecosystems.filter(e => e.tier === 'direct').map(e => e.id);
+      setRevealedSystems(new Set(['river', ...directSystems]));
+      
+      // Show primary connections
+      const primaryConnections = allConnections.filter(c => 
+        directSystems.includes(c.to) && c.from === 'river'
+      );
+      setConnections(primaryConnections);
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  const handleDiscoverSecondary = () => {
+    const secondarySystems = ecosystems.filter(e => e.tier === 'secondary').map(e => e.id);
+    setRevealedSystems(new Set([...Array.from(revealedSystems), ...secondarySystems]));
+    setConnections(allConnections);
+    
+    setTimeout(() => {
+      setShowStrategyChoice(true);
+    }, 1500);
+  };
+
+  const handleStrategyChoice = (choice: 'river-only' | 'integrated' | 'prioritized') => {
+    setStrategy(choice);
+    
+    setTimeout(() => {
+      setProgress({
+        ...progress,
+        phase: 'level-6-team' as GamePhase,
+        completedPhases: [...(progress.completedPhases || []), 'level-5-systems'],
+        systemsStrategy: choice
+      });
+    }, 2000);
+  };
+
+  const getImpactColor = (health: number) => {
+    if (health >= 70) return 'text-green-400';
+    if (health >= 40) return 'text-yellow-400';
+    return 'text-red-400';
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-indigo-900 to-blue-900 py-8 px-4">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <h1 className="text-5xl font-bold text-white mb-3">
+            🔗 Level 5: Systems Thinking
+          </h1>
+          <p className="text-2xl text-purple-200">
+            Understanding the ripple effects across connected ecosystems
+          </p>
+        </div>
+
+        {/* Gaia's Insight */}
+        <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 mb-6 text-white">
+          <div className="flex items-start gap-4">
+            <div className="text-6xl">🌟</div>
+            <div className="flex-1">
+              <h3 className="text-2xl font-bold mb-2">Gaia's Wisdom</h3>
+              <p className="text-lg opacity-90">
+                "Your river restoration has succeeded, but look deeper... Every system touches another. 
+                The river you healed is connected to wetlands, forests, groundwater, and beyond. 
+                Your actions ripple through the entire ecosystem web."
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="grid lg:grid-cols-3 gap-6">
+          {/* Left: Systems Map */}
+          <div className="lg:col-span-2 bg-white/10 backdrop-blur-md rounded-2xl p-6 text-white">
+            <h3 className="text-2xl font-bold mb-4">🗺️ Ecosystem Web</h3>
+            
+            <div className="relative h-[600px] bg-gradient-to-br from-blue-950 to-purple-950 rounded-xl overflow-hidden border-2 border-white/20">
+              {/* Connection lines */}
+              <svg className="absolute inset-0 w-full h-full" style={{ zIndex: 1 }}>
+                {connections.map((conn, idx) => {
+                  const fromNode = ecosystems.find(e => e.id === conn.from);
+                  const toNode = ecosystems.find(e => e.id === conn.to);
+                  if (!fromNode || !toNode) return null;
+                  
+                  return (
+                    <line
+                      key={idx}
+                      x1={`${fromNode.x}%`}
+                      y1={`${fromNode.y}%`}
+                      x2={`${toNode.x}%`}
+                      y2={`${toNode.y}%`}
+                      stroke={conn.impact === 'High' ? '#22c55e' : '#eab308'}
+                      strokeWidth="2"
+                      strokeDasharray={conn.impact === 'Medium' ? '5,5' : '0'}
+                      opacity="0.6"
+                    />
+                  );
+                })}
+              </svg>
+
+              {/* Ecosystem nodes */}
+              {ecosystems.map(system => {
+                const isRevealed = revealedSystems.has(system.id);
+                if (!isRevealed) return null;
+
+                return (
+                  <button
+                    key={system.id}
+                    onClick={() => setSelectedSystem(system.id)}
+                    className={`absolute transform -translate-x-1/2 -translate-y-1/2 transition-all hover:scale-110 ${
+                      selectedSystem === system.id ? 'scale-125 z-20' : 'z-10'
+                    }`}
+                    style={{ left: `${system.x}%`, top: `${system.y}%` }}
+                  >
+                    <div className={`relative ${
+                      system.tier === 'primary' ? 'w-24 h-24' : 
+                      system.tier === 'direct' ? 'w-20 h-20' : 'w-16 h-16'
+                    } bg-gradient-to-br ${
+                      system.tier === 'primary' ? 'from-green-400 to-emerald-600' :
+                      system.tier === 'direct' ? 'from-blue-400 to-cyan-600' :
+                      'from-purple-400 to-pink-600'
+                    } rounded-full flex items-center justify-center text-4xl shadow-2xl border-4 border-white/30 animate-pulse-slow`}>
+                      {system.emoji}
+                      
+                      {/* Health indicator */}
+                      <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 bg-black/80 px-2 py-1 rounded text-xs whitespace-nowrap">
+                        <span className={getImpactColor(system.health)}>
+                          {system.health}%
+                        </span>
+                      </div>
+                    </div>
+                  </button>
+                );
+              })}
+
+              {/* Discovery prompt */}
+              {revealedSystems.size <= 6 && !showStrategyChoice && (
+                <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-30">
+                  <button
+                    onClick={handleDiscoverSecondary}
+                    className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-8 py-4 rounded-xl text-lg font-bold hover:scale-105 transition-all shadow-2xl animate-bounce"
+                  >
+                    🔍 Discover Secondary Connections
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Right: System Details & Impact Analysis */}
+          <div className="space-y-6">
+            {/* Selected System Details */}
+            {selectedSystem && (
+              <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 text-white">
+                <h3 className="text-xl font-bold mb-4">System Details</h3>
+                {(() => {
+                  const system = ecosystems.find(e => e.id === selectedSystem);
+                  if (!system) return null;
+
+                  return (
+                    <div>
+                      <div className="text-5xl mb-3 text-center">{system.emoji}</div>
+                      <h4 className="text-2xl font-bold text-center mb-3">{system.name}</h4>
+                      
+                      <div className="space-y-3">
+                        <div className="bg-black/30 rounded-lg p-3">
+                          <div className="text-sm opacity-75">Current Health</div>
+                          <div className={`text-3xl font-bold ${getImpactColor(system.health)}`}>
+                            {system.health}%
+                          </div>
+                        </div>
+                        
+                        <div className="bg-black/30 rounded-lg p-3">
+                          <div className="text-sm opacity-75">Tier</div>
+                          <div className="text-lg font-semibold capitalize">{system.tier}</div>
+                        </div>
+
+                        <div className="bg-black/30 rounded-lg p-3">
+                          <div className="text-sm opacity-75 mb-2">Connected To</div>
+                          <div className="space-y-1">
+                            {connections
+                              .filter(c => c.from === system.id || c.to === system.id)
+                              .map((c, idx) => (
+                                <div key={idx} className="text-sm">
+                                  → {ecosystems.find(e => e.id === (c.from === system.id ? c.to : c.from))?.name}
+                                  <span className={`ml-2 ${c.impact === 'High' ? 'text-green-400' : 'text-yellow-400'}`}>
+                                    ({c.impact})
+                                  </span>
+                                </div>
+                              ))}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })()}
+              </div>
+            )}
+
+            {/* Impact Summary */}
+            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 text-white">
+              <h3 className="text-xl font-bold mb-4">📊 Impact Analysis</h3>
+              <div className="space-y-3">
+                <div className="bg-green-500/20 border-l-4 border-green-400 p-3 rounded">
+                  <div className="font-bold text-green-300">River Restoration Success</div>
+                  <div className="text-sm opacity-90">85% health achieved ✅</div>
+                </div>
+                
+                <div className="bg-yellow-500/20 border-l-4 border-yellow-400 p-3 rounded">
+                  <div className="font-bold text-yellow-300">Direct Systems Affected</div>
+                  <div className="text-sm opacity-90">5 ecosystems showing improvement</div>
+                </div>
+                
+                <div className="bg-red-500/20 border-l-4 border-red-400 p-3 rounded">
+                  <div className="font-bold text-red-300">Secondary Systems at Risk</div>
+                  <div className="text-sm opacity-90">4 ecosystems need attention</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Strategy Choice Modal */}
+        {showStrategyChoice && !strategy && (
+          <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
+            <div className="bg-gradient-to-br from-indigo-900 to-purple-900 rounded-3xl p-8 max-w-4xl w-full text-white shadow-2xl">
+              <h2 className="text-4xl font-bold mb-4 text-center">🎯 Strategic Decision</h2>
+              <p className="text-xl mb-6 text-center opacity-90">
+                You now see the full ecosystem web. How will you expand your restoration efforts?
+              </p>
+              
+              <div className="grid md:grid-cols-3 gap-4">
+                <button
+                  onClick={() => handleStrategyChoice('river-only')}
+                  className="bg-white/10 hover:bg-white/20 rounded-xl p-6 transition-all transform hover:scale-105 text-left"
+                >
+                  <div className="text-4xl mb-3">🎯</div>
+                  <h3 className="text-xl font-bold mb-2">River-Only Focus</h3>
+                  <p className="text-sm opacity-80">
+                    Perfect the river restoration. Let natural connections spread benefits gradually.
+                  </p>
+                  <div className="mt-3 text-xs">
+                    <span className="text-green-400">✓ Deep expertise</span><br/>
+                    <span className="text-yellow-400">⚠ Slower ecosystem recovery</span>
+                  </div>
+                </button>
+
+                <button
+                  onClick={() => handleStrategyChoice('integrated')}
+                  className="bg-white/10 hover:bg-white/20 rounded-xl p-6 transition-all transform hover:scale-105 text-left"
+                >
+                  <div className="text-4xl mb-3">🌐</div>
+                  <h3 className="text-xl font-bold mb-2">Integrated Approach</h3>
+                  <p className="text-sm opacity-80">
+                    Address all connected systems simultaneously for maximum ecosystem synergy.
+                  </p>
+                  <div className="mt-3 text-xs">
+                    <span className="text-green-400">✓ Holistic recovery</span><br/>
+                    <span className="text-yellow-400">⚠ Complex coordination</span>
+                  </div>
+                </button>
+
+                <button
+                  onClick={() => handleStrategyChoice('prioritized')}
+                  className="bg-white/10 hover:bg-white/20 rounded-xl p-6 transition-all transform hover:scale-105 text-left"
+                >
+                  <div className="text-4xl mb-3">📊</div>
+                  <h3 className="text-xl font-bold mb-2">Prioritized Impact</h3>
+                  <p className="text-sm opacity-80">
+                    Target high-impact systems first. Balance reach with resource efficiency.
+                  </p>
+                  <div className="mt-3 text-xs">
+                    <span className="text-green-400">✓ Optimal ROI</span><br/>
+                    <span className="text-yellow-400">⚠ Some systems wait longer</span>
+                  </div>
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Transition Message */}
+        {strategy && (
+          <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50">
+            <div className="text-center text-white">
+              <div className="text-8xl mb-6 animate-bounce">✨</div>
+              <h2 className="text-5xl font-bold mb-4">Systems Thinking Unlocked!</h2>
+              <p className="text-2xl opacity-80">
+                Moving to Team Building...
+              </p>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 // Add CSS for animations
 const styles = `
   @keyframes spin-slow {
