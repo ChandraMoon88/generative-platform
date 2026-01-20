@@ -6073,6 +6073,11 @@ function CompletionScreen({ progress }: { progress: GameProgress; setProgress: (
               <div className="text-3xl font-bold mb-2">Level 12</div>
               <div className="text-sm opacity-75">Innovation</div>
             </div>
+            <div className="bg-white/10 rounded-xl p-6">
+              <div className="text-5xl mb-3">🏛️</div>
+              <div className="text-3xl font-bold mb-2">Level 13</div>
+              <div className="text-sm opacity-75">Policy</div>
+            </div>
           </div>
         </div>
 
@@ -6129,6 +6134,9 @@ function CompletionScreen({ progress }: { progress: GameProgress; setProgress: (
               <div>✅ Innovation Lab & R&D Tracker</div>
               <div>✅ Experiment Management System</div>
               <div>✅ Pilot Program Launcher</div>
+              <div>✅ Policy Gap Analysis Tool</div>
+              <div>✅ Advocacy Campaign Manager</div>
+              <div>✅ Legislative Tracking System</div>
             </div>
           </div>
           <p className="text-2xl font-bold text-yellow-300">
