@@ -273,22 +273,110 @@ export default function GameFlow({ onAppCreated }: { onAppCreated: (components: 
   // Welcome Phase
   if (gameState.phase === 'welcome') {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-600 via-pink-500 to-orange-500 flex items-center justify-center p-4">
-        <div className="max-w-4xl text-center text-white space-y-8">
-          <div className="text-8xl mb-6 animate-bounce">🎮</div>
-          <h1 className="text-7xl font-bold mb-4">Creative Quest</h1>
-          <p className="text-3xl mb-8">Play, Create, Build Your Dream!</p>
+      <div className="min-h-screen bg-gradient-to-br from-green-900 via-blue-900 to-purple-900 flex items-center justify-center p-4 relative overflow-hidden">
+        {/* Animated Background */}
+        <div className="absolute inset-0">
+          {[...Array(30)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute rounded-full bg-white opacity-20"
+              style={{
+                width: Math.random() * 4 + 2 + 'px',
+                height: Math.random() * 4 + 2 + 'px',
+                left: Math.random() * 100 + '%',
+                top: Math.random() * 100 + '%',
+                animation: `twinkle ${Math.random() * 3 + 2}s infinite ${Math.random() * 2}s`
+              }}
+            />
+          ))}
+        </div>
+
+        <div className="max-w-4xl text-center text-white space-y-8 relative z-10">
+          <div className="text-8xl mb-6">🌍</div>
+          <h1 className="text-7xl font-bold mb-4">EcoSphere</h1>
+          <p className="text-3xl mb-8">Restore a Planet, Build Your Application</p>
           <p className="text-xl mb-12 opacity-90">
-            Every choice you make creates something amazing. Let's see what you'll create!
+            Help heal EcoSphere's ecosystems while unknowingly designing your perfect environmental management app!
           </p>
-          <button
-            onClick={() => setGameState({ ...gameState, phase: 'demo' })}
-            className="bg-white text-purple-600 px-12 py-6 rounded-full text-2xl font-bold hover:scale-110 transform transition-all shadow-2xl"
-          >
-            See What's Possible ✨
-          </button>
+          
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <button
+              onClick={() => setGameState({ ...gameState, phase: 'ecosphere-game', useEcoSphere: true })}
+              className="bg-gradient-to-r from-green-500 to-emerald-500 text-white px-12 py-6 rounded-full text-2xl font-bold hover:scale-110 transform transition-all shadow-2xl"
+            >
+              Start Journey 🚀
+            </button>
+            <button
+              onClick={() => setGameState({ ...gameState, phase: 'demo', useEcoSphere: false })}
+              className="bg-white/20 backdrop-blur-md text-white px-8 py-4 rounded-full text-xl font-semibold hover:scale-105 transform transition-all border-2 border-white/30"
+            >
+              See Demo ✨
+            </button>
+          </div>
         </div>
       </div>
+    );
+  }
+
+  // EcoSphere Game Phase
+  if (gameState.phase === 'ecosphere-game' && gameState.useEcoSphere) {
+    return (
+      <EcoSphereGame 
+        onGameComplete={(appModel: any) => {
+          // Convert app model to components
+          const components: any[] = [];
+          
+          // Generate components from entities
+          if (appModel.entities) {
+            appModel.entities.forEach((entity: any) => {
+              components.push({
+                id: `entity-${entity.type}-list`,
+                type: 'DataTable',
+                category: 'Data Display',
+                props: {
+                  title: `${entity.type} Management`,
+                  data: []
+                }
+              });
+            });
+          }
+          
+          // Generate workflow components
+          if (appModel.workflows) {
+            appModel.workflows.forEach((workflow: any, idx: number) => {
+              components.push({
+                id: `workflow-${idx}`,
+                type: 'StepperForm',
+                category: 'Forms',
+                props: {
+                  title: workflow.type || 'Restoration Workflow',
+                  steps: workflow.steps || []
+                }
+              });
+            });
+          }
+          
+          // Add dashboard
+          if (appModel.uiPatterns && appModel.uiPatterns.includes('real-time-monitoring')) {
+            components.push({
+              id: 'dashboard-main',
+              type: 'Dashboard',
+              category: 'Layout & Containers',
+              props: {
+                title: 'Environmental Dashboard',
+                layout: 'grid'
+              }
+            });
+          }
+          
+          setGameState({
+            ...gameState,
+            phase: 'reveal',
+            unlockedComponents: components,
+            score: appModel.score || 0
+          });
+        }}
+      />
     );
   }
 
