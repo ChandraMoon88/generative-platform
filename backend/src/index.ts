@@ -13,6 +13,7 @@ import { authRouter } from './api/auth';
 import { projectsRouter } from './api/projects';
 import { assetsRouter } from './api/assets';
 import { webhookRouter } from './api/webhook';
+import { ecosphereRouter } from './api/ecosphere';
 import { initDatabase } from './db/database';
 import { initPostgresPool, initializeSchema } from './db/postgres';
 import { logger } from './utils/logger';
