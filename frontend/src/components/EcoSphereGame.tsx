@@ -3835,9 +3835,9 @@ function Level10Compliance({ progress, setProgress }: { progress: GameProgress; 
   ]);
 
   const [inspections, setInspections] = useState([
-    { id: 'initial', name: 'Initial Site Inspection', status: 'scheduled', date: 'Week 2', passed: null },
-    { id: 'water', name: 'Water Quality Audit', status: 'pending', date: 'Week 4', passed: null },
-    { id: 'final', name: 'Final Compliance Review', status: 'pending', date: 'Week 8', passed: null },
+    { id: 'initial', name: 'Initial Site Inspection', status: 'scheduled', date: 'Week 2', passed: null as boolean | null },
+    { id: 'water', name: 'Water Quality Audit', status: 'pending', date: 'Week 4', passed: null as boolean | null },
+    { id: 'final', name: 'Final Compliance Review', status: 'pending', date: 'Week 8', passed: null as boolean | null },
   ]);
 
   const [inspectionChallenge, setInspectionChallenge] = useState(false);
