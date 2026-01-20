@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Restaurant Manager - Demo App',
-  description: 'Demo restaurant management app for the Generative Platform',
+  title: 'EcoSphere - Environmental Restoration Platform',
+  description: 'Build environmental management applications through immersive gameplay',
 };
 
 export default function RootLayout({
