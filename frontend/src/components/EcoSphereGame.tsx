@@ -1052,6 +1052,377 @@ function Level3Planning({ progress, setProgress }: { progress: GameProgress; set
   );
 }
 
+// LEVEL 4: Execution & Monitoring Component
+function Level4Execution({ progress, setProgress }: { progress: GameProgress; setProgress: (p: GameProgress) => void }) {
+  const [simulationRunning, setSimulationRunning] = useState(false);
+  const [simulationDay, setSimulationDay] = useState(0);
+  const [metrics, setMetrics] = useState({
+    riverHealth: 42,
+    pH: 6.2,
+    dissolvedOxygen: 4.5,
+    budgetSpent: 0,
+    daysElapsed: 0,
+    teamUtilization: 0,
+  });
+  const [activeActions, setActiveActions] = useState<Array<{
+    id: string;
+    name: string;
+    progress: number;
+    startDay: number;
+    duration: number;
+  }>>([]);
+  const [events, setEvents] = useState<Array<{
+    id: string;
+    day: number;
+    type: 'info' | 'warning' | 'success' | 'challenge';
+    title: string;
+    message: string;
+  }>>([]);
+  const [showChallenge, setShowChallenge] = useState(false);
+  const [challengeData, setChallengeData] = useState<{
+    title: string;
+    description: string;
+    options: Array<{ id: string; text: string; impact: string }>;
+  } | null>(null);
+
+  const restorationPlan = progress.restorationPlan || { approach: 'sequential', steps: [] };
+
+  useEffect(() => {
+    // Initialize actions based on restoration plan
+    if (activeActions.length === 0 && restorationPlan.steps.length > 0) {
+      const initialActions = restorationPlan.steps.slice(0, restorationPlan.approach === 'parallel' ? 3 : 1).map((step, idx) => ({
+        id: `action-${idx}`,
+        name: step.name,
+        progress: 0,
+        startDay: 0,
+        duration: step.duration
+      }));
+      setActiveActions(initialActions);
+      
+      // Add welcome event
+      setEvents([{
+        id: 'event-0',
+        day: 0,
+        type: 'info',
+        title: 'Simulation Ready',
+        message: `Restoration plan loaded with ${restorationPlan.steps.length} steps. Click "Run Simulation" to begin.`
+      }]);
+    }
+  }, []);
+
+  // Simulation loop
+  useEffect(() => {
+    if (!simulationRunning) return;
+
+    const interval = setInterval(() => {
+      setSimulationDay(day => {
+        const newDay = day + 1;
+        
+        // Update metrics
+        setMetrics(prev => ({
+          ...prev,
+          riverHealth: Math.min(100, prev.riverHealth + (newDay < 20 ? 0.5 : 1.5)),
+          pH: Math.min(7.5, prev.pH + 0.02),
+          dissolvedOxygen: Math.min(8, prev.dissolvedOxygen + 0.05),
+          budgetSpent: prev.budgetSpent + 500,
+          daysElapsed: newDay,
+          teamUtilization: activeActions.length > 0 ? 85 : 20,
+        }));
+
+        // Update active actions
+        setActiveActions(prev => prev.map(action => {
+          const newProgress = Math.min(100, action.progress + (100 / action.duration));
+          return { ...action, progress: newProgress };
+        }).filter(action => action.progress < 100));
+
+        // Add scheduled events
+        if (newDay === 5) {
+          setEvents(prev => [...prev, {
+            id: `event-${newDay}`,
+            day: newDay,
+            type: 'info',
+            title: 'Data Collection',
+            message: 'Field team reports: Water clarity improved by 15%. Fish sightings increasing!'
+          }]);
+        }
+
+        if (newDay === 15) {
+          // Trigger challenge
+          setChallengeData({
+            title: 'Unexpected Storm Warning',
+            description: 'A severe storm is approaching in 48 hours. Heavy rainfall could wash away recent restoration work or help flush out pollutants.',
+            options: [
+              { id: 'reinforce', text: 'Reinforce Critical Areas', impact: 'Cost: $5,000 | Protects work | Delays timeline by 2 days' },
+              { id: 'monitor', text: 'Monitor and Adapt', impact: 'Cost: $1,000 | Risk some damage | Maintain timeline' },
+              { id: 'leverage', text: 'Leverage Natural Flushing', impact: 'Cost: $500 | Risk/reward gamble | Could accelerate recovery' }
+            ]
+          });
+          setShowChallenge(true);
+          setSimulationRunning(false);
+        }
+
+        if (newDay === 20) {
+          setEvents(prev => [...prev, {
+            id: `event-${newDay}`,
+            day: newDay,
+            type: 'warning',
+            title: 'Resource Alert',
+            message: 'Budget at 60% capacity. Consider cost optimization for remaining work.'
+          }]);
+        }
+
+        if (newDay === 30) {
+          setEvents(prev => [...prev, {
+            id: `event-${newDay}`,
+            day: newDay,
+            type: 'success',
+            title: 'Milestone Achieved!',
+            message: '🎉 River health exceeds 60%! Local wildlife returning. Community celebrating!'
+          }]);
+        }
+
+        if (newDay >= 45) {
+          // Simulation complete
+          setSimulationRunning(false);
+          setEvents(prev => [...prev, {
+            id: `event-${newDay}`,
+            day: newDay,
+            type: 'success',
+            title: 'Mission Complete!',
+            message: '🌟 Restoration successful! The ecosystem is thriving. Moving to Systems Thinking...'
+          }]);
+          
+          setTimeout(() => {
+            setProgress({
+              ...progress,
+              phase: 'level-5-systems' as GamePhase,
+              completedPhases: [...(progress.completedPhases || []), 'level-4-execution']
+            });
+          }, 3000);
+        }
+
+        return newDay;
+      });
+    }, 200); // Fast simulation: 5 days per second
+
+    return () => clearInterval(interval);
+  }, [simulationRunning, activeActions]);
+
+  const handleChallengeResponse = (optionId: string) => {
+    setEvents(prev => [...prev, {
+      id: `event-challenge-response`,
+      day: simulationDay,
+      type: 'info',
+      title: 'Decision Made',
+      message: `You chose to ${optionId}. Adapting restoration strategy...`
+    }]);
+    
+    if (optionId === 'reinforce') {
+      setMetrics(prev => ({ ...prev, budgetSpent: prev.budgetSpent + 5000 }));
+    } else if (optionId === 'leverage') {
+      setMetrics(prev => ({ ...prev, riverHealth: prev.riverHealth + 5 }));
+    }
+    
+    setShowChallenge(false);
+    setChallengeData(null);
+    setSimulationRunning(true);
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-teal-900 to-green-900 py-8 px-4">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <h1 className="text-5xl font-bold text-white mb-3">
+            🛠️ Level 4: Execution & Monitoring
+          </h1>
+          <p className="text-2xl text-blue-200">
+            Watch your restoration plan come to life in real-time
+          </p>
+        </div>
+
+        {/* Simulation Controls */}
+        <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 mb-6 text-white">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-2xl font-bold mb-2">Simulation Day: {simulationDay} / 45</h3>
+              <p className="text-lg opacity-80">
+                {simulationRunning ? '⏱️ Simulation running...' : '⏸️ Simulation paused'}
+              </p>
+            </div>
+            <button
+              onClick={() => setSimulationRunning(!simulationRunning)}
+              className={`px-8 py-4 rounded-xl text-xl font-bold transition-all transform hover:scale-105 ${
+                simulationRunning 
+                  ? 'bg-yellow-500 hover:bg-yellow-600' 
+                  : 'bg-green-500 hover:bg-green-600'
+              }`}
+            >
+              {simulationRunning ? '⏸️ Pause' : '▶️ Run Simulation'}
+            </button>
+          </div>
+
+          {/* Progress Bar */}
+          <div className="mt-4 bg-black/30 rounded-full h-4 overflow-hidden">
+            <div 
+              className="bg-gradient-to-r from-green-400 to-emerald-500 h-full transition-all duration-300"
+              style={{ width: `${(simulationDay / 45) * 100}%` }}
+            ></div>
+          </div>
+        </div>
+
+        {/* Main Dashboard: 3 columns */}
+        <div className="grid lg:grid-cols-3 gap-6">
+          {/* Left: Active Actions */}
+          <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 text-white">
+            <h3 className="text-2xl font-bold mb-4">🎯 Active Actions</h3>
+            {activeActions.length === 0 ? (
+              <p className="text-center opacity-60 py-8">
+                {simulationDay >= 45 ? '✅ All actions complete!' : 'No active actions'}
+              </p>
+            ) : (
+              <div className="space-y-4">
+                {activeActions.map(action => (
+                  <div key={action.id} className="bg-white/10 rounded-xl p-4">
+                    <div className="flex justify-between mb-2">
+                      <span className="font-semibold">{action.name}</span>
+                      <span className="text-sm opacity-75">{Math.round(action.progress)}%</span>
+                    </div>
+                    <div className="bg-black/30 rounded-full h-2 overflow-hidden">
+                      <div 
+                        className="bg-gradient-to-r from-blue-400 to-cyan-500 h-full transition-all"
+                        style={{ width: `${action.progress}%` }}
+                      ></div>
+                    </div>
+                    <p className="text-xs opacity-60 mt-1">
+                      Started: Day {action.startDay} | Duration: {action.duration} days
+                    </p>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Center: Living River Visualization */}
+          <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 text-white">
+            <h3 className="text-2xl font-bold mb-4">🌊 Living River</h3>
+            <div className="relative h-64 bg-gradient-to-b from-blue-400 to-blue-600 rounded-xl overflow-hidden">
+              {/* Animated water flow */}
+              <div className="absolute inset-0 opacity-30">
+                <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-transparent via-white to-transparent animate-water-flow"></div>
+              </div>
+              
+              {/* Health indicator */}
+              <div className="absolute top-4 left-4 right-4 text-center">
+                <div className="text-6xl mb-2">
+                  {metrics.riverHealth < 50 ? '😔' : metrics.riverHealth < 75 ? '😊' : '🤩'}
+                </div>
+                <div className="text-2xl font-bold">
+                  Health: {Math.round(metrics.riverHealth)}%
+                </div>
+              </div>
+
+              {/* Fish animation */}
+              {metrics.riverHealth > 60 && (
+                <div className="absolute bottom-8 animate-swim">
+                  <span className="text-4xl">🐟</span>
+                </div>
+              )}
+              
+              {/* Plants */}
+              {metrics.riverHealth > 50 && (
+                <div className="absolute bottom-0 left-0 right-0 flex justify-around">
+                  <span className="text-3xl">🌱</span>
+                  <span className="text-3xl">🌿</span>
+                  <span className="text-3xl">🌾</span>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Right: Metrics Dashboard */}
+          <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 text-white">
+            <h3 className="text-2xl font-bold mb-4">📊 Metrics</h3>
+            <div className="space-y-4">
+              <div className="bg-white/10 rounded-xl p-3">
+                <div className="text-sm opacity-75">pH Level</div>
+                <div className="text-3xl font-bold">{metrics.pH.toFixed(1)}</div>
+                <div className="text-xs opacity-60">Target: 7.0-7.5</div>
+              </div>
+              
+              <div className="bg-white/10 rounded-xl p-3">
+                <div className="text-sm opacity-75">Dissolved Oxygen</div>
+                <div className="text-3xl font-bold">{metrics.dissolvedOxygen.toFixed(1)} mg/L</div>
+                <div className="text-xs opacity-60">Target: &gt;6 mg/L</div>
+              </div>
+              
+              <div className="bg-white/10 rounded-xl p-3">
+                <div className="text-sm opacity-75">Budget Spent</div>
+                <div className="text-3xl font-bold">${(metrics.budgetSpent / 1000).toFixed(1)}K</div>
+                <div className="text-xs opacity-60">of $50K allocated</div>
+              </div>
+              
+              <div className="bg-white/10 rounded-xl p-3">
+                <div className="text-sm opacity-75">Team Utilization</div>
+                <div className="text-3xl font-bold">{metrics.teamUtilization}%</div>
+                <div className="text-xs opacity-60">Optimal: 70-90%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Event Stream */}
+        <div className="mt-6 bg-white/10 backdrop-blur-md rounded-2xl p-6 text-white">
+          <h3 className="text-2xl font-bold mb-4">📡 Event Stream</h3>
+          <div className="space-y-3 max-h-64 overflow-y-auto">
+            {events.slice().reverse().map(event => (
+              <div 
+                key={event.id} 
+                className={`p-4 rounded-xl border-l-4 ${
+                  event.type === 'success' ? 'bg-green-500/20 border-green-400' :
+                  event.type === 'warning' ? 'bg-yellow-500/20 border-yellow-400' :
+                  event.type === 'challenge' ? 'bg-red-500/20 border-red-400' :
+                  'bg-blue-500/20 border-blue-400'
+                }`}
+              >
+                <div className="flex justify-between items-start mb-1">
+                  <span className="font-bold">{event.title}</span>
+                  <span className="text-sm opacity-60">Day {event.day}</span>
+                </div>
+                <p className="text-sm opacity-90">{event.message}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Challenge Modal */}
+        {showChallenge && challengeData && (
+          <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
+            <div className="bg-gradient-to-br from-red-900 to-orange-900 rounded-3xl p-8 max-w-2xl w-full text-white shadow-2xl">
+              <h2 className="text-4xl font-bold mb-4">⚠️ {challengeData.title}</h2>
+              <p className="text-xl mb-6 opacity-90">{challengeData.description}</p>
+              
+              <div className="space-y-4">
+                <p className="text-lg font-semibold">Choose your response:</p>
+                {challengeData.options.map(option => (
+                  <button
+                    key={option.id}
+                    onClick={() => handleChallengeResponse(option.id)}
+                    className="w-full text-left bg-white/10 hover:bg-white/20 rounded-xl p-4 transition-all transform hover:scale-105"
+                  >
+                    <div className="font-bold text-lg mb-2">{option.text}</div>
+                    <div className="text-sm opacity-75">{option.impact}</div>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 // Add CSS for animations
 const styles = `
   @keyframes spin-slow {
