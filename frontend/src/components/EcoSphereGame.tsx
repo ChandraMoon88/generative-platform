@@ -1499,7 +1499,7 @@ function Level4Execution({ progress, setProgress }: { progress: GameProgress; se
 function Level5Systems({ progress, setProgress }: { progress: GameProgress; setProgress: (p: GameProgress) => void }) {
   const [selectedSystem, setSelectedSystem] = useState<string | null>(null);
   const [revealedSystems, setRevealedSystems] = useState<Set<string>>(new Set(['river']));
-  const [connections, setConnections] = useState<Array<{from: string; to: string; type: string}>>([]);
+  const [connections, setConnections] = useState<Array<{from: string; to: string; type: string; impact?: string}>>([]);
   const [strategy, setStrategy] = useState<'river-only' | 'integrated' | 'prioritized' | null>(null);
   const [showStrategyChoice, setShowStrategyChoice] = useState(false);
 
