@@ -96,11 +96,11 @@ export function getSessionId(): string {
 function createBaseEvent(type: EventType, metadata: Partial<EventMetadata> = {}): BaseEvent {
   return {
     id: uuidv4(),
-    timestamp: Date.now(),
-    sessionId: getSessionId(),
-    userId: userId || undefined,
     type,
     metadata: {
+      timestamp: Date.now(),
+      sessionId: getSessionId(),
+      userId: userId || undefined,
       screen: typeof window !== 'undefined' ? window.location.pathname : '',
       ...metadata,
     },
