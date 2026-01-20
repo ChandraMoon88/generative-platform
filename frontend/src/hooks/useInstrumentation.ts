@@ -172,7 +172,7 @@ export function useInstrumentation(options: UseInstrumentationOptions) {
     const targetEntity = entity || entityType;
     switch (operation) {
       case 'create':
-        logStateChange('set', `${targetEntity}/create`, componentName, undefined, data);
+        logStateChange('create', targetEntity, data);
         break;
       case 'read':
         logInteraction(
@@ -182,7 +182,7 @@ export function useInstrumentation(options: UseInstrumentationOptions) {
         );
         break;
       case 'update':
-        logStateChange('update', `${targetEntity}/${id}`, componentName, previousData, data);
+        logStateChange('update', targetEntity, data, previousData);
         break;
       case 'delete':
         logStateChange('delete', targetEntity, data);
