@@ -1857,7 +1857,7 @@ function Level6Team({ progress, setProgress }: { progress: GameProgress; setProg
       id: 'marcus-thompson',
       name: 'Marcus Thompson',
       role: 'Restoration Engineer',
-      portfolio: '👷‍♂️',
+      portrait: '👷‍♂️',
       specialty: 'Infrastructure Design',
       experience: 12,
       costPerMonth: 9500,
