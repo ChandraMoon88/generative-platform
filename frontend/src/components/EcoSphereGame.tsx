@@ -2883,7 +2883,7 @@ function Level8Analytics({ progress, setProgress }: { progress: GameProgress; se
     setTimeout(() => {
       setProgress({
         ...progress,
-        phase: 'completion' as GamePhase,
+        phase: 'level-9-stakeholders' as GamePhase,
         completedPhases: [...(progress.completedPhases || []), 'level-8-analytics']
       });
     }, 1000);
