@@ -10,6 +10,7 @@ import type {
   EventType,
   EventMetadata,
   SemanticAction,
+  SemanticActionType,
   InteractionEvent,
   NavigationEvent,
   StateChangeEvent,
