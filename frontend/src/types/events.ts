@@ -29,7 +29,15 @@ export interface BaseEvent {
   metadata: EventMetadata;
 }
 
-export type SemanticAction = 
+export interface SemanticAction {
+  pattern: PatternType;
+  entity?: string;
+  operation?: CRUDOperation;
+  workflowStep?: string;
+  description: string;
+}
+
+export type SemanticActionType = 
   | 'create' | 'read' | 'update' | 'delete'
   | 'navigate' | 'filter' | 'sort' | 'search'
   | 'submit' | 'validate' | 'export' | 'import'
@@ -50,9 +58,10 @@ export interface TimingInfo {
 
 export interface InteractionEvent extends BaseEvent {
   type: 'interaction';
-  action: SemanticAction;
+  action: SemanticActionType;
   target: ElementTarget;
   timing: TimingInfo;
+  semanticAction?: SemanticAction;
 }
 
 export interface ElementTarget {
