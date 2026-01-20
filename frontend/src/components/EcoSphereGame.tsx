@@ -6411,7 +6411,7 @@ function Level14Mentor({ progress, setProgress }: { progress: GameProgress; setP
                         workshop.status === 'in-progress' ? 'text-yellow-400' :
                         'text-gray-400'
                       }`}>
-                        {workshop.status === 'completed' ? 'Completed' :
+                        {workshop.status === 'complete' ? 'Completed' :
                          workshop.status === 'in-progress' ? 'In Progress' :
                          'Planning'}
                       </span>
