@@ -88,7 +88,8 @@ export default function GameFlow({ onAppCreated }: { onAppCreated: (components: 
     selectedDomain: null,
     completedTasks: [],
     unlockedComponents: [],
-    score: 0
+    score: 0,
+    useEcoSphere: true // Enable EcoSphere by default
   });
 
   const [currentTaskIndex, setCurrentTaskIndex] = useState(0);
