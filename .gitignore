@@ -6,12 +6,16 @@ admin/**
 **/admin/**
 /admin/
 
+# Admin-specific files
+ADMIN_*.md
+*ADMIN*.md
+
 # Shared types - CRITICAL: Admin depends on these
 shared/
 shared/**
 **/shared/**
 
-# Internal documentation  
+# Internal documentation - KEEP PRIVATE
 ACCESS_CONTROL.md
 IMPLEMENTATION_SUMMARY.md
 ARCHITECTURE_DIAGRAM.txt
@@ -31,7 +35,10 @@ QUICKSTART.md
 QUICK_START.md
 ADMIN_SECURITY_COMPLETE.md
 VERCEL_DEPLOYMENT.md
+ECOSPHERE_IMPLEMENTATION_CHECKLIST.txt
+LEVEL_14_15_COMPLETE.md
 plan.txt
+update-summary.txt
 
 # Root utility scripts - contain admin logic
 start-all.ps1
@@ -39,6 +46,7 @@ stop-all.ps1
 auto-commit.ps1
 start-auto-commit.bat
 local-sync-service.js
+deploy-to-vercel.ps1
 
 # Production environment
 .env.production
