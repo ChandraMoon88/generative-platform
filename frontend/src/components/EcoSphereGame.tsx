@@ -1771,6 +1771,542 @@ function Level5Systems({ progress, setProgress }: { progress: GameProgress; setP
   );
 }
 
+// LEVEL 6: Team Building Component
+function Level6Team({ progress, setProgress }: { progress: GameProgress; setProgress: (p: GameProgress) => void }) {
+  const [selectedTab, setSelectedTab] = useState<'recruit' | 'assign' | 'review'>('recruit');
+  const [hiredTeam, setHiredTeam] = useState<TeamMember[]>([]);
+  const [budget, setBudget] = useState(50000);
+  const [assignments, setAssignments] = useState<Map<string, string>>(new Map()); // taskId -> memberId
+  const [showChallenge, setShowChallenge] = useState(false);
+  const [challengeResolved, setChallengeResolved] = useState(false);
+
+  // Available specialists
+  const availableSpecialists: TeamMember[] = [
+    {
+      id: 'sarah-chen',
+      name: 'Dr. Sarah Chen',
+      role: 'Water Quality Scientist',
+      portrait: '👩‍🔬',
+      specialty: 'Chemical Analysis',
+      experience: 8,
+      costPerMonth: 8000,
+      skills: ['Water Testing', 'Lab Analysis', 'Quality Control'],
+      compatibility: ['emily-park', 'james-wilson'],
+      personality: 'Detail-oriented, methodical, great at documentation'
+    },
+    {
+      id: 'marcus-thompson',
+      name: 'Marcus Thompson',
+      role: 'Restoration Engineer',
+      portfolio: '👷‍♂️',
+      specialty: 'Infrastructure Design',
+      experience: 12,
+      costPerMonth: 9500,
+      skills: ['Engineering', 'Project Management', 'Heavy Equipment'],
+      compatibility: ['raj-patel', 'lisa-brown'],
+      personality: 'Practical, experienced, strong leadership'
+    },
+    {
+      id: 'emily-park',
+      name: 'Emily Park',
+      role: 'Ecologist',
+      portrait: '🌿',
+      specialty: 'Biodiversity',
+      experience: 6,
+      costPerMonth: 7000,
+      skills: ['Species Identification', 'Habitat Assessment', 'Field Research'],
+      compatibility: ['sarah-chen', 'david-nguyen'],
+      personality: 'Passionate, curious, excellent field researcher'
+    },
+    {
+      id: 'raj-patel',
+      name: 'Raj Patel',
+      role: 'GIS Specialist',
+      portrait: '🗺️',
+      specialty: 'Spatial Analysis',
+      experience: 5,
+      costPerMonth: 6500,
+      skills: ['Mapping', 'Data Visualization', 'Remote Sensing'],
+      compatibility: ['marcus-thompson', 'emily-park'],
+      personality: 'Tech-savvy, analytical, great visualizations'
+    },
+    {
+      id: 'lisa-brown',
+      name: 'Lisa Brown',
+      role: 'Community Liaison',
+      portrait: '💬',
+      specialty: 'Stakeholder Engagement',
+      experience: 10,
+      costPerMonth: 7500,
+      skills: ['Communication', 'Negotiation', 'Public Speaking'],
+      compatibility: ['marcus-thompson', 'david-nguyen'],
+      personality: 'Charismatic, diplomatic, builds trust easily'
+    },
+    {
+      id: 'james-wilson',
+      name: 'James Wilson',
+      role: 'Data Analyst',
+      portrait: '📊',
+      specialty: 'Statistical Analysis',
+      experience: 4,
+      costPerMonth: 6000,
+      skills: ['Statistics', 'Modeling', 'Report Writing'],
+      compatibility: ['sarah-chen', 'raj-patel'],
+      personality: 'Quantitative thinker, clear communicator'
+    },
+    {
+      id: 'david-nguyen',
+      name: 'David Nguyen',
+      role: 'Policy Advisor',
+      portrait: '⚖️',
+      specialty: 'Environmental Law',
+      experience: 15,
+      costPerMonth: 10000,
+      skills: ['Regulatory Compliance', 'Policy Analysis', 'Legal Research'],
+      compatibility: ['lisa-brown', 'emily-park'],
+      personality: 'Strategic, well-connected, understands regulations'
+    },
+    {
+      id: 'maria-santos',
+      name: 'Maria Santos',
+      role: 'Field Technician',
+      portrait: '🔧',
+      specialty: 'Equipment Operation',
+      experience: 3,
+      costPerMonth: 5000,
+      skills: ['Equipment Maintenance', 'Sample Collection', 'Safety Protocols'],
+      compatibility: ['emily-park', 'marcus-thompson'],
+      personality: 'Reliable, hardworking, learns quickly'
+    },
+  ];
+
+  // Tasks that need assignment
+  const tasks = [
+    { id: 'task-1', name: 'Water Quality Monitoring', requiredSkills: ['Water Testing', 'Lab Analysis'], duration: '2 weeks' },
+    { id: 'task-2', name: 'Restoration Construction', requiredSkills: ['Engineering', 'Project Management'], duration: '6 weeks' },
+    { id: 'task-3', name: 'Biodiversity Survey', requiredSkills: ['Species Identification', 'Field Research'], duration: '3 weeks' },
+    { id: 'task-4', name: 'Impact Mapping', requiredSkills: ['Mapping', 'Data Visualization'], duration: '2 weeks' },
+    { id: 'task-5', name: 'Community Meetings', requiredSkills: ['Communication', 'Public Speaking'], duration: '4 weeks' },
+  ];
+
+  const handleHire = (specialist: TeamMember) => {
+    if (budget >= specialist.costPerMonth * 3) { // Minimum 3-month commitment
+      setHiredTeam([...hiredTeam, specialist]);
+      setBudget(budget - (specialist.costPerMonth * 3));
+    }
+  };
+
+  const handleAssign = (taskId: string, memberId: string) => {
+    const newAssignments = new Map(assignments);
+    newAssignments.set(taskId, memberId);
+    setAssignments(newAssignments);
+  };
+
+  const calculateTeamSynergy = () => {
+    let synergy = 0;
+    hiredTeam.forEach(member => {
+      const compatibleCount = member.compatibility.filter(compId => 
+        hiredTeam.some(m => m.id === compId)
+      ).length;
+      synergy += compatibleCount * 10;
+    });
+    return Math.min(100, synergy);
+  };
+
+  const getTaskMatch = (task: any, memberId: string) => {
+    const member = hiredTeam.find(m => m.id === memberId);
+    if (!member) return 0;
+    
+    const matchedSkills = task.requiredSkills.filter((skill: string) => 
+      member.skills.includes(skill)
+    ).length;
+    return Math.round((matchedSkills / task.requiredSkills.length) * 100);
+  };
+
+  const allTasksAssigned = tasks.every(task => assignments.has(task.id));
+
+  useEffect(() => {
+    if (allTasksAssigned && hiredTeam.length >= 3 && !showChallenge) {
+      setTimeout(() => setShowChallenge(true), 1000);
+    }
+  }, [allTasksAssigned, hiredTeam.length]);
+
+  const handleChallengeDecision = (decision: 'hire-temp' | 'reassign' | 'delay') => {
+    setChallengeResolved(true);
+    
+    setTimeout(() => {
+      setProgress({
+        ...progress,
+        phase: 'level-7-budget' as GamePhase,
+        completedPhases: [...(progress.completedPhases || []), 'level-6-team'],
+        teamMembers: hiredTeam
+      });
+    }, 2000);
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-orange-900 via-red-900 to-pink-900 py-8 px-4">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <h1 className="text-5xl font-bold text-white mb-3">
+            👥 Level 6: Team Building
+          </h1>
+          <p className="text-2xl text-orange-200">
+            Assemble and manage your restoration dream team
+          </p>
+        </div>
+
+        {/* Budget Display */}
+        <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 mb-6 text-white flex justify-between items-center">
+          <div>
+            <div className="text-sm opacity-75">Available Budget</div>
+            <div className="text-3xl font-bold">${budget.toLocaleString()}</div>
+          </div>
+          <div>
+            <div className="text-sm opacity-75">Team Size</div>
+            <div className="text-3xl font-bold">{hiredTeam.length}/8</div>
+          </div>
+          <div>
+            <div className="text-sm opacity-75">Team Synergy</div>
+            <div className="text-3xl font-bold text-green-400">{calculateTeamSynergy()}%</div>
+          </div>
+        </div>
+
+        {/* Tab Navigation */}
+        <div className="flex gap-4 mb-6">
+          <button
+            onClick={() => setSelectedTab('recruit')}
+            className={`flex-1 py-4 rounded-xl font-bold text-lg transition-all ${
+              selectedTab === 'recruit'
+                ? 'bg-gradient-to-r from-green-500 to-emerald-600 text-white'
+                : 'bg-white/10 text-white/60 hover:bg-white/20'
+            }`}
+          >
+            🎯 Recruit Team
+          </button>
+          <button
+            onClick={() => setSelectedTab('assign')}
+            className={`flex-1 py-4 rounded-xl font-bold text-lg transition-all ${
+              selectedTab === 'assign'
+                ? 'bg-gradient-to-r from-blue-500 to-cyan-600 text-white'
+                : 'bg-white/10 text-white/60 hover:bg-white/20'
+            }`}
+          >
+            📋 Assign Tasks
+          </button>
+          <button
+            onClick={() => setSelectedTab('review')}
+            className={`flex-1 py-4 rounded-xl font-bold text-lg transition-all ${
+              selectedTab === 'review'
+                ? 'bg-gradient-to-r from-purple-500 to-pink-600 text-white'
+                : 'bg-white/10 text-white/60 hover:bg-white/20'
+            }`}
+          >
+            ⭐ Team Review
+          </button>
+        </div>
+
+        {/* Recruitment Tab */}
+        {selectedTab === 'recruit' && (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {availableSpecialists.map(specialist => {
+              const isHired = hiredTeam.some(m => m.id === specialist.id);
+              const canAfford = budget >= specialist.costPerMonth * 3;
+
+              return (
+                <div
+                  key={specialist.id}
+                  className={`bg-white/10 backdrop-blur-md rounded-2xl p-6 text-white transition-all ${
+                    isHired ? 'opacity-50 border-2 border-green-400' : 'hover:scale-105'
+                  }`}
+                >
+                  <div className="text-center mb-4">
+                    <div className="text-6xl mb-3">{specialist.portrait}</div>
+                    <h3 className="text-2xl font-bold">{specialist.name}</h3>
+                    <div className="text-sm opacity-75">{specialist.role}</div>
+                  </div>
+
+                  <div className="space-y-3 mb-4">
+                    <div className="bg-black/30 rounded-lg p-3">
+                      <div className="text-xs opacity-75">Specialty</div>
+                      <div className="font-semibold">{specialist.specialty}</div>
+                    </div>
+
+                    <div className="bg-black/30 rounded-lg p-3">
+                      <div className="text-xs opacity-75">Experience</div>
+                      <div className="font-semibold">{specialist.experience} years</div>
+                    </div>
+
+                    <div className="bg-black/30 rounded-lg p-3">
+                      <div className="text-xs opacity-75">Skills</div>
+                      <div className="flex flex-wrap gap-1 mt-1">
+                        {specialist.skills.map(skill => (
+                          <span key={skill} className="text-xs bg-blue-500/30 px-2 py-1 rounded">
+                            {skill}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="bg-black/30 rounded-lg p-3">
+                      <div className="text-xs opacity-75">Cost</div>
+                      <div className="font-semibold">${specialist.costPerMonth.toLocaleString()}/month</div>
+                      <div className="text-xs opacity-60">(3-month min: ${(specialist.costPerMonth * 3).toLocaleString()})</div>
+                    </div>
+
+                    <div className="bg-black/30 rounded-lg p-3">
+                      <div className="text-xs opacity-75 mb-1">Personality</div>
+                      <div className="text-xs italic">{specialist.personality}</div>
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={() => handleHire(specialist)}
+                    disabled={isHired || !canAfford}
+                    className={`w-full py-3 rounded-xl font-bold transition-all ${
+                      isHired
+                        ? 'bg-green-600 cursor-not-allowed'
+                        : canAfford
+                        ? 'bg-gradient-to-r from-green-500 to-emerald-600 hover:scale-105'
+                        : 'bg-gray-600 cursor-not-allowed'
+                    }`}
+                  >
+                    {isHired ? '✅ Hired' : canAfford ? '🤝 Hire' : '❌ Insufficient Budget'}
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+        {/* Assignment Tab */}
+        {selectedTab === 'assign' && (
+          <div className="space-y-6">
+            {hiredTeam.length === 0 ? (
+              <div className="bg-white/10 backdrop-blur-md rounded-2xl p-12 text-center text-white">
+                <div className="text-6xl mb-4">👥</div>
+                <h3 className="text-2xl font-bold mb-2">No Team Members Yet</h3>
+                <p className="text-lg opacity-75">Go to the Recruit tab to hire your team first!</p>
+              </div>
+            ) : (
+              <>
+                {tasks.map(task => {
+                  const assignedMemberId = assignments.get(task.id);
+                  const assignedMember = hiredTeam.find(m => m.id === assignedMemberId);
+                  const matchScore = assignedMemberId ? getTaskMatch(task, assignedMemberId) : 0;
+
+                  return (
+                    <div key={task.id} className="bg-white/10 backdrop-blur-md rounded-2xl p-6 text-white">
+                      <div className="flex items-start justify-between mb-4">
+                        <div className="flex-1">
+                          <h3 className="text-2xl font-bold mb-2">{task.name}</h3>
+                          <div className="flex gap-2 mb-2">
+                            {task.requiredSkills.map(skill => (
+                              <span key={skill} className="text-xs bg-purple-500/30 px-2 py-1 rounded">
+                                {skill}
+                              </span>
+                            ))}
+                          </div>
+                          <div className="text-sm opacity-75">Duration: {task.duration}</div>
+                        </div>
+                        
+                        {assignedMember && (
+                          <div className={`px-4 py-2 rounded-lg font-bold ${
+                            matchScore >= 80 ? 'bg-green-500/30 text-green-300' :
+                            matchScore >= 50 ? 'bg-yellow-500/30 text-yellow-300' :
+                            'bg-red-500/30 text-red-300'
+                          }`}>
+                            Match: {matchScore}%
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                        {hiredTeam.map(member => {
+                          const isAssigned = assignments.get(task.id) === member.id;
+                          const match = getTaskMatch(task, member.id);
+
+                          return (
+                            <button
+                              key={member.id}
+                              onClick={() => handleAssign(task.id, member.id)}
+                              className={`p-4 rounded-xl transition-all ${
+                                isAssigned
+                                  ? 'bg-gradient-to-br from-blue-500 to-cyan-600 scale-105'
+                                  : 'bg-white/10 hover:bg-white/20'
+                              }`}
+                            >
+                              <div className="text-4xl mb-2">{member.portrait}</div>
+                              <div className="font-semibold text-sm">{member.name.split(' ')[0]}</div>
+                              <div className="text-xs opacity-75 mb-2">{member.role}</div>
+                              <div className={`text-xs font-bold ${
+                                match >= 80 ? 'text-green-300' :
+                                match >= 50 ? 'text-yellow-300' :
+                                'text-red-300'
+                              }`}>
+                                {match}% Match
+                              </div>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  );
+                })}
+
+                {allTasksAssigned && (
+                  <div className="bg-green-500/20 border-2 border-green-400 rounded-2xl p-6 text-center text-white">
+                    <div className="text-6xl mb-4">✅</div>
+                    <h3 className="text-2xl font-bold">All Tasks Assigned!</h3>
+                    <p className="text-lg opacity-90 mt-2">Your team is ready for action.</p>
+                  </div>
+                )}
+              </>
+            )}
+          </div>
+        )}
+
+        {/* Review Tab */}
+        {selectedTab === 'review' && (
+          <div className="space-y-6">
+            {hiredTeam.length === 0 ? (
+              <div className="bg-white/10 backdrop-blur-md rounded-2xl p-12 text-center text-white">
+                <div className="text-6xl mb-4">⭐</div>
+                <h3 className="text-2xl font-bold mb-2">No Team to Review</h3>
+                <p className="text-lg opacity-75">Hire team members first!</p>
+              </div>
+            ) : (
+              <>
+                <div className="grid md:grid-cols-3 gap-6">
+                  <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 text-white">
+                    <h3 className="text-xl font-bold mb-4">Team Composition</h3>
+                    <div className="space-y-2">
+                      {hiredTeam.map(member => (
+                        <div key={member.id} className="flex items-center gap-3 bg-black/30 p-3 rounded-lg">
+                          <span className="text-3xl">{member.portrait}</span>
+                          <div className="flex-1">
+                            <div className="font-semibold">{member.name}</div>
+                            <div className="text-xs opacity-75">{member.specialty}</div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 text-white">
+                    <h3 className="text-xl font-bold mb-4">Skills Coverage</h3>
+                    <div className="space-y-3">
+                      {Array.from(new Set(hiredTeam.flatMap(m => m.skills))).map(skill => (
+                        <div key={skill} className="bg-black/30 p-3 rounded-lg">
+                          <div className="flex justify-between items-center mb-1">
+                            <span className="text-sm">{skill}</span>
+                            <span className="text-xs opacity-75">
+                              {hiredTeam.filter(m => m.skills.includes(skill)).length}x
+                            </span>
+                          </div>
+                          <div className="bg-black/40 rounded-full h-2">
+                            <div 
+                              className="bg-gradient-to-r from-blue-400 to-cyan-500 h-full rounded-full"
+                              style={{ width: `${(hiredTeam.filter(m => m.skills.includes(skill)).length / hiredTeam.length) * 100}%` }}
+                            ></div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 text-white">
+                    <h3 className="text-xl font-bold mb-4">Team Metrics</h3>
+                    <div className="space-y-4">
+                      <div className="bg-black/30 p-3 rounded-lg">
+                        <div className="text-sm opacity-75">Average Experience</div>
+                        <div className="text-3xl font-bold">
+                          {Math.round(hiredTeam.reduce((sum, m) => sum + m.experience, 0) / hiredTeam.length)} years
+                        </div>
+                      </div>
+                      
+                      <div className="bg-black/30 p-3 rounded-lg">
+                        <div className="text-sm opacity-75">Monthly Cost</div>
+                        <div className="text-3xl font-bold">
+                          ${hiredTeam.reduce((sum, m) => sum + m.costPerMonth, 0).toLocaleString()}
+                        </div>
+                      </div>
+                      
+                      <div className="bg-black/30 p-3 rounded-lg">
+                        <div className="text-sm opacity-75">Team Synergy</div>
+                        <div className={`text-3xl font-bold ${
+                          calculateTeamSynergy() >= 70 ? 'text-green-400' :
+                          calculateTeamSynergy() >= 40 ? 'text-yellow-400' :
+                          'text-red-400'
+                        }`}>
+                          {calculateTeamSynergy()}%
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+        )}
+
+        {/* Delegation Challenge */}
+        {showChallenge && !challengeResolved && (
+          <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
+            <div className="bg-gradient-to-br from-red-900 to-orange-900 rounded-3xl p-8 max-w-3xl w-full text-white shadow-2xl">
+              <h2 className="text-4xl font-bold mb-4">⚡ Delegation Challenge</h2>
+              <p className="text-xl mb-6">
+                Emergency! A severe pollution incident just occurred upstream. Your team is already fully assigned. 
+                You need someone to handle this crisis immediately. What do you do?
+              </p>
+              
+              <div className="space-y-4">
+                <button
+                  onClick={() => handleChallengeDecision('hire-temp')}
+                  className="w-full text-left bg-white/10 hover:bg-white/20 rounded-xl p-4 transition-all"
+                >
+                  <div className="font-bold text-lg mb-2">💰 Hire Emergency Contractor</div>
+                  <div className="text-sm opacity-80">Cost: $15,000 | Quick response | No long-term commitment</div>
+                </button>
+
+                <button
+                  onClick={() => handleChallengeDecision('reassign')}
+                  className="w-full text-left bg-white/10 hover:bg-white/20 rounded-xl p-4 transition-all"
+                >
+                  <div className="font-bold text-lg mb-2">🔄 Reassign Team Member</div>
+                  <div className="text-sm opacity-80">Free | Delays other work | Builds team versatility</div>
+                </button>
+
+                <button
+                  onClick={() => handleChallengeDecision('delay')}
+                  className="w-full text-left bg-white/10 hover:bg-white/20 rounded-xl p-4 transition-all"
+                >
+                  <div className="font-bold text-lg mb-2">⏰ Wait for Team Availability</div>
+                  <div className="text-sm opacity-80">Free | Risk escalation | Tests planning skills</div>
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Transition Message */}
+        {challengeResolved && (
+          <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50">
+            <div className="text-center text-white">
+              <div className="text-8xl mb-6 animate-bounce">👥</div>
+              <h2 className="text-5xl font-bold mb-4">Team Building Complete!</h2>
+              <p className="text-2xl opacity-80">
+                Moving to Budget Management...
+              </p>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 // Add CSS for animations
 const styles = `
   @keyframes spin-slow {
