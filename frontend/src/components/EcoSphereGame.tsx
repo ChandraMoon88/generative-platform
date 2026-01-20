@@ -5454,8 +5454,8 @@ function Level13Policy({ progress, setProgress }: { progress: GameProgress; setP
   ]);
 
   const [legislation, setLegislation] = useState([
-    { id: 'bill1', name: 'River Restoration Act', stage: 'drafting', votes: 0, passed: null },
-    { id: 'bill2', name: 'Green Infrastructure Fund', stage: 'drafting', votes: 0, passed: null },
+    { id: 'bill1', name: 'River Restoration Act', stage: 'drafting', votes: 0, passed: null as boolean | null },
+    { id: 'bill2', name: 'Green Infrastructure Fund', stage: 'drafting', votes: 0, passed: null as boolean | null },
   ]);
 
   const [policyChallenge, setPolicyChallenge] = useState(false);
