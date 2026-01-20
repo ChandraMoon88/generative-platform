@@ -25,6 +25,8 @@ type GamePhase =
   | 'level-11-projects'
   | 'level-12-innovation'
   | 'level-13-policy'
+  | 'level-14-mentor'
+  | 'level-15-visionary'
   | 'completion';
 
 // Landing Zone (Starting Domain)
@@ -494,6 +496,16 @@ export default function EcoSphereGame({ onGameComplete }: { onGameComplete: (app
   // LEVEL 13: Policy Maker
   if (progress.phase === 'level-13-policy') {
     return <Level13Policy progress={progress} setProgress={setProgress} />;
+  }
+
+  // LEVEL 14: The Mentor
+  if (progress.phase === 'level-14-mentor') {
+    return <Level14Mentor progress={progress} setProgress={setProgress} />;
+  }
+
+  // LEVEL 15: The Visionary
+  if (progress.phase === 'level-15-visionary') {
+    return <Level15Visionary progress={progress} setProgress={setProgress} />;
   }
 
   // COMPLETION
