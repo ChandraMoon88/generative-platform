@@ -237,13 +237,13 @@ export function logError(
 }
 
 export function logSystem(
-  systemAction: SystemEvent['systemAction'],
+  systemAction: SystemEvent['action'],
   data?: Record<string, unknown>
 ): void {
   const event: SystemEvent = {
     ...createBaseEvent('system'),
     type: 'system',
-    systemAction,
+    action: systemAction,
     data,
   };
   
