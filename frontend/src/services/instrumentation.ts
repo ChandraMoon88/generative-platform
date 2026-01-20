@@ -118,9 +118,10 @@ export function logInteraction(
   const event: InteractionEvent = {
     ...createBaseEvent('interaction', { semanticAction }),
     type: 'interaction',
-    interactionType,
+    action: interactionType as SemanticActionType,
     target,
-    value,
+    timing: {},
+    semanticAction,
   };
   
   bufferEvent(event);
