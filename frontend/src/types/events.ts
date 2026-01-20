@@ -71,6 +71,9 @@ export interface ElementTarget {
   type: string;
   value?: any;
   label?: string;
+  className?: string;
+  text?: string;
+  attributes?: Record<string, string>;
 }
 
 export interface NavigationEvent extends BaseEvent {
