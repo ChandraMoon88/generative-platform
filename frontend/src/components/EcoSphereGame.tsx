@@ -5494,6 +5494,11 @@ function CompletionScreen({ progress }: { progress: GameProgress; setProgress: (
               <div className="text-3xl font-bold mb-2">Level 11</div>
               <div className="text-sm opacity-75">Multi-Project</div>
             </div>
+            <div className="bg-white/10 rounded-xl p-6">
+              <div className="text-5xl mb-3">🔬</div>
+              <div className="text-3xl font-bold mb-2">Level 12</div>
+              <div className="text-sm opacity-75">Innovation</div>
+            </div>
           </div>
         </div>
 
@@ -5547,6 +5552,9 @@ function CompletionScreen({ progress }: { progress: GameProgress; setProgress: (
               <div>✅ Multi-Project Portfolio Manager</div>
               <div>✅ Resource Allocation Engine</div>
               <div>✅ Dependency Management</div>
+              <div>✅ Innovation Lab & R&D Tracker</div>
+              <div>✅ Experiment Management System</div>
+              <div>✅ Pilot Program Launcher</div>
             </div>
           </div>
           <p className="text-2xl font-bold text-yellow-300">
