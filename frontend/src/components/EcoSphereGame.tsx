@@ -7431,6 +7431,14 @@ function CompletionScreen({ progress }: { progress: GameProgress; setProgress: (
               <div>✅ Policy Gap Analysis Tool</div>
               <div>✅ Advocacy Campaign Manager</div>
               <div>✅ Legislative Tracking System</div>
+              <div>✅ Curriculum Development Platform</div>
+              <div>✅ Workshop Management System</div>
+              <div>✅ Train-the-Trainer Program</div>
+              <div>✅ Knowledge Base Builder</div>
+              <div>✅ Movement Building Network</div>
+              <div>✅ Leadership Development Platform</div>
+              <div>✅ Global Chapter Management</div>
+              <div>✅ Partnership & Funding Tracker</div>
             </div>
           </div>
           <p className="text-2xl font-bold text-yellow-300">
