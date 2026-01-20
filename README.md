@@ -1,431 +1,270 @@
-# � Generative Platform with EcoSphere
+# 🌍 EcoSphere - Environmental Restoration Game
 
-**Build applications through play - featuring the revolutionary EcoSphere environmental restoration game**
-
-A next-generation platform that generates custom applications based on how you interact with engaging gameplay. No forms, no technical specifications - just play, create, and receive your perfect application.
+**Learn software design by healing a planet. Play through 15 levels of environmental restoration while unknowingly designing a real application.**
 
 ---
 
-## 🎮 EcoSphere: The Ultimate Environmental Restoration Game
+## 🎮 What is EcoSphere?
 
-**Help heal a planet while unknowingly designing your perfect environmental management application**
+EcoSphere is a revolutionary game where you become a "Restoration Architect" tasked with healing struggling ecosystems. Every decision you make - from scanning water quality to managing restoration teams - secretly designs a complete environmental management application.
 
-### The Revolutionary Concept
+**The magic:** You never see code or forms. You only experience beautiful, meaningful gameplay. But by the end, you've designed a sophisticated application with 30+ features!
 
-Players become "Restoration Architects" tasked with healing EcoSphere's struggling ecosystems. Every action in the game - from scanning water quality to managing restoration teams - secretly defines how a real environmental management application works.
+### 🌟 The Journey
 
-**The magic:** Players never see the application being built. They only experience beautiful, meaningful gameplay. But every decision maps to application logic:
-- 🔬 Scanning ecosystems → Defining entity properties & data types
-- 📋 Creating restoration plans → Building workflows & state machines  
-- 💰 Managing budgets → Financial tracking systems
-- 👥 Building teams → User management & collaboration
-- 📊 Monitoring progress → Dashboard design & data visualization
+Play through 15 transformative levels:
 
-### Choose Your Path
+**Phase 1: Discovery (Levels 1-3)**
+- 🔍 **Level 1: Discovery** - Scan and assess environmental damage
+- 🔬 **Level 2: Investigation** - Identify pollution sources and patterns
+- 📋 **Level 3: Planning** - Create comprehensive restoration strategies
+
+**Phase 2: Execution (Levels 4-5)**
+- 🛠️ **Level 4: Execution** - Monitor restoration in real-time
+- 🔗 **Level 5: Systems Thinking** - Understand ecosystem interconnections
+
+**Phase 3: Resources (Levels 6-8)**
+- 👥 **Level 6: Team Building** - Recruit and manage specialists
+- 💰 **Level 7: Budget Management** - Allocate funds strategically
+- 📊 **Level 8: Analytics** - Track data and make predictions
+
+**Phase 4: Organization (Levels 9-10)**
+- 🤝 **Level 9: Stakeholder Management** - Build community support
+- 🏛️ **Level 10: Compliance** - Navigate regulations and permits
+
+**Phase 5: Scaling (Levels 11-13)**
+- 🔧 **Level 11: Multi-Project** - Manage portfolio of projects
+- 🔬 **Level 12: Innovation Lab** - Experiment with new approaches
+- 📜 **Level 13: Policy Maker** - Influence systemic change
+
+**Phase 6: Legacy (Levels 14-15)**
+- 👨‍🏫 **Level 14: The Mentor** - Teach and build capacity
+- 🌍 **Level 15: The Visionary** - Build a global movement
+
+### 🎯 Choose Your Path
 
 Start by selecting one of 6 environmental zones:
-- **🌊 The Weeping River Valley** - Water Quality Management
-- **🌲 The Silent Forest** - Biodiversity & Habitat Management
-- **🏙️ The Choking City** - Urban Environmental Management
-- **🌾 The Barren Fields** - Soil & Agriculture Management
-- **🏖️ The Dying Coast** - Marine & Coastal Management
-- **⛰️ The Wounded Mountains** - Land Restoration Management
 
-[📖 Complete EcoSphere Guide](./ECOSPHERE_GUIDE.md)
-
----
-
-## ✨ Platform Features
-
-- 🎮 **EcoSphere Game** - Generate apps through environmental restoration gameplay
-- 🧩 **150+ Components** - Production-ready React components for any application
-- 🔍 **Smart Generation** - Applications built from your actual behavior patterns
-- 👁️ **Live Previews** - See components in action before using
-- 📱 **Project Management** - Organize your generated applications
-- 🎯 **30+ Categories** - From basic UI to advanced features
-- 🔐 **Secure** - Enterprise-grade security with encrypted passwords
-- ☁️ **Cloud Ready** - Deploy to Vercel, Netlify, or any platform
+- 🌊 **The Weeping River Valley** - Water Quality Management
+- 🌲 **The Silent Forest** - Biodiversity & Habitat Management
+- 🏙️ **The Choking City** - Urban Environmental Management
+- 🌾 **The Barren Fields** - Soil & Agriculture Management
+- 🏖️ **The Dying Coast** - Marine & Coastal Management
+- ⛰️ **The Wounded Mountains** - Land Restoration Management
 
 ---
 
 ## 🚀 Quick Start
 
-### Local Development
+### Play Online (Recommended)
 
-**1. Clone & Install**
+**Visit:** [Your Deployed Game URL]
+
+1. Click **"Register"** to create an account
+2. Choose your environmental zone
+3. Start your restoration journey!
+4. Complete all 15 levels to see the big reveal 🎉
+
+### Run Locally
+
+**Requirements:**
+- Node.js 18+ 
+- npm or yarn
+
+**Setup:**
 ```bash
-git clone <repository-url>
+# 1. Clone the repository
+git clone <your-repo-url>
 cd generative-platform
 
-# Install backend
-cd backend && npm install
-
-# Install frontend
-cd ../frontend && npm install
-```
-
-**2. Start Servers**
-```bash
-# Terminal 1: Backend (port 3001)
-cd backend && npm run dev
-
-# Terminal 2: Frontend (port 3000)
-cd frontend && npm run dev
-```
-
-**3. Create Account**
-Open `http://localhost:3000/register` and create your account
-
----
-
-## 🌐 Deploy to Vercel (Free)
-
-Deploy your own instance in 3 simple steps:
-
-### Step 1: Fork Repository
-Click the **"Fork"** button at the top of this page to create your own copy
-
-### Step 2: Deploy to Vercel
-
-1. **Sign up** at [vercel.com](https://vercel.com) (100% free forever)
-2. Click **"New Project"**
-3. **Import** your forked repository from GitHub
-4. **Configure** (optional):
-   - Framework Preset: **Next.js** (auto-detected)
-   - Root Directory: `./` (leave default)
-   - Build Command: Leave default
-   - Environment Variables: Add later if needed
-5. Click **"Deploy"** 
-
-⚡ Your app will be live in ~30 seconds at: `https://your-app.vercel.app`
-
-### Step 3: Access Your App
-
-Visit your deployment URL and:
-- ✅ Create your admin account at `/register`
-- ✅ Browse 150+ components at `/components`
-- ✅ Start building projects
-
-### 🎯 One-Click Deploy
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/YOUR_USERNAME/generative-platform)
-
----
-
-### 📝 Environment Variables (Optional)
-
-For production use, you can add these in Vercel Dashboard → Settings → Environment Variables:
-
-```bash
-# JWT Secret (for secure authentication)
-JWT_SECRET=your-random-secret-string-here
-
-# Database (Vercel provides SQLite by default)
-DATABASE_URL=file:./data/production.db
-
-# Frontend URL (auto-set by Vercel)
-FRONTEND_URL=https://your-app.vercel.app
-```
-
-**Note**: The app works out-of-the-box without setting any environment variables!
-
----
-
-## 🎯 What You Can Build
-
-### 📊 Dashboards & Analytics
-Create powerful dashboards with **DataTable**, **LineChart**, **BarChart**, **MetricCard**, **PieChart**
-
-### 🛒 E-Commerce Stores
-Build online shops with **CardGrid**, **ProductCard**, **CreditCardInput**, **ImageGallery**, **CheckoutFlow**
-
-### 💬 Social Platforms
-Develop social apps with **Timeline**, **LiveFeed**, **ChatInterface**, **FileUpload**, **CommentThread**
-
-### 🎮 Games & Interactive Apps
-Make games using **GameCanvas**, **Sprite**, **PhysicsBody**, **GameController**, **CollisionDetector**
-
-### 🎨 3D Experiences
-Create 3D apps with **Scene3D**, **Model3D**, **Camera3D**, **Light3D**, **Particle3D**
-
----
-
-## 🧩 Component Library (150+)
-
-| Category | Components | Examples |
-|----------|-----------|----------|
-| **Buttons & Actions** | 4 | Button, IconButton, FloatingButton |
-| **Navigation** | 5 | Navbar, Tabs, Breadcrumbs, Sidebar |
-| **Modals & Overlays** | 6 | Modal, Drawer, Tooltip, Popover |
-| **Data Display** | 5 | DataTable, Card, Timeline, Badge |
-| **Forms & Inputs** | 5 | Input, Select, FileUpload, DatePicker |
-| **Feedback** | 7 | Toast, Alert, Loader, Progress |
-| **Charts** | 10 | Line, Bar, Pie, Scatter, Heatmap |
-| **Animation** | 7 | FadeIn, SlideIn, Spring, Parallax |
-| **3D & WebGL** | 7 | Scene3D, Model3D, Camera, Lighting |
-| **Game Dev** | 8 | Canvas, Sprite, Physics, Collision |
-| **Business** | 30+ | Auth, Payment, Workflow, Analytics |
-
----
-
-## 📱 How to Use
-
-### 1️⃣ Create Your Account
-Go to `/register` and create your free account
-
-### 2️⃣ Browse Components
-Visit `/components` to explore all 150+ components with live previews
-
-### 3️⃣ Create a Project
-Click "New Project" at `/projects` to start building
-
-### 4️⃣ Build Your App
-Drag components, customize props, see live preview, export code
-
----
-
-## 💻 Code Example
-
-```tsx
-import { 
-  Button, 
-  DataTable, 
-  LineChart,
-  Modal 
-} from '@/components/universal';
-
-function MyApp() {
-  const [showModal, setShowModal] = useState(false);
-
-  return (
-    <div>
-      <Button 
-        variant="primary" 
-        onClick={() => setShowModal(true)}
-      >
-        Open Dashboard
-      </Button>
-
-      <DataTable 
-        data={salesData} 
-        columns={columns}
-        sortable
-        filterable
-      />
-
-      <LineChart 
-        data={chartData}
-        height={400}
-        showLegend
-      />
-
-      <Modal 
-        isOpen={showModal}
-        onClose={() => setShowModal(false)}
-      >
-        <h2>Analytics Dashboard</h2>
-      </Modal>
-    </div>
-  );
-}
-```
-
----
-
-## 🔒 Security Features
-
-Your applications are protected with enterprise-grade security:
-
-- ✅ **Encrypted Passwords** - PBKDF2 with 10,000 iterations + unique salt
-- ✅ **SQL Injection Protection** - Parameterized queries & input validation
-- ✅ **XSS Protection** - Automatic input sanitization & HTML encoding
-- ✅ **CSRF Protection** - Origin validation on all state-changing requests
-- ✅ **Rate Limiting** - 100 requests per 15 minutes per user
-- ✅ **Security Headers** - Protection against clickjacking & MIME sniffing
-- ✅ **Private Projects** - Your projects are private and isolated
-
----
-
-## 🏗️ Tech Stack
-
-- **Frontend**: Next.js 14, React 18, TypeScript, Tailwind CSS
-- **Backend**: Express.js, Node.js, SQLite
-- **Components**: 150+ Universal React components
-- **Auth**: JWT tokens with secure hashing
-- **Security**: Rate limiting, input validation, CSRF protection
-
----
-
-## 📂 Project Structure
-
-```
-generative-platform/
-├── frontend/              # Next.js application
-│   ├── src/
-│   │   ├── app/          # Pages (register, login, projects, components)
-│   │   └── components/   # 150+ Universal components
-│   └── package.json
-│
-├── backend/              # Express API server
-│   ├── src/
-│   │   ├── api/         # REST endpoints (auth, projects)
-│   │   ├── db/          # SQLite database
-│   │   └── middleware/  # Security middleware
-│   └── package.json
-│
-└── README.md
-```
-
----
-
-## 🎯 Popular Components
-
-### 🌟 Most Used
-- **DataTable** - Sortable, filterable tables with pagination
-- **Button** - All variants (primary, secondary, outline, ghost)
-- **LineChart** - Time-series data visualization
-- **Modal** - Flexible dialogs and popups
-- **Form** - Dynamic forms with validation
-
-### 💎 Hidden Gems
-- **GameCanvas** - Full 2D game engine
-- **Scene3D** - WebGL 3D rendering
-- **SpringAnimation** - Physics-based animations
-- **RichTextEditor** - WYSIWYG editor
-
----
-
-## 🆘 Troubleshooting
-
-### Can't access http://localhost:3000?
-- Check backend is running on port 3001
-- Check frontend is running on port 3000
-- Try `npm install` again if dependencies failed
-
-### Login not working?
-- Clear browser cookies and try again
-- Check backend console for errors
-- Ensure both servers are running
-
-### Components not loading?
-- Hard refresh: `Ctrl+Shift+R` (Windows) or `Cmd+Shift+R` (Mac)
-- Check browser console for errors
-- Verify you're logged in
-
-### Port already in use?
-```bash
-# Windows: Kill process on port
-netstat -ano | findstr :3000
-taskkill /PID <process-id> /F
-
-# Mac/Linux
-lsof -ti:3000 | xargs kill
-```
-
----
-
-## 🤝 Contributing
-
-We welcome contributions! Areas to help:
-
-- 🧩 New components
-- 📚 Documentation improvements
-- 🐛 Bug fixes
-- ♿ Accessibility enhancements
-- 🎨 UI/UX improvements
-
-**To contribute:**
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/my-component`
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
-
----
-
-## 📝 License
-
-This project is available for personal and commercial use.
-
----
-
-## 💡 Pro Tips
-
-1. **Explore First** - Spend 10 minutes browsing `/components` to see what's available
-2. **Use Search** - Type what you need (e.g., "chart", "button", "3D")
-3. **Check Examples** - Every component has code examples
-4. **Start Simple** - Build a small project first to learn the workflow
-5. **Customize Everything** - All components accept props for customization
-
----
-
-## 🌟 Quick Commands
-
-```bash
-# Start development
+# 2. Install frontend dependencies
+cd frontend
+npm install
+
+# 3. Install backend dependencies  
+cd ../backend
+npm install
+
+# 4. Start backend server (Terminal 1)
+cd backend
 npm run dev
+# Backend runs on http://localhost:3001
 
-# Build for production
-npm run build
+# 5. Start frontend (Terminal 2)
+cd frontend
+npm run dev
+# Frontend runs on http://localhost:3000
 
-# Start production server
-npm start
-
-# Run tests
-npm test
-
-# Lint code
-npm run lint
+# 6. Open your browser
+# Navigate to http://localhost:3000
 ```
 
----
-
-## 📞 Support
-
-**Need help?**
-- Check troubleshooting section above
-- Browse component documentation at `/components`
-- Review code examples in each component
-
-**Found a bug?**
-- Create an issue with reproduction steps
-- Include browser and Node.js version
-- Share error messages
+**First Time Setup:**
+1. Go to `http://localhost:3000/register`
+2. Create your account
+3. Start playing!
 
 ---
 
-## 🎉 Get Started in 60 Seconds
+## 🎓 How to Play
 
-```bash
-# Clone
-git clone <repository-url>
-cd generative-platform
+### Getting Started
+1. **Register** - Create your free account
+2. **Choose Zone** - Select which ecosystem you want to restore
+3. **Meet Gaia** - Your AI guide throughout the journey
+4. **Start Level 1** - Begin with environmental scanning
 
-# Install & Run
-cd backend && npm install && npm run dev &
-cd ../frontend && npm install && npm run dev
+### Gameplay Tips
+- 💡 **Take your time** - Each level teaches important concepts
+- 🎯 **Complete objectives** - Finish all tasks to unlock the next level
+- 🤔 **Make thoughtful decisions** - Your choices shape the application
+- 📈 **Track progress** - Watch your impact grow across levels
+- 🎉 **Reach the end** - Complete all 15 levels for the big reveal!
 
-# Open browser
-http://localhost:3000/register
-```
-
----
-
-## 🚀 Deploy Your App (Free Hosting)
-
-Prefer not to run locally? Deploy for free:
-
-- **Vercel** - Best for Next.js (this app) - [vercel.com](https://vercel.com)
-- **Netlify** - Great for all apps - [netlify.com](https://netlify.com)
-- **Railway** - Full-stack apps - [railway.app](https://railway.app)
-- **Render** - Free tier available - [render.com](https://render.com)
-
-All offer free plans with custom domains!
+### Controls
+- **Mouse/Touch** - Click/tap to interact with elements
+- **Reading** - Pay attention to Gaia's guidance
+- **Decision Making** - Choose from multiple options when presented
+- **Exploration** - Scan, analyze, and interact with the environment
 
 ---
 
-**Built for developers who want to ship faster ⚡**
+## 🌟 What You'll Learn
 
-⭐ **Star this repo if you find it useful!**
+Through gameplay, you'll experience:
 
-🚀 **Ready to build something amazing? [Get started now](#-quick-start)**
+- **Systems Thinking** - Understanding interconnected ecosystems
+- **Strategic Planning** - Creating comprehensive restoration plans
+- **Resource Management** - Budgets, teams, and time allocation
+- **Data Analysis** - Tracking metrics and making predictions
+- **Stakeholder Relations** - Building community support
+- **Compliance** - Working within regulatory frameworks
+- **Portfolio Management** - Juggling multiple projects
+- **Innovation** - Experimenting and learning from failure
+- **Policy Influence** - Creating systemic change
+- **Teaching** - Building capacity in others
+- **Movement Building** - Creating lasting global impact
+
+**The twist:** All of these translate directly into software design patterns!
+
+---
+
+## 🎉 The Big Reveal
+
+Complete all 15 levels to discover:
+- What you've actually been building
+- How gameplay mapped to software design
+- The complete application you created
+- 30+ features you designed through play
+
+**No spoilers!** You have to play through to experience the magic ✨
+
+---
+
+## 📱 Features
+
+- ✅ **15 Complete Levels** - Full journey from discovery to global impact
+- ✅ **Beautiful Graphics** - Immersive environmental themes
+- ✅ **Progressive Difficulty** - Each level builds on previous concepts
+- ✅ **Real Decisions** - Your choices matter and shape outcomes
+- ✅ **30+ Application Features** - Generated from your gameplay
+- ✅ **Challenge Scenarios** - Test your problem-solving skills
+- ✅ **Satisfaction Tracking** - See your impact grow
+- ✅ **Epic Completion** - Celebration of your journey
+
+---
+
+## 🛠️ Technical Details
+
+### Tech Stack
+- **Frontend:** Next.js 14, React, TypeScript, Tailwind CSS
+- **Backend:** Node.js, Express, TypeScript
+- **Database:** PostgreSQL
+- **Deployment:** Vercel (Frontend), Railway/Heroku (Backend)
+
+### Browser Support
+- Chrome 90+
+- Firefox 88+
+- Safari 14+
+- Edge 90+
+
+### System Requirements
+- Modern browser with JavaScript enabled
+- Stable internet connection
+- Screen resolution: 1024x768 minimum (1920x1080 recommended)
+
+---
+
+## 🐛 Troubleshooting
+
+### Game Won't Load
+- Clear browser cache and cookies
+- Ensure JavaScript is enabled
+- Try a different browser
+- Check internet connection
+
+### Can't Progress to Next Level
+- Complete all objectives in current level
+- Click the "Complete Level" button when available
+- Refresh the page if stuck
+
+### Lost Progress
+- Login again - progress is saved automatically
+- Contact support if issues persist
+
+### Performance Issues
+- Close unnecessary browser tabs
+- Update your browser to latest version
+- Check system resources (RAM, CPU)
+
+---
+
+## 🌐 Deploy Your Own Instance
+
+Want to host your own version? Deploy to Vercel for free:
+
+1. **Fork this repository** on GitHub
+2. **Sign up** at [vercel.com](https://vercel.com)
+3. **Import your fork** and click Deploy
+4. Your game will be live in ~30 seconds! 🚀
+
+---
+
+## 🤝 Community
+
+- **Questions?** Open an issue on GitHub
+- **Feedback?** We'd love to hear your experience!
+- **Bug Reports:** Please include level number and description
+
+---
+
+## 📄 License
+
+MIT License - Feel free to fork and create your own version!
+
+---
+
+## 🙏 Credits
+
+Created with ❤️ for anyone who wants to learn software design through meaningful play.
+
+**Special Thanks:**
+- The environmental science community for inspiration
+- Game designers who believe in learning through play
+- Everyone who believes technology can help heal our planet
+
+---
+
+## 🚀 Start Your Journey
+
+**Ready to heal a planet and learn software design?**
+
+👉 **Play Now** (Coming Soon) 👈
+
+or
+
+👉 **[Clone and Run Locally](#run-locally)** 👈
+
+---
+
+*Transform from individual discoverer to global visionary. Your journey begins now.* 🌍✨
