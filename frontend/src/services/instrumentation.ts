@@ -145,20 +145,18 @@ export function logNavigation(
 }
 
 export function logStateChange(
-  changeType: StateChangeEvent['changeType'],
-  path: string,
-  source: string,
-  previousValue?: unknown,
-  newValue?: unknown
+  operation: StateChangeEvent['operation'],
+  entityType?: string,
+  data?: any,
+  previousState?: any
 ): void {
   const event: StateChangeEvent = {
     ...createBaseEvent('state_change'),
     type: 'state_change',
-    changeType,
-    path,
-    previousValue,
-    newValue,
-    source,
+    operation,
+    entityType,
+    data,
+    previousState,
   };
   
   bufferEvent(event);
