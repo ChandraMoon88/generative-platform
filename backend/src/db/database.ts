@@ -1,0 +1,585 @@
+/**
+ * Database Initialization
+ * Sets up SQLite database with required tables using sql.js
+ */
+
+import initSqlJs, { Database as SqlJsDatabase } from 'sql.js';
+import { logger } from '../utils/logger';
+import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
+import { dirname } from 'path';
+
+let db: SqlJsDatabase;
+let dbPath: string;
+
+// Wrapper to provide a similar API to better-sqlite3
+export interface DatabaseWrapper {
+  exec(sql: string): void;
+  prepare(sql: string): StatementWrapper;
+  close(): void;
+}
+
+export interface StatementWrapper {
+  run(...params: unknown[]): { changes: number; lastInsertRowid: number };
+  get(...params: unknown[]): Record<string, unknown> | undefined;
+  all(...params: unknown[]): Record<string, unknown>[];
+}
+
+class SqlJsStatementWrapper implements StatementWrapper {
+  private database: SqlJsDatabase;
+  private sql: string;
+
+  constructor(database: SqlJsDatabase, sql: string) {
+    this.database = database;
+    this.sql = sql;
+  }
+
+  run(...params: unknown[]): { changes: number; lastInsertRowid: number } {
+    const stmt = this.database.prepare(this.sql);
+    stmt.bind(params.map(p => p === undefined ? null : p));
+    stmt.step();
+    stmt.free();
+    saveDatabase();
+    return { 
+      changes: this.database.getRowsModified(),
+      lastInsertRowid: 0
+    };
+  }
+
+  get(...params: unknown[]): Record<string, unknown> | undefined {
+    const stmt = this.database.prepare(this.sql);
+    stmt.bind(params.map(p => p === undefined ? null : p));
+    
+    if (stmt.step()) {
+      const columns = stmt.getColumnNames();
+      const values = stmt.get();
+      stmt.free();
+      
+      const result: Record<string, unknown> = {};
+      columns.forEach((col, i) => {
+        result[col] = values[i];
+      });
+      return result;
+    }
+    
+    stmt.free();
+    return undefined;
+  }
+
+  all(...params: unknown[]): Record<string, unknown>[] {
+    const stmt = this.database.prepare(this.sql);
+    stmt.bind(params.map(p => p === undefined ? null : p));
+    
+    const results: Record<string, unknown>[] = [];
+    const columns = stmt.getColumnNames();
+    
+    while (stmt.step()) {
+      const values = stmt.get();
+      const row: Record<string, unknown> = {};
+      columns.forEach((col, i) => {
+        row[col] = values[i];
+      });
+      results.push(row);
+    }
+    
+    stmt.free();
+    return results;
+  }
+}
+
+class SqlJsDatabaseWrapper implements DatabaseWrapper {
+  private database: SqlJsDatabase;
+
+  constructor(database: SqlJsDatabase) {
+    this.database = database;
+  }
+
+  exec(sql: string): void {
+    this.database.exec(sql);
+    saveDatabase();
+  }
+
+  prepare(sql: string): StatementWrapper {
+    return new SqlJsStatementWrapper(this.database, sql);
+  }
+
+  close(): void {
+    saveDatabase();
+    this.database.close();
+  }
+}
+
+let wrappedDb: DatabaseWrapper;
+
+function saveDatabase(): void {
+  // Skip file operations in production/serverless environments
+  if (process.env.NODE_ENV === 'production') {
+    return;
+  }
+  
+  if (db && dbPath) {
+    try {
+      const data = db.export();
+      const buffer = Buffer.from(data);
+      writeFileSync(dbPath, buffer);
+    } catch (err) {
+      logger.error('Failed to save database:', err);
+    }
+  }
+}
+
+export function getDatabase(): DatabaseWrapper {
+  if (!wrappedDb) {
+    throw new Error('Database not initialized');
+  }
+  return wrappedDb;
+}
+
+export async function initDatabase(): Promise<void> {
+  const SQL = await initSqlJs();
+  
+  // In production (Vercel), use in-memory database
+  if (process.env.NODE_ENV === 'production') {
+    db = new SQL.Database();
+    logger.info('In-memory database created for production');
+  } else {
+    // In development, use file-based database
+    dbPath = process.env.DATABASE_PATH || 'data/generative-platform.db';
+    
+    // Ensure data directory exists
+    const dir = dirname(dbPath);
+    if (!existsSync(dir)) {
+      mkdirSync(dir, { recursive: true });
+    }
+    
+    // Load existing database or create new one
+    if (existsSync(dbPath)) {
+      const fileBuffer = readFileSync(dbPath);
+      db = new SQL.Database(fileBuffer);
+      logger.info(`Database loaded from ${dbPath}`);
+    } else {
+      db = new SQL.Database();
+      logger.info(`New database created at ${dbPath}`);
+    }
+  }
+  
+  wrappedDb = new SqlJsDatabaseWrapper(db);
+  
+  // Enable foreign keys
+  db.exec('PRAGMA foreign_keys = ON');
+  
+  // Create tables
+  createTables();
+  
+  // Save initial database (only in development)
+  saveDatabase();
+  
+  logger.info('Database initialized');
+}
+
+function createTables(): void {
+  // Users table - client authentication with role-based access
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS users (
+      id TEXT PRIMARY KEY,
+      name TEXT NOT NULL,
+      email TEXT UNIQUE NOT NULL,
+      password TEXT NOT NULL,
+      salt TEXT NOT NULL,
+      role TEXT DEFAULT 'client' CHECK(role IN ('admin', 'client')),
+      created_at INTEGER NOT NULL,
+      updated_at INTEGER NOT NULL
+    )
+  `);
+  
+  db.exec(`CREATE INDEX IF NOT EXISTS idx_users_email ON users(email)`);
+  db.exec(`CREATE INDEX IF NOT EXISTS idx_users_role ON users(role)`);
+  
+  // Application models table - MUST be created before projects table
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS app_models (
+      id TEXT PRIMARY KEY,
+      version TEXT NOT NULL,
+      name TEXT NOT NULL,
+      description TEXT,
+      data TEXT NOT NULL,
+      pattern_ids TEXT,
+      confidence REAL,
+      created_at INTEGER DEFAULT (strftime('%s', 'now') * 1000)
+    )
+  `);
+  
+  // Events table - stores raw events
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS events (
+      id TEXT PRIMARY KEY,
+      session_id TEXT NOT NULL,
+      user_id TEXT,
+      type TEXT NOT NULL,
+      timestamp INTEGER NOT NULL,
+      data TEXT NOT NULL,
+      created_at INTEGER DEFAULT (strftime('%s', 'now') * 1000)
+    )
+  `);
+  
+  db.exec(`CREATE INDEX IF NOT EXISTS idx_events_session ON events(session_id)`);
+  db.exec(`CREATE INDEX IF NOT EXISTS idx_events_timestamp ON events(timestamp)`);
+  db.exec(`CREATE INDEX IF NOT EXISTS idx_events_type ON events(type)`);
+  
+  // Sessions table - groups related events
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS sessions (
+      id TEXT PRIMARY KEY,
+      user_id TEXT,
+      start_time INTEGER NOT NULL,
+      end_time INTEGER,
+      event_count INTEGER DEFAULT 0,
+      metadata TEXT,
+      created_at INTEGER DEFAULT (strftime('%s', 'now') * 1000)
+    )
+  `);
+  
+  db.exec(`CREATE INDEX IF NOT EXISTS idx_sessions_user ON sessions(user_id)`);
+  db.exec(`CREATE INDEX IF NOT EXISTS idx_sessions_start ON sessions(start_time)`);
+  
+  // Projects table - user-owned applications
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS projects (
+      id TEXT PRIMARY KEY,
+      user_id TEXT NOT NULL,
+      name TEXT NOT NULL,
+      description TEXT,
+      model_id TEXT,
+      status TEXT DEFAULT 'draft' CHECK(status IN ('draft', 'building', 'completed', 'deployed')),
+      config TEXT,
+      generated_files TEXT,
+      created_at INTEGER NOT NULL,
+      updated_at INTEGER NOT NULL,
+      FOREIGN KEY (user_id) REFERENCES users(id),
+      FOREIGN KEY (model_id) REFERENCES app_models(id)
+    )
+  `);
+  
+  db.exec(`CREATE INDEX IF NOT EXISTS idx_projects_user ON projects(user_id)`);
+  db.exec(`CREATE INDEX IF NOT EXISTS idx_projects_status ON projects(status)`);
+  db.exec(`CREATE INDEX IF NOT EXISTS idx_projects_model ON projects(model_id)`);
+  
+  // App builds table - tracks when users build apps (for syncing to admin)
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS app_builds (
+      id TEXT PRIMARY KEY,
+      user_id TEXT NOT NULL,
+      project_id TEXT NOT NULL,
+      sent_to_admin INTEGER DEFAULT 0,
+      created_at INTEGER NOT NULL,
+      FOREIGN KEY (user_id) REFERENCES users(id),
+      FOREIGN KEY (project_id) REFERENCES projects(id)
+    )
+  `);
+  
+  db.exec(`CREATE INDEX IF NOT EXISTS idx_builds_user ON app_builds(user_id)`);
+  db.exec(`CREATE INDEX IF NOT EXISTS idx_builds_project ON app_builds(project_id)`);
+  db.exec(`CREATE INDEX IF NOT EXISTS idx_builds_sent ON app_builds(sent_to_admin)`);
+  
+  // Recognized patterns table
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS patterns (
+      id TEXT PRIMARY KEY,
+      session_id TEXT NOT NULL,
+      type TEXT NOT NULL,
+      confidence REAL NOT NULL,
+      start_time INTEGER NOT NULL,
+      end_time INTEGER NOT NULL,
+      event_ids TEXT NOT NULL,
+      metadata TEXT,
+      created_at INTEGER DEFAULT (strftime('%s', 'now') * 1000),
+      FOREIGN KEY (session_id) REFERENCES sessions(id)
+    )
+  `);
+  
+  db.exec(`CREATE INDEX IF NOT EXISTS idx_patterns_session ON patterns(session_id)`);
+  db.exec(`CREATE INDEX IF NOT EXISTS idx_patterns_type ON patterns(type)`);
+  
+  // Pattern definitions table
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS pattern_definitions (
+      id TEXT PRIMARY KEY,
+      name TEXT NOT NULL,
+      description TEXT,
+      type TEXT NOT NULL,
+      rules TEXT NOT NULL,
+      is_active INTEGER DEFAULT 1,
+      created_at INTEGER DEFAULT (strftime('%s', 'now') * 1000),
+      updated_at INTEGER DEFAULT (strftime('%s', 'now') * 1000)
+    )
+  `);
+  
+  // Generated code table
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS generated_code (
+      id TEXT PRIMARY KEY,
+      model_id TEXT NOT NULL,
+      type TEXT NOT NULL,
+      name TEXT NOT NULL,
+      code TEXT NOT NULL,
+      metadata TEXT,
+      created_at INTEGER DEFAULT (strftime('%s', 'now') * 1000),
+      FOREIGN KEY (model_id) REFERENCES app_models(id)
+    )
+  `);
+  
+  // User assets table - stores user-uploaded assets
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS user_assets (
+      id TEXT PRIMARY KEY,
+      session_id TEXT NOT NULL,
+      type TEXT NOT NULL,
+      name TEXT NOT NULL,
+      data TEXT NOT NULL,
+      url TEXT,
+      metadata TEXT NOT NULL,
+      created_at INTEGER NOT NULL
+    )
+  `);
+  
+  db.exec(`CREATE INDEX IF NOT EXISTS idx_user_assets_session ON user_assets(session_id)`);
+  db.exec(`CREATE INDEX IF NOT EXISTS idx_user_assets_type ON user_assets(type)`);
+  
+  // EcoSphere Environmental Entities
+  // Water Sources table
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS water_sources (
+      id TEXT PRIMARY KEY,
+      project_id TEXT NOT NULL,
+      name TEXT NOT NULL,
+      overall_health TEXT CHECK(overall_health IN ('critical', 'polluted', 'at-risk', 'healthy')),
+      created_at INTEGER NOT NULL,
+      updated_at INTEGER NOT NULL,
+      FOREIGN KEY (project_id) REFERENCES projects(id)
+    )
+  `);
+  
+  // Water Sections table
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS water_sections (
+      id TEXT PRIMARY KEY,
+      water_source_id TEXT NOT NULL,
+      section_number INTEGER NOT NULL,
+      temperature REAL,
+      ph REAL,
+      dissolved_oxygen REAL,
+      turbidity REAL,
+      pollutant_level TEXT CHECK(pollutant_level IN ('none', 'low', 'medium', 'high', 'critical')),
+      latitude REAL,
+      longitude REAL,
+      created_at INTEGER NOT NULL,
+      FOREIGN KEY (water_source_id) REFERENCES water_sources(id)
+    )
+  `);
+  
+  // Pollution Sources table
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS pollution_sources (
+      id TEXT PRIMARY KEY,
+      project_id TEXT NOT NULL,
+      name TEXT NOT NULL,
+      source_type TEXT CHECK(source_type IN ('industrial', 'agricultural', 'urban', 'illegal', 'natural')),
+      severity INTEGER CHECK(severity BETWEEN 1 AND 10),
+      frequency TEXT CHECK(frequency IN ('constant', 'daily', 'weekly', 'seasonal', 'one-time')),
+      pollutants TEXT,
+      responsibility TEXT,
+      accessibility TEXT CHECK(accessibility IN ('easy', 'moderate', 'difficult', 'requires-authority')),
+      priority INTEGER,
+      created_at INTEGER NOT NULL,
+      FOREIGN KEY (project_id) REFERENCES projects(id)
+    )
+  `);
+  
+  // Restoration Plans table
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS restoration_plans (
+      id TEXT PRIMARY KEY,
+      project_id TEXT NOT NULL,
+      name TEXT NOT NULL,
+      approach TEXT CHECK(approach IN ('sequential', 'parallel')),
+      total_budget REAL,
+      total_duration INTEGER,
+      created_at INTEGER NOT NULL,
+      FOREIGN KEY (project_id) REFERENCES projects(id)
+    )
+  `);
+  
+  // Workflow Steps table
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS workflow_steps (
+      id TEXT PRIMARY KEY,
+      plan_id TEXT NOT NULL,
+      name TEXT NOT NULL,
+      description TEXT,
+      action_type TEXT,
+      estimated_duration INTEGER,
+      estimated_cost REAL,
+      prerequisites TEXT,
+      success_criteria TEXT,
+      risk_factors TEXT,
+      status TEXT DEFAULT 'planned' CHECK(status IN ('planned', 'in-progress', 'completed', 'blocked')),
+      created_at INTEGER NOT NULL,
+      FOREIGN KEY (plan_id) REFERENCES restoration_plans(id)
+    )
+  `);
+  
+  // Team Members table
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS team_members (
+      id TEXT PRIMARY KEY,
+      project_id TEXT NOT NULL,
+      name TEXT NOT NULL,
+      role TEXT NOT NULL,
+      specialty TEXT,
+      skills TEXT,
+      cost_per_month REAL,
+      availability TEXT CHECK(availability IN ('full-time', 'part-time')),
+      personality_traits TEXT,
+      experience INTEGER DEFAULT 0,
+      morale INTEGER DEFAULT 100,
+      created_at INTEGER NOT NULL,
+      FOREIGN KEY (project_id) REFERENCES projects(id)
+    )
+  `);
+  
+  // Insert default pattern definitions
+  insertDefaultPatternDefinitions();
+}
+
+function insertDefaultPatternDefinitions(): void {
+  const definitions = [
+    {
+      id: 'crud_create',
+      name: 'CRUD Create',
+      description: 'User creates a new entity',
+      type: 'crud_create',
+      rules: JSON.stringify({
+        sequence: [
+          { type: 'navigation', to: { pattern: '*/new' } },
+          { type: 'form', formAction: 'start' },
+          { type: 'form', formAction: 'field_change', minOccurrences: 1 },
+          { type: 'form', formAction: 'submit' },
+          { type: 'state_change', changeType: 'set' }
+        ],
+        timeout: 300000,
+      }),
+    },
+    {
+      id: 'crud_read',
+      name: 'CRUD Read',
+      description: 'User views entity details',
+      type: 'crud_read',
+      rules: JSON.stringify({
+        sequence: [
+          { type: 'interaction', interactionType: 'click', metadata: { semanticAction: { pattern: 'crud_read' } } }
+        ],
+        timeout: 10000,
+      }),
+    },
+    {
+      id: 'crud_update',
+      name: 'CRUD Update',
+      description: 'User updates an existing entity',
+      type: 'crud_update',
+      rules: JSON.stringify({
+        sequence: [
+          { type: 'navigation', to: { pattern: '*/edit' } },
+          { type: 'form', formAction: 'start' },
+          { type: 'form', formAction: 'field_change', minOccurrences: 1 },
+          { type: 'form', formAction: 'submit' },
+          { type: 'state_change', changeType: 'update' }
+        ],
+        timeout: 300000,
+      }),
+    },
+    {
+      id: 'crud_delete',
+      name: 'CRUD Delete',
+      description: 'User deletes an entity',
+      type: 'crud_delete',
+      rules: JSON.stringify({
+        sequence: [
+          { type: 'interaction', interactionType: 'click', metadata: { semanticAction: { pattern: 'crud_delete' } } },
+          { type: 'state_change', changeType: 'delete' }
+        ],
+        timeout: 30000,
+      }),
+    },
+    {
+      id: 'list_view',
+      name: 'List View',
+      description: 'User views a list of entities',
+      type: 'list_view',
+      rules: JSON.stringify({
+        sequence: [
+          { type: 'interaction', interactionType: 'scroll', metadata: { semanticAction: { pattern: 'list_view' } } }
+        ],
+        timeout: 60000,
+      }),
+    },
+    {
+      id: 'filter',
+      name: 'Filter',
+      description: 'User filters a list',
+      type: 'filter',
+      rules: JSON.stringify({
+        sequence: [
+          { type: 'interaction', metadata: { semanticAction: { pattern: 'filter' } } }
+        ],
+        timeout: 30000,
+      }),
+    },
+    {
+      id: 'sort',
+      name: 'Sort',
+      description: 'User sorts a list',
+      type: 'sort',
+      rules: JSON.stringify({
+        sequence: [
+          { type: 'interaction', metadata: { semanticAction: { pattern: 'sort' } } }
+        ],
+        timeout: 10000,
+      }),
+    },
+    {
+      id: 'workflow',
+      name: 'Workflow',
+      description: 'User completes a multi-step workflow',
+      type: 'workflow_step',
+      rules: JSON.stringify({
+        sequence: [
+          { type: 'workflow', action: 'start' },
+          { type: 'workflow', action: 'step', minOccurrences: 1 },
+          { type: 'workflow', action: 'complete' }
+        ],
+        timeout: 600000,
+      }),
+    },
+  ];
+  
+  // Check if already inserted by looking for first definition
+  const existing = wrappedDb.prepare('SELECT id FROM pattern_definitions WHERE id = ?').get('crud_create');
+  if (existing) {
+    return;
+  }
+  
+  const stmt = wrappedDb.prepare(`
+    INSERT OR IGNORE INTO pattern_definitions (id, name, description, type, rules)
+    VALUES (?, ?, ?, ?, ?)
+  `);
+  
+  for (const def of definitions) {
+    stmt.run(def.id, def.name, def.description, def.type, def.rules);
+  }
+}
+
+export function closeDatabase(): void {
+  if (db) {
+    saveDatabase();
+    db.close();
+  }
+}
