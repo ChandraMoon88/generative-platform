@@ -175,7 +175,7 @@ export function logFormEvent(
     type: 'form',
     formId,
     action: formAction,
-    field,
+    fields: field ? [field] : undefined,
     formData,
     validationErrors,
   };
