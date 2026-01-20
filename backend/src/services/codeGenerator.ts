@@ -1,6 +1,6 @@
 /**
  * Code Generation Engine
- * Generates application code from synthesized models
+ * Generates application code from synthesized models, including EcoSphere environmental applications
  */
 
 import { logger } from '../utils/logger';
@@ -12,6 +12,7 @@ interface Entity {
   properties: EntityProperty[];
   relationships: EntityRelationship[];
   operations: string[];
+  isEnvironmental?: boolean; // Flag for EcoSphere entities
 }
 
 interface EntityProperty {
@@ -19,6 +20,7 @@ interface EntityProperty {
   type: string;
   required: boolean;
   defaultValue?: unknown;
+  validationRules?: string[]; // For environmental data validation
 }
 
 interface EntityRelationship {
