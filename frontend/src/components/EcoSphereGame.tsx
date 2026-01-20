@@ -7374,18 +7374,22 @@ function CompletionScreen({ progress }: { progress: GameProgress; setProgress: (
         {/* Impact Statistics */}
         <div className="bg-white/10 backdrop-blur-md rounded-3xl p-8 mb-8 text-white">
           <h2 className="text-4xl font-bold mb-6">🌟 Your Impact</h2>
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-4 gap-6">
             <div className="bg-gradient-to-br from-blue-500/20 to-cyan-500/20 rounded-xl p-6 border-2 border-blue-400">
-              <div className="text-5xl font-bold text-blue-300 mb-2">88%</div>
+              <div className="text-5xl font-bold text-blue-300 mb-2">92%</div>
               <div className="text-xl">River Health Restored</div>
             </div>
             <div className="bg-gradient-to-br from-green-500/20 to-emerald-500/20 rounded-xl p-6 border-2 border-green-400">
-              <div className="text-5xl font-bold text-green-300 mb-2">+156%</div>
-              <div className="text-xl">Biodiversity Increase</div>
+              <div className="text-5xl font-bold text-green-300 mb-2">15+</div>
+              <div className="text-xl">Ecosystems Healed</div>
             </div>
             <div className="bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-xl p-6 border-2 border-purple-400">
-              <div className="text-5xl font-bold text-purple-300 mb-2">$179K</div>
-              <div className="text-xl">Budget Managed</div>
+              <div className="text-5xl font-bold text-purple-300 mb-2">500+</div>
+              <div className="text-xl">People Trained</div>
+            </div>
+            <div className="bg-gradient-to-br from-yellow-500/20 to-orange-500/20 rounded-xl p-6 border-2 border-yellow-400">
+              <div className="text-5xl font-bold text-yellow-300 mb-2">8</div>
+              <div className="text-xl">Global Chapters</div>
             </div>
           </div>
         </div>
