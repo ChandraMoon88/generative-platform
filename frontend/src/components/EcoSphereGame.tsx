@@ -6149,13 +6149,13 @@ function Level14Mentor({ progress, setProgress }: { progress: GameProgress; setP
       setProgress({
         ...progress,
         phase: 'level-15-visionary',
-        completedPhases: [...progress.completedPhases, 'level-14-mentor']
+        completedPhases: [...(progress.completedPhases || []), 'level-14-mentor']
       });
     }, 3000);
   };
 
   const activeCourses = Array.from(courses.values()).filter(c => c.status === 'active').length;
-  const completedWorkshops = Array.from(workshops.values()).filter(w => w.status === 'completed').length;
+  const completedWorkshops = Array.from(workshops.values()).filter(w => w.status === 'complete').length;
   const certifiedTrainers = Array.from(trainers.values()).filter(t => t.certified).length;
   const totalStudents = Array.from(courses.values()).reduce((sum, c) => sum + c.students, 0);
   const totalTrainees = Array.from(trainers.values()).reduce((sum, t) => sum + t.trainees, 0);
