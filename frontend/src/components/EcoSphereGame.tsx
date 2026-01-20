@@ -3787,6 +3787,536 @@ function Level9Stakeholders({ progress, setProgress }: { progress: GameProgress;
   );
 }
 
+// LEVEL 10: Compliance Manager Component
+function Level10Compliance({ progress, setProgress }: { progress: GameProgress; setProgress: (p: GameProgress) => void }) {
+  const [selectedTab, setSelectedTab] = useState<'framework' | 'permits' | 'inspections' | 'calendar'>('framework');
+  const [permits, setPermits] = useState([
+    { id: 'water', name: 'Water Discharge Permit', status: 'pending', progress: 0, required: true },
+    { id: 'wetland', name: 'Wetland Alteration Permit', status: 'pending', progress: 0, required: true },
+    { id: 'habitat', name: 'Habitat Restoration Authorization', status: 'pending', progress: 0, required: true },
+    { id: 'construction', name: 'Construction Permit', status: 'pending', progress: 0, required: false },
+  ]);
+  
+  const [regulations, setRegulations] = useState([
+    { id: 'cwa', name: 'Clean Water Act', compliance: 100, critical: true },
+    { id: 'esa', name: 'Endangered Species Act', compliance: 85, critical: true },
+    { id: 'nepa', name: 'NEPA Review', compliance: 90, critical: true },
+    { id: 'local', name: 'Local Ordinances', compliance: 95, critical: false },
+  ]);
+
+  const [inspections, setInspections] = useState([
+    { id: 'initial', name: 'Initial Site Inspection', status: 'scheduled', date: 'Week 2', passed: null },
+    { id: 'water', name: 'Water Quality Audit', status: 'pending', date: 'Week 4', passed: null },
+    { id: 'final', name: 'Final Compliance Review', status: 'pending', date: 'Week 8', passed: null },
+  ]);
+
+  const [inspectionChallenge, setInspectionChallenge] = useState(false);
+  const [challengeHandled, setChallengeHandled] = useState(false);
+  const [regulatoryChange, setRegulatoryChange] = useState(false);
+  const [changeHandled, setChangeHandled] = useState(false);
+  const [levelComplete, setLevelComplete] = useState(false);
+
+  const applyForPermit = (permitId: string) => {
+    setPermits(prev => prev.map(p => 
+      p.id === permitId ? { ...p, status: 'in-review', progress: 50 } : p
+    ));
+    
+    setTimeout(() => {
+      setPermits(prev => prev.map(p => 
+        p.id === permitId ? { ...p, status: 'approved', progress: 100 } : p
+      ));
+    }, 1500);
+  };
+
+  const handleInspection = (response: string) => {
+    if (response === 'prepare') {
+      setInspections(prev => prev.map((insp, idx) => 
+        idx === 0 ? { ...insp, status: 'completed', passed: true } : insp
+      ));
+      setRegulations(prev => prev.map(r => ({ ...r, compliance: Math.min(100, r.compliance + 5) })));
+    } else if (response === 'wing-it') {
+      setInspections(prev => prev.map((insp, idx) => 
+        idx === 0 ? { ...insp, status: 'completed', passed: false } : insp
+      ));
+      setRegulations(prev => prev.map(r => ({ ...r, compliance: Math.max(0, r.compliance - 15) })));
+    }
+    setChallengeHandled(true);
+  };
+
+  const handleRegulatoryChange = (response: string) => {
+    if (response === 'adapt') {
+      setRegulations(prev => prev.map(r => 
+        r.id === 'cwa' ? { ...r, compliance: 100 } : r
+      ));
+    } else if (response === 'delay') {
+      setRegulations(prev => prev.map(r => 
+        r.id === 'cwa' ? { ...r, compliance: Math.max(0, r.compliance - 20) } : r
+      ));
+    }
+    setChangeHandled(true);
+  };
+
+  const completeLevel = () => {
+    setLevelComplete(true);
+    setTimeout(() => {
+      setProgress({
+        ...progress,
+        phase: 'completion' as GamePhase,
+        completedPhases: [...(progress.completedPhases || []), 'level-10-compliance']
+      });
+    }, 2000);
+  };
+
+  const allPermitsApproved = permits.filter(p => p.required).every(p => p.status === 'approved');
+  const averageCompliance = Math.round(regulations.reduce((sum, r) => sum + r.compliance, 0) / regulations.length);
+  const allInspectionsPassed = inspections.every(i => i.passed !== false);
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-gray-900 to-zinc-900 py-8 px-4">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <h1 className="text-5xl font-bold text-white mb-3">
+            🏛️ Level 10: Compliance Manager
+          </h1>
+          <p className="text-2xl text-gray-300">
+            Navigate regulatory requirements and maintain compliance
+          </p>
+        </div>
+
+        {/* Compliance Dashboard */}
+        <div className="grid md:grid-cols-3 gap-4 mb-6">
+          <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 text-white">
+            <div className="text-sm opacity-75 mb-2">Overall Compliance</div>
+            <div className={`text-4xl font-bold ${
+              averageCompliance >= 90 ? 'text-green-400' :
+              averageCompliance >= 70 ? 'text-yellow-400' :
+              'text-red-400'
+            }`}>
+              {averageCompliance}%
+            </div>
+            <div className="bg-black/40 rounded-full h-3 mt-2">
+              <div 
+                className={`h-full rounded-full transition-all ${
+                  averageCompliance >= 90 ? 'bg-gradient-to-r from-green-400 to-emerald-500' :
+                  averageCompliance >= 70 ? 'bg-gradient-to-r from-yellow-400 to-orange-500' :
+                  'bg-gradient-to-r from-red-400 to-pink-500'
+                }`}
+                style={{ width: `${averageCompliance}%` }}
+              ></div>
+            </div>
+          </div>
+
+          <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 text-white">
+            <div className="text-sm opacity-75 mb-2">Permits</div>
+            <div className="text-4xl font-bold">
+              {permits.filter(p => p.status === 'approved').length}/{permits.filter(p => p.required).length}
+            </div>
+            <div className="text-xs opacity-75 mt-2">Required permits approved</div>
+          </div>
+
+          <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 text-white">
+            <div className="text-sm opacity-75 mb-2">Inspections</div>
+            <div className="text-4xl font-bold">
+              {inspections.filter(i => i.passed === true).length}/{inspections.length}
+            </div>
+            <div className="text-xs opacity-75 mt-2">Inspections passed</div>
+          </div>
+        </div>
+
+        {/* Tab Navigation */}
+        <div className="flex gap-4 mb-6">
+          <button
+            onClick={() => setSelectedTab('framework')}
+            className={`flex-1 py-4 rounded-xl font-bold text-lg transition-all ${
+              selectedTab === 'framework'
+                ? 'bg-gradient-to-r from-blue-500 to-cyan-600 text-white'
+                : 'bg-white/10 text-white/60 hover:bg-white/20'
+            }`}
+          >
+            📋 Regulatory Framework
+          </button>
+          <button
+            onClick={() => setSelectedTab('permits')}
+            className={`flex-1 py-4 rounded-xl font-bold text-lg transition-all ${
+              selectedTab === 'permits'
+                ? 'bg-gradient-to-r from-purple-500 to-pink-600 text-white'
+                : 'bg-white/10 text-white/60 hover:bg-white/20'
+            }`}
+          >
+            📄 Permits
+          </button>
+          <button
+            onClick={() => setSelectedTab('inspections')}
+            className={`flex-1 py-4 rounded-xl font-bold text-lg transition-all ${
+              selectedTab === 'inspections'
+                ? 'bg-gradient-to-r from-orange-500 to-red-600 text-white'
+                : 'bg-white/10 text-white/60 hover:bg-white/20'
+            }`}
+          >
+            🔍 Inspections
+          </button>
+          <button
+            onClick={() => setSelectedTab('calendar')}
+            className={`flex-1 py-4 rounded-xl font-bold text-lg transition-all ${
+              selectedTab === 'calendar'
+                ? 'bg-gradient-to-r from-green-500 to-emerald-600 text-white'
+                : 'bg-white/10 text-white/60 hover:bg-white/20'
+            }`}
+          >
+            📅 Compliance Calendar
+          </button>
+        </div>
+
+        {/* Regulatory Framework Tab */}
+        {selectedTab === 'framework' && (
+          <div className="space-y-6">
+            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 text-white">
+              <h3 className="text-2xl font-bold mb-4">📋 Regulatory Requirements</h3>
+              <p className="text-lg mb-6 opacity-90">
+                Maintain compliance with federal, state, and local regulations.
+              </p>
+
+              <div className="space-y-4 mb-6">
+                {regulations.map(reg => (
+                  <div key={reg.id} className="bg-black/30 rounded-xl p-4">
+                    <div className="flex justify-between items-start mb-3">
+                      <div>
+                        <h4 className="text-xl font-bold">{reg.name}</h4>
+                        {reg.critical && (
+                          <span className="text-xs text-red-400">⚠️ Critical Regulation</span>
+                        )}
+                      </div>
+                      <span className={`px-3 py-1 rounded-full text-sm font-bold ${
+                        reg.compliance >= 90 ? 'bg-green-500' :
+                        reg.compliance >= 70 ? 'bg-yellow-500' :
+                        'bg-red-500'
+                      }`}>
+                        {reg.compliance}%
+                      </span>
+                    </div>
+                    <div className="bg-black/40 rounded-full h-3">
+                      <div 
+                        className={`h-full rounded-full transition-all ${
+                          reg.compliance >= 90 ? 'bg-gradient-to-r from-green-400 to-emerald-500' :
+                          reg.compliance >= 70 ? 'bg-gradient-to-r from-yellow-400 to-orange-500' :
+                          'bg-gradient-to-r from-red-400 to-pink-500'
+                        }`}
+                        style={{ width: `${reg.compliance}%` }}
+                      ></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {!regulatoryChange && changeHandled && (
+                <div className="text-center">
+                  <button
+                    onClick={() => setRegulatoryChange(true)}
+                    className="px-6 py-3 bg-gradient-to-r from-orange-500 to-red-600 rounded-xl font-bold hover:scale-105 transition-all"
+                  >
+                    ⚠️ Handle Regulatory Change
+                  </button>
+                </div>
+              )}
+
+              {regulatoryChange && !changeHandled && (
+                <div className="bg-orange-500/20 border-2 border-orange-400 rounded-xl p-6 mt-6">
+                  <div className="text-5xl mb-4">📢</div>
+                  <h4 className="text-2xl font-bold mb-4">New Regulation Alert</h4>
+                  <p className="text-lg mb-4">
+                    The EPA has updated Clean Water Act standards, requiring stricter discharge limits. 
+                    How do you respond?
+                  </p>
+                  <div className="grid md:grid-cols-3 gap-4">
+                    <button
+                      onClick={() => handleRegulatoryChange('adapt')}
+                      className="bg-white/10 hover:bg-white/20 rounded-xl p-4 transition-all text-left"
+                    >
+                      <div className="text-3xl mb-2">✅</div>
+                      <div className="font-bold">Immediate Adaptation</div>
+                      <div className="text-sm opacity-75 mt-2">
+                        Update systems immediately, ensure full compliance
+                      </div>
+                      <div className="text-xs text-green-400 mt-2">✓ Maintains compliance</div>
+                    </button>
+                    <button
+                      onClick={() => handleRegulatoryChange('phase')}
+                      className="bg-white/10 hover:bg-white/20 rounded-xl p-4 transition-all text-left"
+                    >
+                      <div className="text-3xl mb-2">📅</div>
+                      <div className="font-bold">Phased Implementation</div>
+                      <div className="text-sm opacity-75 mt-2">
+                        Request grace period, implement in stages
+                      </div>
+                      <div className="text-xs text-yellow-400 mt-2">⚠ Temporary variance needed</div>
+                    </button>
+                    <button
+                      onClick={() => handleRegulatoryChange('delay')}
+                      className="bg-white/10 hover:bg-white/20 rounded-xl p-4 transition-all text-left"
+                    >
+                      <div className="text-3xl mb-2">⏸️</div>
+                      <div className="font-bold">Delay & Challenge</div>
+                      <div className="text-sm opacity-75 mt-2">
+                        Contest requirement, delay implementation
+                      </div>
+                      <div className="text-xs text-red-400 mt-2">✗ Risk non-compliance</div>
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Permits Tab */}
+        {selectedTab === 'permits' && (
+          <div className="space-y-6">
+            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 text-white">
+              <h3 className="text-2xl font-bold mb-4">📄 Permit Management</h3>
+              <p className="text-lg mb-6 opacity-90">
+                Obtain all required permits before beginning restoration work.
+              </p>
+
+              <div className="grid md:grid-cols-2 gap-4">
+                {permits.map(permit => (
+                  <div key={permit.id} className="bg-black/30 rounded-xl p-4">
+                    <div className="flex justify-between items-start mb-3">
+                      <div>
+                        <h4 className="text-lg font-bold">{permit.name}</h4>
+                        {permit.required && (
+                          <span className="text-xs text-red-400">Required</span>
+                        )}
+                      </div>
+                      <span className={`px-3 py-1 rounded-full text-xs font-bold ${
+                        permit.status === 'approved' ? 'bg-green-500' :
+                        permit.status === 'in-review' ? 'bg-yellow-500' :
+                        'bg-gray-600'
+                      }`}>
+                        {permit.status === 'approved' ? '✓ Approved' :
+                         permit.status === 'in-review' ? '⏳ In Review' :
+                         'Pending'}
+                      </span>
+                    </div>
+
+                    {permit.status === 'pending' && (
+                      <button
+                        onClick={() => applyForPermit(permit.id)}
+                        className="w-full mt-3 px-4 py-2 bg-gradient-to-r from-blue-500 to-cyan-600 rounded-lg font-bold hover:scale-105 transition-all"
+                      >
+                        Apply for Permit
+                      </button>
+                    )}
+
+                    {permit.status === 'in-review' && (
+                      <div className="mt-3">
+                        <div className="text-sm opacity-75 mb-2">Processing...</div>
+                        <div className="bg-black/40 rounded-full h-2">
+                          <div 
+                            className="bg-gradient-to-r from-yellow-400 to-orange-500 h-full rounded-full transition-all animate-pulse"
+                            style={{ width: `${permit.progress}%` }}
+                          ></div>
+                        </div>
+                      </div>
+                    )}
+
+                    {permit.status === 'approved' && (
+                      <div className="mt-3 bg-green-500/20 border border-green-400 rounded-lg p-2 text-center text-sm">
+                        ✅ Permit Approved
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              {allPermitsApproved && (
+                <div className="mt-6 bg-green-500/20 border-2 border-green-400 rounded-xl p-6 text-center">
+                  <div className="text-5xl mb-3">🎉</div>
+                  <h4 className="text-2xl font-bold">All Required Permits Obtained!</h4>
+                  <p className="opacity-90 mt-2">You're authorized to proceed with restoration work.</p>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Inspections Tab */}
+        {selectedTab === 'inspections' && (
+          <div className="space-y-6">
+            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 text-white">
+              <h3 className="text-2xl font-bold mb-4">🔍 Compliance Inspections</h3>
+              <p className="text-lg mb-6 opacity-90">
+                Pass all inspections to demonstrate regulatory compliance.
+              </p>
+
+              <div className="space-y-4 mb-6">
+                {inspections.map((inspection, idx) => (
+                  <div key={inspection.id} className="bg-black/30 rounded-xl p-4">
+                    <div className="flex justify-between items-start mb-2">
+                      <div>
+                        <h4 className="text-lg font-bold">{inspection.name}</h4>
+                        <div className="text-sm opacity-75">Scheduled: {inspection.date}</div>
+                      </div>
+                      <span className={`px-3 py-1 rounded-full text-xs font-bold ${
+                        inspection.passed === true ? 'bg-green-500' :
+                        inspection.passed === false ? 'bg-red-500' :
+                        inspection.status === 'scheduled' ? 'bg-blue-500' :
+                        'bg-gray-600'
+                      }`}>
+                        {inspection.passed === true ? '✓ Passed' :
+                         inspection.passed === false ? '✗ Failed' :
+                         inspection.status === 'scheduled' ? 'Scheduled' :
+                         'Pending'}
+                      </span>
+                    </div>
+
+                    {idx === 0 && inspection.status === 'scheduled' && !challengeHandled && (
+                      <button
+                        onClick={() => setInspectionChallenge(true)}
+                        className="mt-3 px-4 py-2 bg-gradient-to-r from-orange-500 to-red-600 rounded-lg font-bold hover:scale-105 transition-all"
+                      >
+                        Begin Inspection
+                      </button>
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              {inspectionChallenge && !challengeHandled && (
+                <div className="bg-blue-500/20 border-2 border-blue-400 rounded-xl p-6">
+                  <div className="text-5xl mb-4">🔍</div>
+                  <h4 className="text-2xl font-bold mb-4">Inspector Arriving Tomorrow</h4>
+                  <p className="text-lg mb-4">
+                    The state environmental inspector will visit your site tomorrow morning. 
+                    Your team needs guidance on preparation.
+                  </p>
+                  <div className="grid md:grid-cols-3 gap-4">
+                    <button
+                      onClick={() => handleInspection('prepare')}
+                      className="bg-white/10 hover:bg-white/20 rounded-xl p-4 transition-all text-left"
+                    >
+                      <div className="text-3xl mb-2">📋</div>
+                      <div className="font-bold">Thorough Preparation</div>
+                      <div className="text-sm opacity-75 mt-2">
+                        Full documentation review, site cleanup, team briefing
+                      </div>
+                      <div className="text-xs text-green-400 mt-2">✓ Best chance of passing</div>
+                    </button>
+                    <button
+                      onClick={() => handleInspection('standard')}
+                      className="bg-white/10 hover:bg-white/20 rounded-xl p-4 transition-all text-left"
+                    >
+                      <div className="text-3xl mb-2">📝</div>
+                      <div className="font-bold">Standard Prep</div>
+                      <div className="text-sm opacity-75 mt-2">
+                        Basic documentation, normal operations
+                      </div>
+                      <div className="text-xs text-yellow-400 mt-2">⚠ Moderate success chance</div>
+                    </button>
+                    <button
+                      onClick={() => handleInspection('wing-it')}
+                      className="bg-white/10 hover:bg-white/20 rounded-xl p-4 transition-all text-left"
+                    >
+                      <div className="text-3xl mb-2">🤷</div>
+                      <div className="font-bold">Wing It</div>
+                      <div className="text-sm opacity-75 mt-2">
+                        Minimal prep, rely on current state
+                      </div>
+                      <div className="text-xs text-red-400 mt-2">✗ High risk of failure</div>
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {challengeHandled && inspections[0].passed === false && (
+                <div className="bg-red-500/20 border-2 border-red-400 rounded-xl p-6 text-center">
+                  <div className="text-5xl mb-3">⚠️</div>
+                  <h4 className="text-2xl font-bold">Inspection Failed</h4>
+                  <p className="opacity-90 mt-2">You'll need to address violations and schedule a re-inspection.</p>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Compliance Calendar Tab */}
+        {selectedTab === 'calendar' && (
+          <div className="space-y-6">
+            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 text-white">
+              <h3 className="text-2xl font-bold mb-4">📅 Compliance Calendar</h3>
+              <p className="text-lg mb-6 opacity-90">
+                Track deadlines and upcoming compliance activities.
+              </p>
+
+              <div className="grid md:grid-cols-2 gap-4 mb-6">
+                <div className="bg-black/30 rounded-xl p-4">
+                  <h4 className="text-lg font-bold mb-3 text-blue-400">Upcoming Deadlines</h4>
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span>Quarterly Water Quality Report</span>
+                      <span className="text-yellow-400">Week 5</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span>Annual Compliance Certification</span>
+                      <span className="text-green-400">Week 12</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span>Permit Renewal (Water Discharge)</span>
+                      <span className="text-orange-400">Week 8</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-black/30 rounded-xl p-4">
+                  <h4 className="text-lg font-bold mb-3 text-purple-400">Recent Activities</h4>
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2 text-sm">
+                      <span className="text-green-400">✓</span>
+                      <span>Submitted NEPA documentation</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm">
+                      <span className="text-green-400">✓</span>
+                      <span>Completed safety training</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm">
+                      <span className="text-yellow-400">⏳</span>
+                      <span>Awaiting EPA response</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {allPermitsApproved && challengeHandled && changeHandled && averageCompliance >= 85 && (
+                <div className="text-center">
+                  <button
+                    onClick={completeLevel}
+                    className="px-8 py-4 bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl font-bold text-lg hover:scale-105 transition-all"
+                  >
+                    🎉 Complete Compliance Management
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Transition Message */}
+        {levelComplete && (
+          <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50">
+            <div className="text-center text-white">
+              <div className="text-8xl mb-6 animate-bounce">🏛️</div>
+              <h2 className="text-5xl font-bold mb-4">Compliance Mastered!</h2>
+              <p className="text-2xl opacity-80">
+                Moving to final celebration...
+              </p>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 // Completion Screen
 function CompletionScreen({ progress }: { progress: GameProgress; setProgress: (p: GameProgress) => void }) {
   return (
