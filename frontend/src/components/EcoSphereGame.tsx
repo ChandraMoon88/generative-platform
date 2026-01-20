@@ -6407,7 +6407,7 @@ function Level14Mentor({ progress, setProgress }: { progress: GameProgress; setP
                     <div className="flex justify-between text-sm">
                       <span>Status:</span>
                       <span className={`font-bold ${
-                        workshop.status === 'completed' ? 'text-green-400' :
+                        workshop.status === 'complete' ? 'text-green-400' :
                         workshop.status === 'in-progress' ? 'text-yellow-400' :
                         'text-gray-400'
                       }`}>
