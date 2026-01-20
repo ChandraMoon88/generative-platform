@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { Droplet, TreePine, Factory, Sprout, Waves, Mountain, Check, Lock, Sparkles, Users, DollarSign, BarChart3, MessageSquare, FileCheck, FolderKanban, Lightbulb, Scale, GraduationCap, Globe } from 'lucide-react';
 import Level1Game from './Level1Game';
 import Level2Game from './Level2Game';
+import Level3Game from './Level3Game';
 import { loadGameState, GameState } from '@/lib/gameState';
 
 // Level Icons Mapping
@@ -317,6 +318,10 @@ export default function EcoSphereGame() {
   
   if (gameStarted && currentLevel === 2) {
     return <Level2Game />;
+  }
+  
+  if (gameStarted && currentLevel === 3) {
+    return <Level3Game />;
   }
 
   return (
