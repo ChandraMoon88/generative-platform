@@ -90,6 +90,8 @@ export interface FormField {
   type: string;
   value: any;
   label?: string;
+  previousValue?: any;
+  isValid?: boolean;
 }
 
 export interface ValidationError {
