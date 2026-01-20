@@ -140,7 +140,7 @@ export default function NewMenuItemPage() {
         Object.entries(newErrors).map(([field, message]) => ({
           field,
           message: message || '',
-          rule: 'validation',
+          type: 'validation',
         }))
       );
       return false;
