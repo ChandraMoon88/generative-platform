@@ -46,7 +46,8 @@ export type SemanticActionType =
 export type PatternType =
   | 'crud' | 'list_view' | 'detail_view' | 'form_flow'
   | 'search' | 'filter' | 'sort' | 'navigation'
-  | 'user_preference' | 'workflow' | 'error_handling';
+  | 'user_preference' | 'workflow' | 'error_handling'
+  | 'crud_create' | 'crud_read' | 'crud_update' | 'crud_delete';
 
 export type CRUDOperation = 'create' | 'read' | 'update' | 'delete';
 
