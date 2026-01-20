@@ -6649,6 +6649,599 @@ function Level14Mentor({ progress, setProgress }: { progress: GameProgress; setP
   );
 }
 
+// LEVEL 15: The Visionary - Building a Movement & Global Impact
+function Level15Visionary({ progress, setProgress }: { progress: GameProgress; setProgress: (p: GameProgress) => void }) {
+  const [activeTab, setActiveTab] = useState<'movement' | 'organization' | 'global' | 'legacy'>('movement');
+  const [chapters, setChapters] = useState(new Map([
+    ['chapter-1', { id: 'chapter-1', name: 'Urban Watershed Alliance', location: 'Local', members: 0, status: 'forming' as const, impact: 0 }],
+    ['chapter-2', { id: 'chapter-2', name: 'Regional Rivers Coalition', location: 'Regional', members: 0, status: 'forming' as const, impact: 0 }],
+    ['chapter-3', { id: 'chapter-3', name: 'National Water Network', location: 'National', members: 0, status: 'forming' as const, impact: 0 }],
+  ]));
+  const [leaders, setLeaders] = useState(new Map([
+    ['leader-1', { id: 'leader-1', name: 'Maya Patel', role: 'Regional Coordinator', trained: false, leading: 0 }],
+    ['leader-2', { id: 'leader-2', name: 'James Liu', role: 'Community Organizer', trained: false, leading: 0 }],
+    ['leader-3', { id: 'leader-3', name: 'Aisha Mohammed', role: 'Policy Advocate', trained: false, leading: 0 }],
+    ['leader-4', { id: 'leader-4', name: 'Carlos Fernandez', role: 'Technical Lead', trained: false, leading: 0 }],
+  ]));
+  const [partnerships, setPartnerships] = useState(new Map([
+    ['partner-1', { id: 'partner-1', name: 'Global Water Foundation', type: 'NGO', status: 'initial' as const, funding: 0 }],
+    ['partner-2', { id: 'partner-2', name: 'EcoTech Solutions', type: 'Corporate', status: 'initial' as const, funding: 0 }],
+    ['partner-3', { id: 'partner-3', name: 'International Rivers Network', type: 'Network', status: 'initial' as const, funding: 0 }],
+  ]));
+  const [vision, setVision] = useState({
+    statement: '',
+    goals: [] as string[],
+    timeline: 0,
+    funding: 0,
+  });
+  const [globalProjects, setGlobalProjects] = useState(0);
+  const [ecosystemsRestored, setEcosystemsRestored] = useState(12); // From previous levels
+  const [showChallenge, setShowChallenge] = useState(false);
+  const [challengeResolved, setChallengeResolved] = useState(false);
+  const [levelComplete, setLevelComplete] = useState(false);
+
+  const launchChapter = (chapterId: string) => {
+    const chapter = chapters.get(chapterId);
+    if (chapter && chapter.status === 'forming') {
+      const newMembers = Math.floor(Math.random() * 100) + 50; // 50-150 members
+      const updated = new Map(chapters);
+      updated.set(chapterId, { ...chapter, members: newMembers, status: 'active' });
+      setChapters(updated);
+      
+      setTimeout(() => {
+        const impact = Math.floor(Math.random() * 5) + 3; // 3-8 projects
+        const updated2 = new Map(chapters);
+        updated2.set(chapterId, { ...chapter, members: newMembers, status: 'active', impact });
+        setChapters(updated2);
+        setGlobalProjects(prev => prev + impact);
+        setEcosystemsRestored(prev => prev + Math.floor(Math.random() * 3) + 2);
+      }, 2000);
+    }
+  };
+
+  const developLeader = (leaderId: string) => {
+    const leader = leaders.get(leaderId);
+    if (leader && !leader.trained) {
+      const updated = new Map(leaders);
+      updated.set(leaderId, { ...leader, trained: true });
+      setLeaders(updated);
+      
+      setTimeout(() => {
+        const leading = Math.floor(Math.random() * 3) + 2; // 2-5 chapters
+        const updated2 = new Map(leaders);
+        updated2.set(leaderId, { ...leader, trained: true, leading });
+        setLeaders(updated2);
+      }, 1500);
+    }
+  };
+
+  const buildPartnership = (partnerId: string) => {
+    const partner = partnerships.get(partnerId);
+    if (partner) {
+      const nextStatus = partner.status === 'initial' ? 'collaborating' : 'strategic';
+      const newFunding = partner.status === 'initial' ? 
+        Math.floor(Math.random() * 50000) + 50000 : // $50K-100K
+        Math.floor(Math.random() * 200000) + 200000; // $200K-400K
+      
+      const updated = new Map(partnerships);
+      updated.set(partnerId, { ...partner, status: nextStatus as any, funding: partner.funding + newFunding });
+      setPartnerships(updated);
+      
+      setVision(prev => ({ ...prev, funding: prev.funding + newFunding }));
+    }
+  };
+
+  const createVisionStatement = () => {
+    setVision({
+      statement: 'To create a global network of thriving ecosystems where communities and nature flourish together, ensuring healthy watersheds for generations to come.',
+      goals: [
+        'Restore 1000 ecosystems worldwide',
+        'Train 10,000 conservation leaders',
+        'Influence national water policies',
+        'Build self-sustaining local chapters',
+        'Create accessible education resources'
+      ],
+      timeline: 10, // 10-year vision
+      funding: vision.funding,
+    });
+  };
+
+  const expandGlobally = () => {
+    const newChapters = Math.floor(Math.random() * 5) + 3; // 3-8 new chapters
+    const newProjects = Math.floor(Math.random() * 10) + 10; // 10-20 projects
+    setGlobalProjects(prev => prev + newProjects);
+    setEcosystemsRestored(prev => prev + Math.floor(Math.random() * 8) + 5);
+    
+    // Add new international chapters
+    const internationalLocations = ['Europe', 'Asia', 'Africa', 'South America', 'Australia'];
+    const updated = new Map(chapters);
+    for (let i = 0; i < Math.min(newChapters, 5); i++) {
+      const location = internationalLocations[i];
+      const id = `chapter-international-${i + 1}`;
+      if (!updated.has(id)) {
+        updated.set(id, {
+          id,
+          name: `${location} Water Alliance`,
+          location,
+          members: Math.floor(Math.random() * 80) + 40,
+          status: 'active' as const,
+          impact: Math.floor(Math.random() * 4) + 2,
+        });
+      }
+    }
+    setChapters(updated);
+  };
+
+  const triggerChallenge = () => {
+    setShowChallenge(true);
+  };
+
+  const handleChallengeResponse = (approach: 'values' | 'structure' | 'sustainable') => {
+    setChallengeResolved(true);
+    setShowChallenge(false);
+    
+    // All approaches are positive
+    if (approach === 'values') {
+      createVisionStatement();
+    } else if (approach === 'structure') {
+      const updated = new Map(leaders);
+      leaders.forEach((leader, id) => {
+        if (leader.trained) {
+          updated.set(id, { ...leader, leading: leader.leading + 2 });
+        }
+      });
+      setLeaders(updated);
+    } else {
+      expandGlobally();
+    }
+  };
+
+  const completeLevel = () => {
+    setLevelComplete(true);
+    setTimeout(() => {
+      setProgress({
+        ...progress,
+        phase: 'completion',
+        completedPhases: [...progress.completedPhases, 'level-15-visionary']
+      });
+    }, 3000);
+  };
+
+  const activeChapters = Array.from(chapters.values()).filter(c => c.status === 'active').length;
+  const totalMembers = Array.from(chapters.values()).reduce((sum, c) => sum + c.members, 0);
+  const trainedLeaders = Array.from(leaders.values()).filter(l => l.trained).length;
+  const strategicPartners = Array.from(partnerships.values()).filter(p => p.status === 'strategic').length;
+  const totalFunding = Array.from(partnerships.values()).reduce((sum, p) => sum + p.funding, 0);
+
+  const canComplete = activeChapters >= 4 && trainedLeaders >= 3 && vision.statement !== '' && challengeResolved && strategicPartners >= 1;
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-indigo-900 via-purple-900 to-pink-900 p-6">
+      <div className="max-w-6xl mx-auto">
+        {/* Header */}
+        <div className="bg-white/10 backdrop-blur-md rounded-3xl p-8 mb-8 text-white">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h1 className="text-5xl font-bold mb-2">🌍 Level 15: The Visionary</h1>
+              <p className="text-xl opacity-80">Build a global movement for lasting environmental change</p>
+            </div>
+            <div className="text-right">
+              <div className="text-4xl font-bold text-yellow-400">{ecosystemsRestored}</div>
+              <div className="text-sm opacity-75">Ecosystems Restored</div>
+            </div>
+          </div>
+
+          {/* Key Metrics */}
+          <div className="grid grid-cols-4 gap-4">
+            <div className="bg-blue-500/20 rounded-xl p-4 border-2 border-blue-400">
+              <div className="text-3xl font-bold text-blue-300">{activeChapters}</div>
+              <div className="text-sm opacity-75">Active Chapters</div>
+            </div>
+            <div className="bg-green-500/20 rounded-xl p-4 border-2 border-green-400">
+              <div className="text-3xl font-bold text-green-300">{totalMembers}</div>
+              <div className="text-sm opacity-75">Network Members</div>
+            </div>
+            <div className="bg-purple-500/20 rounded-xl p-4 border-2 border-purple-400">
+              <div className="text-3xl font-bold text-purple-300">{globalProjects}</div>
+              <div className="text-sm opacity-75">Global Projects</div>
+            </div>
+            <div className="bg-yellow-500/20 rounded-xl p-4 border-2 border-yellow-400">
+              <div className="text-3xl font-bold text-yellow-300">${(totalFunding / 1000).toFixed(0)}K</div>
+              <div className="text-sm opacity-75">Network Funding</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Tabs */}
+        <div className="flex gap-4 mb-6">
+          <button
+            onClick={() => setActiveTab('movement')}
+            className={`flex-1 py-4 rounded-xl font-bold transition-all ${
+              activeTab === 'movement'
+                ? 'bg-blue-500 text-white scale-105'
+                : 'bg-white/10 text-white/70 hover:bg-white/20'
+            }`}
+          >
+            🌊 Movement Building
+          </button>
+          <button
+            onClick={() => setActiveTab('organization')}
+            className={`flex-1 py-4 rounded-xl font-bold transition-all ${
+              activeTab === 'organization'
+                ? 'bg-green-500 text-white scale-105'
+                : 'bg-white/10 text-white/70 hover:bg-white/20'
+            }`}
+          >
+            👥 Leadership Network
+          </button>
+          <button
+            onClick={() => setActiveTab('global')}
+            className={`flex-1 py-4 rounded-xl font-bold transition-all ${
+              activeTab === 'global'
+                ? 'bg-purple-500 text-white scale-105'
+                : 'bg-white/10 text-white/70 hover:bg-white/20'
+            }`}
+          >
+            🌐 Global Scaling
+          </button>
+          <button
+            onClick={() => setActiveTab('legacy')}
+            className={`flex-1 py-4 rounded-xl font-bold transition-all ${
+              activeTab === 'legacy'
+                ? 'bg-yellow-500 text-white scale-105'
+                : 'bg-white/10 text-white/70 hover:bg-white/20'
+            }`}
+          >
+            🏆 Vision & Legacy
+          </button>
+        </div>
+
+        {/* Challenge Modal */}
+        {showChallenge && (
+          <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-6">
+            <div className="bg-gradient-to-br from-red-900 to-orange-900 rounded-3xl p-8 max-w-2xl border-4 border-red-500 text-white">
+              <h3 className="text-3xl font-bold mb-4">🚨 Scaling Challenge!</h3>
+              <p className="text-xl mb-6">
+                As your movement grows rapidly, some chapters are drifting from the original mission. 
+                Resources are stretched thin, and there's confusion about priorities. How do you maintain cohesion?
+              </p>
+              <div className="space-y-3">
+                <button
+                  onClick={() => handleChallengeResponse('values')}
+                  className="w-full p-4 bg-blue-600/40 hover:bg-blue-600 rounded-xl border-2 border-blue-400 text-left transition-all"
+                >
+                  <div className="font-bold mb-1">🎯 Reinforce Core Values</div>
+                  <div className="text-sm opacity-90">Create clear vision statement and shared principles</div>
+                </button>
+                <button
+                  onClick={() => handleChallengeResponse('structure')}
+                  className="w-full p-4 bg-green-600/40 hover:bg-green-600 rounded-xl border-2 border-green-400 text-left transition-all"
+                >
+                  <div className="font-bold mb-1">🏗️ Build Stronger Structure</div>
+                  <div className="text-sm opacity-90">Develop regional coordinators and support systems</div>
+                </button>
+                <button
+                  onClick={() => handleChallengeResponse('sustainable')}
+                  className="w-full p-4 bg-purple-600/40 hover:bg-purple-600 rounded-xl border-2 border-purple-400 text-left transition-all"
+                >
+                  <div className="font-bold mb-1">💰 Ensure Financial Sustainability</div>
+                  <div className="text-sm opacity-90">Diversify funding and build local fundraising capacity</div>
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Tab Content */}
+        {activeTab === 'movement' && (
+          <div className="bg-white/10 backdrop-blur-md rounded-3xl p-8 text-white">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-3xl font-bold">🌊 Building the Movement</h2>
+              {!showChallenge && !challengeResolved && activeChapters >= 3 && (
+                <button
+                  onClick={triggerChallenge}
+                  className="px-6 py-3 bg-gradient-to-r from-red-500 to-orange-600 rounded-xl font-bold hover:scale-105 transition-all animate-pulse"
+                >
+                  ⚠️ Scaling Challenge
+                </button>
+              )}
+            </div>
+
+            <p className="text-lg mb-6 opacity-90">
+              Create local chapters that empower communities to take ownership of their ecosystems.
+            </p>
+
+            <div className="grid md:grid-cols-2 gap-6">
+              {Array.from(chapters.values()).map(chapter => (
+                <div key={chapter.id} className="bg-black/30 rounded-xl p-6 border-2 border-blue-400">
+                  <h3 className="text-xl font-bold mb-3">{chapter.name}</h3>
+                  <div className="space-y-2 mb-4">
+                    <div className="flex justify-between text-sm">
+                      <span>Location:</span>
+                      <span className="font-bold text-blue-400">{chapter.location}</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span>Status:</span>
+                      <span className={`font-bold ${
+                        chapter.status === 'active' ? 'text-green-400' : 'text-gray-400'
+                      }`}>
+                        {chapter.status === 'active' ? 'Active' : 'Forming'}
+                      </span>
+                    </div>
+                    {chapter.members > 0 && (
+                      <div className="flex justify-between text-sm">
+                        <span>Members:</span>
+                        <span className="font-bold text-green-400">{chapter.members}</span>
+                      </div>
+                    )}
+                    {chapter.impact > 0 && (
+                      <div className="flex justify-between text-sm">
+                        <span>Projects Led:</span>
+                        <span className="font-bold text-purple-400">{chapter.impact}</span>
+                      </div>
+                    )}
+                  </div>
+                  {chapter.status === 'forming' && (
+                    <button
+                      onClick={() => launchChapter(chapter.id)}
+                      className="w-full py-2 bg-blue-600 hover:bg-blue-700 rounded-lg font-bold transition-all"
+                    >
+                      🚀 Launch Chapter
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            {activeChapters >= 3 && (
+              <div className="mt-6 bg-gradient-to-r from-green-900/40 to-emerald-900/40 border-2 border-green-400 rounded-xl p-6">
+                <h3 className="text-2xl font-bold mb-3">🌟 Movement Growing!</h3>
+                <p className="text-lg">
+                  Your network has {totalMembers} members across {activeChapters} chapters, 
+                  working on {globalProjects} restoration projects simultaneously!
+                </p>
+              </div>
+            )}
+          </div>
+        )}
+
+        {activeTab === 'organization' && (
+          <div className="bg-white/10 backdrop-blur-md rounded-3xl p-8 text-white">
+            <h2 className="text-3xl font-bold mb-6">👥 Developing Leaders</h2>
+            <p className="text-lg mb-6 opacity-90">
+              Cultivate a network of empowered leaders who can sustain the movement.
+            </p>
+
+            <div className="grid md:grid-cols-2 gap-6 mb-6">
+              {Array.from(leaders.values()).map(leader => (
+                <div key={leader.id} className="bg-black/30 rounded-xl p-6 border-2 border-green-400">
+                  <div className="flex items-center justify-between mb-3">
+                    <h3 className="text-xl font-bold">{leader.name}</h3>
+                    {leader.trained && <div className="text-2xl">⭐</div>}
+                  </div>
+                  <div className="space-y-2 mb-4">
+                    <div className="flex justify-between text-sm">
+                      <span>Role:</span>
+                      <span className="font-bold text-blue-400">{leader.role}</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span>Status:</span>
+                      <span className={`font-bold ${
+                        leader.trained ? 'text-green-400' : 'text-gray-400'
+                      }`}>
+                        {leader.trained ? 'Leadership Trained' : 'In Development'}
+                      </span>
+                    </div>
+                    {leader.leading > 0 && (
+                      <div className="flex justify-between text-sm">
+                        <span>Leading:</span>
+                        <span className="font-bold text-purple-400">{leader.leading} chapters</span>
+                      </div>
+                    )}
+                  </div>
+                  {!leader.trained && (
+                    <button
+                      onClick={() => developLeader(leader.id)}
+                      className="w-full py-2 bg-green-600 hover:bg-green-700 rounded-lg font-bold transition-all"
+                    >
+                      🎓 Develop Leader
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            <div className="bg-gradient-to-r from-purple-900/40 to-pink-900/40 border-2 border-purple-400 rounded-xl p-6">
+              <h3 className="text-2xl font-bold mb-4">🌐 Leadership Network</h3>
+              <p className="text-lg mb-4">
+                Your {trainedLeaders} trained leaders are coordinating {Array.from(leaders.values()).reduce((sum, l) => sum + l.leading, 0)} chapters, 
+                creating a self-sustaining organizational structure.
+              </p>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'global' && (
+          <div className="bg-white/10 backdrop-blur-md rounded-3xl p-8 text-white">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-3xl font-bold">🌐 International Expansion</h2>
+              <button
+                onClick={expandGlobally}
+                className="px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-600 rounded-xl font-bold hover:scale-105 transition-all"
+              >
+                🚀 Expand Globally
+              </button>
+            </div>
+
+            <p className="text-lg mb-6 opacity-90">
+              Scale your impact by forming strategic partnerships and expanding worldwide.
+            </p>
+
+            <div className="grid md:grid-cols-3 gap-6 mb-6">
+              {Array.from(partnerships.values()).map(partner => (
+                <div key={partner.id} className="bg-black/30 rounded-xl p-6 border-2 border-purple-400">
+                  <h3 className="text-lg font-bold mb-3">{partner.name}</h3>
+                  <div className="space-y-2 mb-4">
+                    <div className="flex justify-between text-sm">
+                      <span>Type:</span>
+                      <span className="font-bold text-blue-400">{partner.type}</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span>Status:</span>
+                      <span className={`font-bold ${
+                        partner.status === 'strategic' ? 'text-purple-400' :
+                        partner.status === 'collaborating' ? 'text-yellow-400' :
+                        'text-gray-400'
+                      }`}>
+                        {partner.status === 'strategic' ? 'Strategic' :
+                         partner.status === 'collaborating' ? 'Collaborating' :
+                         'Initial Contact'}
+                      </span>
+                    </div>
+                    {partner.funding > 0 && (
+                      <div className="flex justify-between text-sm">
+                        <span>Funding:</span>
+                        <span className="font-bold text-green-400">${(partner.funding / 1000).toFixed(0)}K</span>
+                      </div>
+                    )}
+                  </div>
+                  {partner.status !== 'strategic' && (
+                    <button
+                      onClick={() => buildPartnership(partner.id)}
+                      className="w-full py-2 bg-purple-600 hover:bg-purple-700 rounded-lg font-bold transition-all"
+                    >
+                      🤝 Build Partnership
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            <div className="bg-gradient-to-r from-blue-900/40 to-cyan-900/40 border-2 border-blue-400 rounded-xl p-6">
+              <h3 className="text-2xl font-bold mb-4">🌍 Global Reach</h3>
+              <div className="grid md:grid-cols-3 gap-4">
+                <div className="bg-black/30 rounded-lg p-4">
+                  <div className="text-4xl font-bold text-blue-400 mb-1">{activeChapters}</div>
+                  <div className="text-sm opacity-75">Countries/Regions</div>
+                </div>
+                <div className="bg-black/30 rounded-lg p-4">
+                  <div className="text-4xl font-bold text-green-400 mb-1">{globalProjects}</div>
+                  <div className="text-sm opacity-75">Active Projects</div>
+                </div>
+                <div className="bg-black/30 rounded-lg p-4">
+                  <div className="text-4xl font-bold text-purple-400 mb-1">${(totalFunding / 1000).toFixed(0)}K</div>
+                  <div className="text-sm opacity-75">Total Funding</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'legacy' && (
+          <div className="bg-white/10 backdrop-blur-md rounded-3xl p-8 text-white">
+            <h2 className="text-3xl font-bold mb-6">🏆 Vision & Legacy</h2>
+            <p className="text-lg mb-6 opacity-90">
+              Define the long-term vision and create a lasting legacy for generations.
+            </p>
+
+            {vision.statement === '' ? (
+              <div className="bg-black/30 rounded-xl p-8 border-2 border-yellow-400 mb-6">
+                <h3 className="text-2xl font-bold mb-4">Create Your Vision Statement</h3>
+                <p className="text-lg mb-6 opacity-90">
+                  A clear, inspiring vision will guide your movement for decades to come.
+                </p>
+                <button
+                  onClick={createVisionStatement}
+                  className="px-8 py-4 bg-gradient-to-r from-yellow-500 to-orange-600 rounded-xl font-bold text-lg hover:scale-105 transition-all"
+                >
+                  ✨ Craft Vision Statement
+                </button>
+              </div>
+            ) : (
+              <div className="bg-gradient-to-r from-yellow-900/40 to-orange-900/40 border-2 border-yellow-400 rounded-xl p-8 mb-6">
+                <h3 className="text-3xl font-bold mb-4">🌟 Our Vision</h3>
+                <p className="text-xl mb-6 italic leading-relaxed">"{vision.statement}"</p>
+                <h4 className="text-2xl font-bold mb-3">Strategic Goals:</h4>
+                <ul className="space-y-2 mb-6">
+                  {vision.goals.map((goal, idx) => (
+                    <li key={idx} className="flex items-center text-lg">
+                      <span className="text-green-400 mr-3">✓</span>
+                      {goal}
+                    </li>
+                  ))}
+                </ul>
+                <div className="flex justify-between items-center">
+                  <span className="text-lg opacity-75">{vision.timeline}-Year Strategic Plan</span>
+                  <span className="text-2xl font-bold text-green-400">${(vision.funding / 1000).toFixed(0)}K committed</span>
+                </div>
+              </div>
+            )}
+
+            <div className="bg-gradient-to-r from-green-900/40 to-emerald-900/40 border-2 border-green-400 rounded-xl p-6 mb-6">
+              <h3 className="text-2xl font-bold mb-4">🌍 Your Global Impact</h3>
+              <div className="grid md:grid-cols-2 gap-4">
+                <div className="bg-black/30 rounded-lg p-4">
+                  <div className="text-5xl font-bold text-green-400 mb-2">{ecosystemsRestored}</div>
+                  <div className="text-lg">Ecosystems Restored</div>
+                </div>
+                <div className="bg-black/30 rounded-lg p-4">
+                  <div className="text-5xl font-bold text-blue-400 mb-2">{totalMembers}</div>
+                  <div className="text-lg">Lives Changed</div>
+                </div>
+                <div className="bg-black/30 rounded-lg p-4">
+                  <div className="text-5xl font-bold text-purple-400 mb-2">{activeChapters}</div>
+                  <div className="text-lg">Communities Empowered</div>
+                </div>
+                <div className="bg-black/30 rounded-lg p-4">
+                  <div className="text-5xl font-bold text-yellow-400 mb-2">{trainedLeaders}</div>
+                  <div className="text-lg">Leaders Developed</div>
+                </div>
+              </div>
+            </div>
+
+            {canComplete && (
+              <div className="bg-gradient-to-r from-purple-900/40 to-pink-900/40 border-2 border-purple-400 rounded-xl p-8 text-center">
+                <h3 className="text-3xl font-bold mb-4">✨ Movement Complete!</h3>
+                <p className="text-xl mb-6 leading-relaxed">
+                  You've built a self-sustaining global movement that will continue your work for generations. 
+                  Your vision of thriving ecosystems is becoming reality across the world.
+                </p>
+                <button
+                  onClick={completeLevel}
+                  className="px-8 py-4 bg-gradient-to-r from-purple-500 via-pink-500 to-yellow-500 rounded-xl font-bold text-lg hover:scale-105 transition-all"
+                >
+                  🎉 Complete Your Journey
+                </button>
+              </div>
+            )}
+            {!canComplete && (
+              <div className="bg-yellow-500/20 border-2 border-yellow-400 rounded-xl p-4">
+                <p className="text-sm">
+                  <strong>To complete:</strong> Launch 4+ chapters, develop 3+ leaders, create vision statement, 
+                  build 1+ strategic partnership, and resolve the scaling challenge
+                </p>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Transition Message */}
+        {levelComplete && (
+          <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50">
+            <div className="text-center text-white">
+              <div className="text-8xl mb-6 animate-bounce">🌍</div>
+              <h2 className="text-5xl font-bold mb-4">Global Movement Created!</h2>
+              <p className="text-2xl opacity-80">
+                Revealing the full journey...
+              </p>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 // Completion Screen
 function CompletionScreen({ progress }: { progress: GameProgress; setProgress: (p: GameProgress) => void }) {
   return (
