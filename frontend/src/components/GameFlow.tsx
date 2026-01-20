@@ -323,15 +323,6 @@ export default function GameFlow({ onAppCreated }: { onAppCreated: (components: 
     return <EcoSphereGame />;
   }
 
-  // Reveal Phase: Show the magic of what was built
-            unlockedComponents: components,
-            score: appModel.score || 0
-          });
-        }}
-      />
-    );
-  }
-
   // Demo Phase
   if (gameState.phase === 'demo') {
     return (
