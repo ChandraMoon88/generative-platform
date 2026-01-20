@@ -6653,9 +6653,9 @@ function Level14Mentor({ progress, setProgress }: { progress: GameProgress; setP
 function Level15Visionary({ progress, setProgress }: { progress: GameProgress; setProgress: (p: GameProgress) => void }) {
   const [activeTab, setActiveTab] = useState<'movement' | 'organization' | 'global' | 'legacy'>('movement');
   const [chapters, setChapters] = useState(new Map([
-    ['chapter-1', { id: 'chapter-1', name: 'Urban Watershed Alliance', location: 'Local', members: 0, status: 'forming' as const, impact: 0 }],
-    ['chapter-2', { id: 'chapter-2', name: 'Regional Rivers Coalition', location: 'Regional', members: 0, status: 'forming' as const, impact: 0 }],
-    ['chapter-3', { id: 'chapter-3', name: 'National Water Network', location: 'National', members: 0, status: 'forming' as const, impact: 0 }],
+    ['chapter-1', { id: 'chapter-1', name: 'Urban Watershed Alliance', location: 'Local', members: 0, status: 'forming' as 'forming' | 'active' | 'thriving', impact: 0 }],
+    ['chapter-2', { id: 'chapter-2', name: 'Regional Rivers Coalition', location: 'Regional', members: 0, status: 'forming' as 'forming' | 'active' | 'thriving', impact: 0 }],
+    ['chapter-3', { id: 'chapter-3', name: 'National Water Network', location: 'National', members: 0, status: 'forming' as 'forming' | 'active' | 'thriving', impact: 0 }],
   ]));
   const [leaders, setLeaders] = useState(new Map([
     ['leader-1', { id: 'leader-1', name: 'Maya Patel', role: 'Regional Coordinator', trained: false, leading: 0 }],
