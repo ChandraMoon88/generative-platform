@@ -110,7 +110,7 @@ function createBaseEvent(type: EventType, metadata: Partial<EventMetadata> = {})
 // ============ LOGGING FUNCTIONS ============
 
 export function logInteraction(
-  interactionType: InteractionEvent['interactionType'],
+  interactionType: string,
   target: ElementTarget,
   semanticAction?: SemanticAction,
   value?: unknown
