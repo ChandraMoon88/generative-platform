@@ -324,6 +324,10 @@ export default function EcoSphereGame() {
   if (gameStarted && currentLevel === 3) {
     return <Level3Game />;
   }
+  
+  if (gameStarted && currentLevel >= 4 && currentLevel <= 15) {
+    return <RemainingLevelsGame levelNumber={currentLevel} />;
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-900 via-teal-800 to-blue-900 p-4 md:p-8">
