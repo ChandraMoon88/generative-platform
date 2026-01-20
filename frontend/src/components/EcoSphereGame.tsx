@@ -3339,6 +3339,448 @@ function Level8Analytics({ progress, setProgress }: { progress: GameProgress; se
   );
 }
 
+// LEVEL 9: Stakeholder Management Component
+function Level9Stakeholders({ progress, setProgress }: { progress: GameProgress; setProgress: (p: GameProgress) => void }) {
+  const [selectedTab, setSelectedTab] = useState<'map' | 'engage' | 'crisis' | 'influence'>('map');
+  const [stakeholders, setStakeholders] = useState([
+    { id: 'mayor', name: 'Mayor Chen', type: 'Government', influence: 85, support: 60, engaged: false },
+    { id: 'epa', name: 'EPA Director', type: 'Regulatory', influence: 90, support: 75, engaged: false },
+    { id: 'industry', name: 'Factory Owner', type: 'Business', influence: 70, support: 30, engaged: false },
+    { id: 'farmers', name: 'Farmers Association', type: 'Community', influence: 65, support: 45, engaged: false },
+    { id: 'activists', name: 'Green Coalition', type: 'Advocacy', influence: 60, support: 95, engaged: false },
+    { id: 'residents', name: 'Local Residents', type: 'Community', influence: 55, support: 50, engaged: false },
+  ]);
+  
+  const [engagementPlan, setEngagementPlan] = useState<Map<string, string>>(new Map());
+  const [crisisHandled, setCrisisHandled] = useState(false);
+  const [influenceMapBuilt, setInfluenceMapBuilt] = useState(false);
+  const [levelComplete, setLevelComplete] = useState(false);
+
+  const engageStakeholder = (id: string, strategy: string) => {
+    setStakeholders(prev => prev.map(s => 
+      s.id === id ? { ...s, engaged: true, support: Math.min(100, s.support + 15) } : s
+    ));
+    const newPlan = new Map(engagementPlan);
+    newPlan.set(id, strategy);
+    setEngagementPlan(newPlan);
+  };
+
+  const handleCrisis = (response: string) => {
+    if (response === 'transparent') {
+      setStakeholders(prev => prev.map(s => ({ ...s, support: Math.min(100, s.support + 10) })));
+    } else if (response === 'deflect') {
+      setStakeholders(prev => prev.map(s => 
+        s.type === 'Advocacy' ? { ...s, support: Math.max(0, s.support - 20) } : s
+      ));
+    }
+    setCrisisHandled(true);
+  };
+
+  const buildInfluenceMap = () => {
+    setInfluenceMapBuilt(true);
+  };
+
+  const completeLevel = () => {
+    setLevelComplete(true);
+    setTimeout(() => {
+      setProgress({
+        ...progress,
+        phase: 'completion' as GamePhase,
+        completedPhases: [...(progress.completedPhases || []), 'level-9-stakeholders']
+      });
+    }, 2000);
+  };
+
+  const averageSupport = Math.round(stakeholders.reduce((sum, s) => sum + s.support, 0) / stakeholders.length);
+  const allEngaged = stakeholders.every(s => s.engaged);
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-rose-900 via-pink-900 to-purple-900 py-8 px-4">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <h1 className="text-5xl font-bold text-white mb-3">
+            🤝 Level 9: Stakeholder Management
+          </h1>
+          <p className="text-2xl text-rose-200">
+            Build relationships and navigate complex stakeholder dynamics
+          </p>
+        </div>
+
+        {/* Support Meter */}
+        <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 mb-6 text-white">
+          <div className="flex justify-between items-center mb-2">
+            <span className="text-lg font-bold">Average Stakeholder Support</span>
+            <span className={`text-3xl font-bold ${
+              averageSupport >= 70 ? 'text-green-400' :
+              averageSupport >= 50 ? 'text-yellow-400' :
+              'text-red-400'
+            }`}>
+              {averageSupport}%
+            </span>
+          </div>
+          <div className="bg-black/40 rounded-full h-4">
+            <div 
+              className={`h-full rounded-full transition-all ${
+                averageSupport >= 70 ? 'bg-gradient-to-r from-green-400 to-emerald-500' :
+                averageSupport >= 50 ? 'bg-gradient-to-r from-yellow-400 to-orange-500' :
+                'bg-gradient-to-r from-red-400 to-pink-500'
+              }`}
+              style={{ width: `${averageSupport}%` }}
+            ></div>
+          </div>
+        </div>
+
+        {/* Tab Navigation */}
+        <div className="flex gap-4 mb-6">
+          <button
+            onClick={() => setSelectedTab('map')}
+            className={`flex-1 py-4 rounded-xl font-bold text-lg transition-all ${
+              selectedTab === 'map'
+                ? 'bg-gradient-to-r from-blue-500 to-cyan-600 text-white'
+                : 'bg-white/10 text-white/60 hover:bg-white/20'
+            }`}
+          >
+            🗺️ Stakeholder Map
+          </button>
+          <button
+            onClick={() => setSelectedTab('engage')}
+            className={`flex-1 py-4 rounded-xl font-bold text-lg transition-all ${
+              selectedTab === 'engage'
+                ? 'bg-gradient-to-r from-green-500 to-emerald-600 text-white'
+                : 'bg-white/10 text-white/60 hover:bg-white/20'
+            }`}
+          >
+            💬 Engagement
+          </button>
+          <button
+            onClick={() => setSelectedTab('crisis')}
+            className={`flex-1 py-4 rounded-xl font-bold text-lg transition-all ${
+              selectedTab === 'crisis'
+                ? 'bg-gradient-to-r from-red-500 to-orange-600 text-white'
+                : 'bg-white/10 text-white/60 hover:bg-white/20'
+            }`}
+          >
+            ⚠️ Crisis Response
+          </button>
+          <button
+            onClick={() => setSelectedTab('influence')}
+            className={`flex-1 py-4 rounded-xl font-bold text-lg transition-all ${
+              selectedTab === 'influence'
+                ? 'bg-gradient-to-r from-purple-500 to-pink-600 text-white'
+                : 'bg-white/10 text-white/60 hover:bg-white/20'
+            }`}
+          >
+            📊 Influence Map
+          </button>
+        </div>
+
+        {/* Stakeholder Map Tab */}
+        {selectedTab === 'map' && (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {stakeholders.map(stakeholder => (
+              <div
+                key={stakeholder.id}
+                className={`bg-white/10 backdrop-blur-md rounded-2xl p-6 text-white transition-all ${
+                  stakeholder.engaged ? 'border-2 border-green-400' : ''
+                }`}
+              >
+                <div className="flex justify-between items-start mb-4">
+                  <div>
+                    <h3 className="text-2xl font-bold mb-1">{stakeholder.name}</h3>
+                    <span className="text-sm opacity-75">{stakeholder.type}</span>
+                  </div>
+                  {stakeholder.engaged && (
+                    <span className="text-3xl">✅</span>
+                  )}
+                </div>
+
+                <div className="space-y-3 mb-4">
+                  <div>
+                    <div className="flex justify-between text-sm mb-1">
+                      <span>Influence</span>
+                      <span className="font-bold">{stakeholder.influence}%</span>
+                    </div>
+                    <div className="bg-black/40 rounded-full h-2">
+                      <div 
+                        className="bg-gradient-to-r from-purple-400 to-pink-500 h-full rounded-full"
+                        style={{ width: `${stakeholder.influence}%` }}
+                      ></div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <div className="flex justify-between text-sm mb-1">
+                      <span>Support</span>
+                      <span className={`font-bold ${
+                        stakeholder.support >= 70 ? 'text-green-400' :
+                        stakeholder.support >= 40 ? 'text-yellow-400' :
+                        'text-red-400'
+                      }`}>
+                        {stakeholder.support}%
+                      </span>
+                    </div>
+                    <div className="bg-black/40 rounded-full h-2">
+                      <div 
+                        className={`h-full rounded-full ${
+                          stakeholder.support >= 70 ? 'bg-gradient-to-r from-green-400 to-emerald-500' :
+                          stakeholder.support >= 40 ? 'bg-gradient-to-r from-yellow-400 to-orange-500' :
+                          'bg-gradient-to-r from-red-400 to-pink-500'
+                        }`}
+                        style={{ width: `${stakeholder.support}%` }}
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+
+                {!stakeholder.engaged && (
+                  <div className="text-xs opacity-75 bg-black/30 p-2 rounded">
+                    Not yet engaged - use Engagement tab to connect
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Engagement Tab */}
+        {selectedTab === 'engage' && (
+          <div className="space-y-6">
+            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 text-white">
+              <h3 className="text-2xl font-bold mb-4">💬 Engagement Strategies</h3>
+              <p className="text-lg mb-6 opacity-90">
+                Choose the right communication strategy for each stakeholder group.
+              </p>
+
+              <div className="grid md:grid-cols-2 gap-6">
+                {stakeholders.map(stakeholder => (
+                  <div key={stakeholder.id} className="bg-black/30 rounded-xl p-4">
+                    <div className="flex justify-between items-start mb-4">
+                      <div>
+                        <h4 className="text-xl font-bold">{stakeholder.name}</h4>
+                        <div className="text-sm opacity-75">{stakeholder.type}</div>
+                      </div>
+                      {stakeholder.engaged ? (
+                        <span className="px-3 py-1 bg-green-500 rounded-full text-xs font-bold">Engaged</span>
+                      ) : (
+                        <span className="px-3 py-1 bg-gray-600 rounded-full text-xs font-bold">Pending</span>
+                      )}
+                    </div>
+
+                    {!stakeholder.engaged && (
+                      <div className="space-y-2">
+                        <button
+                          onClick={() => engageStakeholder(stakeholder.id, 'data-driven')}
+                          className="w-full text-left bg-white/10 hover:bg-white/20 rounded-lg p-3 transition-all text-sm"
+                        >
+                          <div className="font-bold">📊 Data-Driven Approach</div>
+                          <div className="text-xs opacity-75">Present facts, figures, and scientific evidence</div>
+                        </button>
+                        
+                        <button
+                          onClick={() => engageStakeholder(stakeholder.id, 'emotional')}
+                          className="w-full text-left bg-white/10 hover:bg-white/20 rounded-lg p-3 transition-all text-sm"
+                        >
+                          <div className="font-bold">❤️ Emotional Appeal</div>
+                          <div className="text-xs opacity-75">Focus on community impact and shared values</div>
+                        </button>
+                        
+                        <button
+                          onClick={() => engageStakeholder(stakeholder.id, 'economic')}
+                          className="w-full text-left bg-white/10 hover:bg-white/20 rounded-lg p-3 transition-all text-sm"
+                        >
+                          <div className="font-bold">💼 Economic Benefits</div>
+                          <div className="text-xs opacity-75">Highlight cost savings and economic opportunities</div>
+                        </button>
+                      </div>
+                    )}
+
+                    {stakeholder.engaged && engagementPlan.has(stakeholder.id) && (
+                      <div className="bg-green-500/20 border border-green-400 rounded-lg p-3 text-sm">
+                        ✅ Engaged using: <span className="font-bold capitalize">{engagementPlan.get(stakeholder.id)}</span> strategy
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              {allEngaged && (
+                <div className="mt-6 bg-green-500/20 border-2 border-green-400 rounded-xl p-6 text-center">
+                  <div className="text-5xl mb-3">🎉</div>
+                  <h4 className="text-2xl font-bold">All Stakeholders Engaged!</h4>
+                  <p className="opacity-90 mt-2">Your communication strategy is working.</p>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Crisis Response Tab */}
+        {selectedTab === 'crisis' && (
+          <div className="space-y-6">
+            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 text-white">
+              <h3 className="text-2xl font-bold mb-4">⚠️ Crisis Communication</h3>
+              
+              {!crisisHandled ? (
+                <>
+                  <div className="bg-red-500/20 border-2 border-red-400 rounded-xl p-6 mb-6">
+                    <div className="text-5xl mb-4">🚨</div>
+                    <h4 className="text-2xl font-bold mb-4">Breaking News</h4>
+                    <p className="text-lg mb-4">
+                      A local news outlet reports that your restoration project may have disturbed 
+                      a sensitive habitat area. Environmental groups are questioning your methods. 
+                      How do you respond?
+                    </p>
+                  </div>
+
+                  <div className="grid md:grid-cols-3 gap-4">
+                    <button
+                      onClick={() => handleCrisis('transparent')}
+                      className="bg-white/10 hover:bg-white/20 rounded-xl p-6 transition-all text-left"
+                    >
+                      <div className="text-4xl mb-3">🔍</div>
+                      <h4 className="text-xl font-bold mb-2">Transparent Communication</h4>
+                      <p className="text-sm opacity-80">
+                        Immediately share all data, invite independent review, hold public meeting
+                      </p>
+                      <div className="mt-3 text-xs text-green-400">✓ Builds trust with all groups</div>
+                    </button>
+
+                    <button
+                      onClick={() => handleCrisis('defensive')}
+                      className="bg-white/10 hover:bg-white/20 rounded-xl p-6 transition-all text-left"
+                    >
+                      <div className="text-4xl mb-3">🛡️</div>
+                      <h4 className="text-xl font-bold mb-2">Defensive Response</h4>
+                      <p className="text-sm opacity-80">
+                        Issue statement defending methodology, cite credentials and permits
+                      </p>
+                      <div className="mt-3 text-xs text-yellow-400">⚠ May maintain some support</div>
+                    </button>
+
+                    <button
+                      onClick={() => handleCrisis('deflect')}
+                      className="bg-white/10 hover:bg-white/20 rounded-xl p-6 transition-all text-left"
+                    >
+                      <div className="text-4xl mb-3">↩️</div>
+                      <h4 className="text-xl font-bold mb-2">Deflect & Minimize</h4>
+                      <p className="text-sm opacity-80">
+                        Downplay concerns, wait for story to blow over, avoid direct engagement
+                      </p>
+                      <div className="mt-3 text-xs text-red-400">✗ May damage stakeholder trust</div>
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <div className="bg-green-500/20 border-2 border-green-400 rounded-xl p-6 text-center">
+                  <div className="text-5xl mb-4">✅</div>
+                  <h4 className="text-2xl font-bold mb-2">Crisis Handled</h4>
+                  <p className="text-lg opacity-90">
+                    Your response has been noted by stakeholders. Support levels updated.
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Influence Map Tab */}
+        {selectedTab === 'influence' && (
+          <div className="space-y-6">
+            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 text-white">
+              <h3 className="text-2xl font-bold mb-4">📊 Influence Network</h3>
+              <p className="text-lg mb-6 opacity-90">
+                Map stakeholder relationships and identify key influencers who can champion your project.
+              </p>
+
+              {!influenceMapBuilt ? (
+                <div className="text-center">
+                  <button
+                    onClick={buildInfluenceMap}
+                    className="px-8 py-4 bg-gradient-to-r from-purple-500 to-pink-600 rounded-xl font-bold text-lg hover:scale-105 transition-all"
+                  >
+                    🗺️ Build Influence Map
+                  </button>
+                </div>
+              ) : (
+                <>
+                  <div className="bg-black/30 rounded-xl p-6 mb-6">
+                    <h4 className="text-xl font-bold mb-4">Key Relationships</h4>
+                    <div className="space-y-3">
+                      <div className="flex items-center gap-4 bg-white/10 p-3 rounded-lg">
+                        <span>Mayor Chen</span>
+                        <span className="opacity-50">↔️</span>
+                        <span>EPA Director</span>
+                        <span className="ml-auto text-sm text-green-400">Strong Alliance</span>
+                      </div>
+                      <div className="flex items-center gap-4 bg-white/10 p-3 rounded-lg">
+                        <span>Green Coalition</span>
+                        <span className="opacity-50">↔️</span>
+                        <span>Local Residents</span>
+                        <span className="ml-auto text-sm text-blue-400">Aligned Interests</span>
+                      </div>
+                      <div className="flex items-center gap-4 bg-white/10 p-3 rounded-lg">
+                        <span>Factory Owner</span>
+                        <span className="opacity-50">⚔️</span>
+                        <span>Green Coalition</span>
+                        <span className="ml-auto text-sm text-red-400">Opposition</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-black/30 rounded-xl p-6">
+                    <h4 className="text-xl font-bold mb-4">Champion Identification</h4>
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div className="bg-green-500/20 border border-green-400 rounded-lg p-4">
+                        <div className="text-3xl mb-2">⭐</div>
+                        <div className="font-bold">EPA Director</div>
+                        <div className="text-sm opacity-75 mt-1">
+                          High influence + High support = Perfect champion
+                        </div>
+                      </div>
+                      <div className="bg-blue-500/20 border border-blue-400 rounded-lg p-4">
+                        <div className="text-3xl mb-2">🎯</div>
+                        <div className="font-bold">Mayor Chen</div>
+                        <div className="text-sm opacity-75 mt-1">
+                          Key decision-maker with strong support
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {allEngaged && crisisHandled && averageSupport >= 60 && (
+                    <div className="mt-6 text-center">
+                      <button
+                        onClick={completeLevel}
+                        className="px-8 py-4 bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl font-bold text-lg hover:scale-105 transition-all"
+                      >
+                        🎉 Complete Stakeholder Management
+                      </button>
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Transition Message */}
+        {levelComplete && (
+          <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50">
+            <div className="text-center text-white">
+              <div className="text-8xl mb-6 animate-bounce">🤝</div>
+              <h2 className="text-5xl font-bold mb-4">Stakeholder Management Mastered!</h2>
+              <p className="text-2xl opacity-80">
+                Moving to final celebration...
+              </p>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 // Completion Screen
 function CompletionScreen({ progress }: { progress: GameProgress; setProgress: (p: GameProgress) => void }) {
   return (
