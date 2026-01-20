@@ -164,7 +164,7 @@ export function logStateChange(
 
 export function logFormEvent(
   formId: string,
-  formAction: FormEvent['formAction'],
+  formAction: FormEvent['action'],
   field?: FormField,
   formData?: Record<string, unknown>,
   validationErrors?: ValidationError[],
