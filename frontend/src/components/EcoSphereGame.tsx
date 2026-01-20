@@ -6071,7 +6071,7 @@ function Level14Mentor({ progress, setProgress }: { progress: GameProgress; setP
         const participants = Math.floor(Math.random() * 15) + 15; // 15-30
         const satisfaction = Math.floor(Math.random() * 20) + 75; // 75-95%
         const updated2 = new Map(workshops);
-        updated2.set(workshopId, { ...workshop, participants, satisfaction, status: 'completed' });
+        updated2.set(workshopId, { ...workshop, participants, satisfaction, status: 'complete' });
         setWorkshops(updated2);
       }, 2000);
     }
