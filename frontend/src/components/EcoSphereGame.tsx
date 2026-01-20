@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Droplet, TreePine, Factory, Sprout, Waves, Mountain, Check, Lock, Sparkles, Users, DollarSign, BarChart3, MessageSquare, FileCheck, FolderKanban, Lightbulb, Scale, GraduationCap, Globe } from 'lucide-react';
 import Level1Game from './Level1Game';
+import Level2Game from './Level2Game';
 import { loadGameState, GameState } from '@/lib/gameState';
 
 // Level Icons Mapping
