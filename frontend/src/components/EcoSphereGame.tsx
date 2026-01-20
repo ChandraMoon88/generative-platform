@@ -3891,6 +3891,8 @@ function CompletionScreen({ progress }: { progress: GameProgress; setProgress: (
               <div>✅ Analytics Dashboard</div>
               <div>✅ Systems Integration Framework</div>
               <div>✅ Real-time Monitoring</div>
+              <div>✅ Stakeholder Relationship Manager</div>
+              <div>✅ Crisis Communication System</div>
             </div>
           </div>
           <p className="text-2xl font-bold text-yellow-300">
