@@ -48,7 +48,7 @@ export type PatternType =
   | 'search' | 'filter' | 'sort' | 'navigation'
   | 'user_preference' | 'workflow' | 'error_handling'
   | 'crud_create' | 'crud_read' | 'crud_update' | 'crud_delete'
-  | 'form_submission' | 'form_validation';
+  | 'form_submission' | 'form_validation' | 'workflow_step';
 
 export type CRUDOperation = 'create' | 'read' | 'update' | 'delete';
 
