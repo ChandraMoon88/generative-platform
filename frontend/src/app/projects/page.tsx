@@ -3,7 +3,7 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import ComponentShowcase from '@/components/ComponentShowcase';
-import CreativeUniverseGame from '@/components/CreativeUniverseGame';
+import EcoSphereGame from '@/components/EcoSphereGame';
 
 interface Project {
   id: string;
@@ -768,7 +768,7 @@ function ProjectsContent() {
   const gameCompleted = typeof window !== 'undefined' && localStorage.getItem('gameCompleted') === 'true';
   
   if (!gameCompleted && projects.length === 0) {
-    return <CreativeUniverseGame onGameComplete={handleGameAppCreated} />;
+    return <EcoSphereGame />;
   }
 
   // If a project ID is in the URL, show the project detail view
