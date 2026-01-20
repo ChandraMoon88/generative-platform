@@ -6009,10 +6009,10 @@ function Level13Policy({ progress, setProgress }: { progress: GameProgress; setP
 function Level14Mentor({ progress, setProgress }: { progress: GameProgress; setProgress: (p: GameProgress) => void }) {
   const [activeTab, setActiveTab] = useState<'curriculum' | 'workshops' | 'trainers' | 'impact'>('curriculum');
   const [courses, setCourses] = useState(new Map([
-    ['course-1', { id: 'course-1', name: 'Ecosystem Restoration Basics', modules: 0, students: 0, status: 'draft' as const, completion: 0 }],
-    ['course-2', { id: 'course-2', name: 'Systems Thinking Workshop', modules: 0, students: 0, status: 'draft' as const, completion: 0 }],
-    ['course-3', { id: 'course-3', name: 'Stakeholder Engagement', modules: 0, students: 0, status: 'draft' as const, completion: 0 }],
-    ['course-4', { id: 'course-4', name: 'Policy & Advocacy Training', modules: 0, students: 0, status: 'draft' as const, completion: 0 }],
+    ['course-1', { id: 'course-1', name: 'Ecosystem Restoration Basics', modules: 0, students: 0, status: 'draft' as 'draft' | 'ready' | 'active', completion: 0 }],
+    ['course-2', { id: 'course-2', name: 'Systems Thinking Workshop', modules: 0, students: 0, status: 'draft' as 'draft' | 'ready' | 'active', completion: 0 }],
+    ['course-3', { id: 'course-3', name: 'Stakeholder Engagement', modules: 0, students: 0, status: 'draft' as 'draft' | 'ready' | 'active', completion: 0 }],
+    ['course-4', { id: 'course-4', name: 'Policy & Advocacy Training', modules: 0, students: 0, status: 'draft' as 'draft' | 'ready' | 'active', completion: 0 }],
   ]));
   const [workshops, setWorkshops] = useState(new Map([
     ['workshop-1', { id: 'workshop-1', name: 'Field Assessment Training', participants: 0, status: 'planning' as const, satisfaction: 0 }],
