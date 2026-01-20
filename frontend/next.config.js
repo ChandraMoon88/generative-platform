@@ -2,6 +2,15 @@
 const nextConfig = {
   reactStrictMode: true,
   transpilePackages: ['shared'],
+  eslint: {
+    // Warning: This allows production builds to successfully complete even if
+    // your project has ESLint errors.
+    ignoreDuringBuilds: false,
+  },
+  typescript: {
+    // We already type-checked during build
+    ignoreBuildErrors: false,
+  },
   async headers() {
     return [
       {
