@@ -320,11 +320,7 @@ export default function GameFlow({ onAppCreated }: { onAppCreated: (components: 
 
   // EcoSphere Game Phase
   if (gameState.phase === 'ecosphere-game' && gameState.useEcoSphere) {
-    return (
-      <EcoSphereGame 
-        onGameComplete={(appModel: any) => {
-          // Convert app model to components
-          const components: any[] = [];
+    return <EcoSphereGame />;
           
           // Generate components from entities
           if (appModel.entities) {
