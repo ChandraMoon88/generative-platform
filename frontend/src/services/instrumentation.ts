@@ -339,7 +339,7 @@ async function flushEvents(sync: boolean = false): Promise<void> {
 
 export function extractElementTarget(element: HTMLElement): ElementTarget {
   return {
-    tagName: element.tagName.toLowerCase(),
+    type: element.tagName.toLowerCase(),
     id: element.id || undefined,
     className: element.className || undefined,
     text: element.textContent?.slice(0, 100) || undefined,
