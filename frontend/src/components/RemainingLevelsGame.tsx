@@ -175,12 +175,12 @@ const LEVEL_CONFIGS: {[key: number]: LevelConfig} = {
     icon: Trophy,
     color: 'from-cyan-500 to-blue-600',
     tasks: [
-      { name: 'Collect Baseline Data', description: 'Establish before-restoration metrics', timeRequired: 55, completed: false },
-      { name: 'Ongoing Monitoring', description: 'Weekly water quality tests', timeRequired: 50, completed: false },
-      { name: 'Analyze Trends', description: 'Use statistical methods', timeRequired: 60, completed: false },
-      { name: 'Visualize Data', description: 'Create graphs and charts', timeRequired: 45, completed: false },
-      { name: 'Compare Results', description: 'Measure against goals', timeRequired: 55, completed: false },
-      { name: 'Publish Findings', description: 'Share results publicly', timeRequired: 50, completed: false }
+      { name: 'Collect Baseline Data', description: 'Establish before-restoration metrics', timeRequired: 55, completed: false, inputType: 'text', inputPrompt: 'Describe sampling locations and baseline metrics you will establish:' },
+      { name: 'Ongoing Monitoring', description: 'Weekly water quality tests', timeRequired: 50, completed: false, inputType: 'text', inputPrompt: 'List water quality parameters you will test weekly:' },
+      { name: 'Analyze Trends', description: 'Use statistical methods', timeRequired: 60, completed: false, inputType: 'text', inputPrompt: 'Summarize key trends observed in your monitoring data:' },
+      { name: 'Visualize Data', description: 'Create graphs and charts', timeRequired: 45, completed: false, inputType: 'text', inputPrompt: 'Describe charts/graphs you will create to show progress:' },
+      { name: 'Compare Results', description: 'Measure against goals', timeRequired: 55, completed: false, inputType: 'text', inputPrompt: 'Compare current results vs. target goals and explain gaps:' },
+      { name: 'Publish Findings', description: 'Share results publicly', timeRequired: 50, completed: false, inputType: 'text', inputPrompt: 'Write a summary of findings to share with the community:' }
     ],
     quiz: [
       { question: 'Why is baseline data important?', options: ['It is not', 'Shows change over time', 'Wastes time', 'Confuses people'], correctAnswer: 1 },
