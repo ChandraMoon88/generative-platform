@@ -455,6 +455,12 @@ export default function Level2Game() {
                 }
                 className="w-full h-40 px-4 py-3 bg-white/10 border-2 border-white/20 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-cyan-400 resize-none"
               />
+              
+              <div className="mt-3 bg-blue-500/20 border border-blue-400/50 rounded-lg p-3 text-sm text-blue-200">
+                💡 <strong>Hint:</strong> {activeModal.type === 'photo' && 'Include visual details: colors, pollution type, extent, visible damage'}
+                {activeModal.type === 'measurement' && 'Include specific numbers with units (pH, PPM, mg/L, NTU, temperature)'}
+                {activeModal.type === 'interview' && 'Include witness testimony: what they observed, duration, health/community impact'}
+              </div>
 
               <div className="flex gap-4 mt-6">
                 <button
@@ -477,7 +483,7 @@ export default function Level2Game() {
                   disabled={inputValue.trim().length < 20}
                   className="flex-1 px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 rounded-lg font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Submit Evidence (Will Validate)
+                  Validate & Submit
                 </button>
               </div>
             </div>
