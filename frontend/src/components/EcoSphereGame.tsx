@@ -6,6 +6,8 @@ import Level1Game from './Level1Game';
 import Level2Game from './Level2Game';
 import Level3Game from './Level3Game';
 import RemainingLevelsGame from './RemainingLevelsGame';
+import OpeningSequence from './OpeningSequence';
+import GaiaGuide, { GaiaMessages } from './GaiaGuide';
 import { loadGameState, GameState } from '@/lib/gameState';
 
 // Level Icons Mapping
