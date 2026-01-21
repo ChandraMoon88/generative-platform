@@ -5,6 +5,7 @@ import { Droplet, TreePine, Factory, Sprout, Waves, Mountain, Check, Lock, Spark
 import Level1Game from './Level1Game';
 import Level2Game from './Level2Game';
 import Level3Game from './Level3Game';
+import Level5Game from './Level5Game';
 import RemainingLevelsGame from './RemainingLevelsGame';
 import OpeningSequence from './OpeningSequence';
 import GaiaGuide, { GaiaMessages } from './GaiaGuide';
@@ -403,7 +404,37 @@ export default function EcoSphereGame() {
     );
   }
   
-  if (gameStarted && currentLevel >= 4 && currentLevel <= 15) {
+  if (gameStarted && currentLevel === 4) {
+    return (
+      <>
+        <RemainingLevelsGame levelNumber={4} />
+        {gaiaMessage && (
+          <GaiaGuide 
+            message={{ text: gaiaMessage, emotion: 'thoughtful' }}
+            autoClose={true}
+            autoCloseDelay={5000}
+          />
+        )}
+      </>
+    );
+  }
+  
+  if (gameStarted && currentLevel === 5) {
+    return (
+      <>
+        <Level5Game />
+        {gaiaMessage && (
+          <GaiaGuide 
+            message={{ text: gaiaMessage, emotion: 'thoughtful' }}
+            autoClose={true}
+            autoCloseDelay={5000}
+          />
+        )}
+      </>
+    );
+  }
+  
+  if (gameStarted && currentLevel >= 6 && currentLevel <= 15) {
     return (
       <>
         <RemainingLevelsGame levelNumber={currentLevel} />
