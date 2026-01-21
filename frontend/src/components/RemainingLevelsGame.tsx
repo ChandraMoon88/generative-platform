@@ -323,6 +323,27 @@ export default function RemainingLevelsGame({ levelNumber }: Props) {
     }
   }, [phase, currentTaskIndex, tasks, config.quiz, levelNumber, budget, daysElapsed, currentEvent, eventsHandled]);
 
+  const handleEventChoice = (choiceIndex: number) => {
+    if (!currentEvent) return;
+    
+    const outcome = calculateEventOutcome(
+      currentEvent,
+      choiceIndex,
+      { budget, daysRemaining: 30 - daysElapsed, teamMorale }
+    );
+    
+    setBudget(outcome.budget);
+    setTeamMorale(outcome.teamMorale);
+    setEventsHandled([...eventsHandled, currentEvent.id]);
+    setEventConsequence(outcome.consequences);
+    
+    // Clear event after showing consequence
+    setTimeout(() => {
+      setCurrentEvent(null);
+      setEventConsequence(null);
+    }, 4000);
+  };
+
   const Icon = config.icon;
   
   if (phase === 'intro') {
