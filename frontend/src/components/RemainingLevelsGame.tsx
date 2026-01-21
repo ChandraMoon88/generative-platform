@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Play, CheckCircle2, Clock, Target, Users, DollarSign, Zap, Heart, Shield, Trophy, Star, Award, AlertTriangle } from 'lucide-react';
+import { Play, CheckCircle2, Clock, Target, Users, DollarSign, Zap, Heart, Shield, Trophy, Star, Award, AlertTriangle, X } from 'lucide-react';
+import { DynamicEvent, getRandomEvent, calculateEventOutcome } from '@/lib/dynamicEvents';
 
 interface LevelConfig {
   level: number;
