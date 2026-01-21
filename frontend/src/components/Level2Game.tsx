@@ -404,7 +404,7 @@ export default function Level2Game() {
                   disabled={inputValue.trim().length < 20}
                   className="flex-1 px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 rounded-lg font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Submit Evidence
+                  Submit Evidence (Will Validate)
                 </button>
               </div>
             </div>
