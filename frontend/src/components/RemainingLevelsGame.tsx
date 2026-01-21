@@ -359,6 +359,50 @@ export default function RemainingLevelsGame({ levelNumber }: Props) {
     }, 4000);
   };
 
+  const handleTaskInput = () => {
+    const currentTask = tasks[currentTaskIndex];
+    
+    // Validate input
+    if (currentTask.inputType === 'number') {
+      const num = parseFloat(taskInputValue);
+      if (isNaN(num) || num <= 0) {
+        alert('Please enter a valid positive number');
+        return;
+      }
+    } else if (currentTask.inputType === 'text' && taskInputValue.trim().length < 20) {
+      alert('Please provide more detailed information (at least 20 characters)');
+      return;
+    }
+    
+    // Save input and complete task
+    const newTasks = [...tasks];
+    newTasks[currentTaskIndex].completed = true;
+    newTasks[currentTaskIndex].userInput = taskInputValue;
+    setTasks(newTasks);
+    
+    // Increment days elapsed
+    setDaysElapsed(d => d + 1);
+    
+    // Check for dynamic event
+    if (levelNumber >= 4 && !currentEvent && Math.random() < 0.3) {
+      const event = getRandomEvent(levelNumber, budget, daysElapsed + 1);
+      if (event && !eventsHandled.includes(event.id)) {
+        setCurrentEvent(event);
+      }
+    }
+    
+    // Move to next task
+    setShowTaskInput(false);
+    setTaskInputValue('');
+    
+    if (currentTaskIndex + 1 < tasks.length) {
+      setCurrentTaskIndex(currentTaskIndex + 1);
+      setTimer(0);
+    } else {
+      setTimeout(() => setPhase(config.quiz ? 'quiz' : 'complete'), 1000);
+    }
+  };
+
   const Icon = config.icon;
   const EventIcon = currentEvent?.icon;
   
