@@ -255,12 +255,12 @@ const LEVEL_CONFIGS: {[key: number]: LevelConfig} = {
     icon: Trophy,
     color: 'from-yellow-500 to-amber-600',
     tasks: [
-      { name: 'Document Journey', description: 'Write comprehensive history', timeRequired: 70, completed: false },
-      { name: 'Measure Total Impact', description: 'Calculate all metrics', timeRequired: 65, completed: false },
-      { name: 'Create Educational Film', description: 'Inspire future generations', timeRequired: 60, completed: false },
-      { name: 'Establish Foundation', description: 'Ensure perpetual funding', timeRequired: 70, completed: false },
-      { name: 'Global Conference', description: 'Share model worldwide', timeRequired: 65, completed: false },
-      { name: 'Celebrate Victory', description: 'Recognition ceremony', timeRequired: 60, completed: false }
+      { name: 'Document Journey', description: 'Write comprehensive history', timeRequired: 70, completed: false, inputType: 'text', inputPrompt: 'Write a summary of your entire restoration journey from start to finish:' },
+      { name: 'Measure Total Impact', description: 'Calculate all metrics', timeRequired: 65, completed: false, inputType: 'text', inputPrompt: 'Summarize all measurable impacts (water quality, species, community benefits):' },
+      { name: 'Create Educational Film', description: 'Inspire future generations', timeRequired: 60, completed: false, inputType: 'text', inputPrompt: 'Outline the script/storyline for your educational documentary:' },
+      { name: 'Establish Foundation', description: 'Ensure perpetual funding', timeRequired: 70, completed: false, inputType: 'text', inputPrompt: 'Describe your foundation\'s mission and funding strategy:' },
+      { name: 'Global Conference', description: 'Share model worldwide', timeRequired: 65, completed: false, inputType: 'text', inputPrompt: 'Write your conference presentation abstract for global audience:' },
+      { name: 'Celebrate Victory', description: 'Recognition ceremony', timeRequired: 60, completed: false, inputType: 'text', inputPrompt: 'Plan the victory celebration - who to recognize and how:' }
     ],
     quiz: [
       { question: 'What defines a successful legacy?', options: ['Money', 'Lasting positive change', 'Fame', 'Awards'], correctAnswer: 1 },
