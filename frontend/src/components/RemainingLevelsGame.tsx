@@ -771,7 +771,26 @@ export default function RemainingLevelsGame({ levelNumber }: Props) {
             <div className="bg-slate-900 rounded-2xl max-w-2xl w-full p-8 border-2 border-white/20">
               <h3 className="text-2xl font-bold mb-4">✍️ Complete Task: {currentTask.name}</h3>
               
-              <p className="text-gray-400 mb-6">{currentTask.inputPrompt}</p>
+              <p className="text-gray-400 mb-4">{currentTask.inputPrompt}</p>
+
+              <div className="bg-yellow-500/20 border-l-4 border-yellow-400 p-3 mb-4 text-sm">
+                <p className="font-bold text-yellow-300 mb-1">💡 Tips for a valid answer:</p>
+                <ul className="list-disc list-inside space-y-1 text-yellow-100 text-xs">
+                  {currentTask.inputType === 'number' && (
+                    <>
+                      <li>Enter realistic values (not too high or low)</li>
+                      <li>Consider project scope and budget constraints</li>
+                    </>
+                  )}
+                  {currentTask.inputType === 'text' && (
+                    <>
+                      <li>Use at least 10 meaningful words</li>
+                      <li>Include specific details relevant to the task</li>
+                      <li>Mention key concepts (roles, costs, metrics, steps, etc.)</li>
+                    </>
+                  )}
+                </ul>
+              </div>
 
               {currentTask.inputType === 'number' ? (
                 <input
