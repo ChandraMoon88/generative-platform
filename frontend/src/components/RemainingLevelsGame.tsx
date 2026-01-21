@@ -796,7 +796,7 @@ export default function RemainingLevelsGame({ levelNumber }: Props) {
                   disabled={!taskInputValue.trim()}
                   className={`flex-1 px-6 py-3 bg-gradient-to-r ${config.color} rounded-lg font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed`}
                 >
-                  Submit & Continue
+                  Submit & Validate Answer
                 </button>
               </div>
             </div>
