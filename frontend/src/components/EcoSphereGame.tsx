@@ -153,18 +153,29 @@ export default function EcoSphereGame() {
   const [completedLevels, setCompletedLevels] = useState<Set<number>>(new Set([0]));
   const [showLevelSelect, setShowLevelSelect] = useState<boolean>(false);
   const [gameStarted, setGameStarted] = useState<boolean>(false);
+  const [showOpeningSequence, setShowOpeningSequence] = useState<boolean>(true);
+  const [selectedLandingZone, setSelectedLandingZone] = useState<string | null>(null);
+  const [gaiaMessage, setGaiaMessage] = useState<string | null>(null);
   const [gameState, setGameState] = useState<GameState | null>(null);
 
   // Load game state on mount
   useEffect(() => {
     const saved = loadGameState();
+    const savedZone = localStorage.getItem('ecosphere_landing_zone');
+    
     if (saved) {
       setGameState(saved);
       setCurrentLevel(saved.currentLevel);
       setCompletedLevels(new Set(saved.completedLevels));
       if (saved.currentLevel > 0) {
         setGameStarted(true);
+        setShowOpeningSequence(false);
       }
+    }
+    
+    if (savedZone) {
+      setSelectedLandingZone(savedZone);
+      setShowOpeningSequence(false);
     }
   }, []);
 
