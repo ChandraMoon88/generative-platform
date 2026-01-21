@@ -359,19 +359,63 @@ export default function EcoSphereGame() {
 
   // If on Level 1, render the actual interactive game
   if (gameStarted && currentLevel === 1) {
-    return <Level1Game />;
+    return (
+      <>
+        <Level1Game />
+        {gaiaMessage && (
+          <GaiaGuide 
+            message={{ text: gaiaMessage, emotion: 'thoughtful' }}
+            autoClose={true}
+            autoCloseDelay={5000}
+          />
+        )}
+      </>
+    );
   }
   
   if (gameStarted && currentLevel === 2) {
-    return <Level2Game />;
+    return (
+      <>
+        <Level2Game />
+        {gaiaMessage && (
+          <GaiaGuide 
+            message={{ text: gaiaMessage, emotion: 'thoughtful' }}
+            autoClose={true}
+            autoCloseDelay={5000}
+          />
+        )}
+      </>
+    );
   }
   
   if (gameStarted && currentLevel === 3) {
-    return <Level3Game />;
+    return (
+      <>
+        <Level3Game />
+        {gaiaMessage && (
+          <GaiaGuide 
+            message={{ text: gaiaMessage, emotion: 'thoughtful' }}
+            autoClose={true}
+            autoCloseDelay={5000}
+          />
+        )}
+      </>
+    );
   }
   
   if (gameStarted && currentLevel >= 4 && currentLevel <= 15) {
-    return <RemainingLevelsGame levelNumber={currentLevel} />;
+    return (
+      <>
+        <RemainingLevelsGame levelNumber={currentLevel} />
+        {gaiaMessage && (
+          <GaiaGuide 
+            message={{ text: gaiaMessage, emotion: 'thoughtful' }}
+            autoClose={true}
+            autoCloseDelay={5000}
+          />
+        )}
+      </>
+    );
   }
 
   return (
