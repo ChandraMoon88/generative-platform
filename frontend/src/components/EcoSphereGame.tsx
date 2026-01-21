@@ -186,6 +186,10 @@ export default function EcoSphereGame() {
   const completeLevel = () => {
     setCompletedLevels(prev => new Set([...prev, currentLevel]));
     
+    // Show Gaia message on level completion
+    setGaiaMessage(GaiaMessages.levelComplete.text);
+    setTimeout(() => setGaiaMessage(null), 5000);
+    
     if (currentLevel < 15) {
       setTimeout(() => {
         setCurrentLevel(currentLevel + 1);
@@ -195,6 +199,27 @@ export default function EcoSphereGame() {
 
   const startGame = () => {
     setGameStarted(true);
+    setGaiaMessage(GaiaMessages.welcome.text);
+    setTimeout(() => setGaiaMessage(null), 5000);
+  };
+  
+  const handleZoneSelected = (zoneId: string) => {
+    setSelectedLandingZone(zoneId);
+    setShowOpeningSequence(false);
+    setGameStarted(true);
+    
+    // Show Gaia message for the selected zone
+    const zoneMessages: Record<string, string> = {
+      river: "The Weeping River Valley awaits your healing touch. Let us begin where water once flowed pure.",
+      forest: "The Silent Forest remembers its songs. Together, we shall bring life back to these ancient woods.",
+      city: "The Choking City needs our wisdom. Urban healing is delicate work, but vital for all who live here.",
+      fields: "The Barren Fields hold memory of abundance. Let us restore what generations once cherished.",
+      coast: "The Dying Coast calls out. Where land meets sea, our work is crucial for countless lives.",
+      mountains: "The Wounded Mountains stand strong despite their scars. Let us help them heal and thrive once more."
+    };
+    
+    setGaiaMessage(zoneMessages[zoneId] || GaiaMessages.welcome.text);
+    setTimeout(() => setGaiaMessage(null), 6000);
   };
 
   const selectLevel = (levelId: number) => {
