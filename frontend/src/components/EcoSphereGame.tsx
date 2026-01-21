@@ -577,6 +577,15 @@ export default function EcoSphereGame() {
           )}
         </div>
       </div>
+      
+      {/* Gaia Guide overlay */}
+      {gaiaMessage && (
+        <GaiaGuide 
+          message={{ text: gaiaMessage, emotion: 'thoughtful' }}
+          autoClose={true}
+          autoCloseDelay={5000}
+        />
+      )}
     </div>
   );
 }
