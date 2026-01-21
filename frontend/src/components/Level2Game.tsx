@@ -12,8 +12,11 @@ interface PollutionSource {
   documented: boolean;
   evidence: {
     photo: boolean;
+    photoDescription: string;
     measurement: boolean;
+    measurementValue: string;
     interview: boolean;
+    interviewNotes: string;
   };
 }
 
