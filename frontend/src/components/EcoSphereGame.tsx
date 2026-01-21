@@ -467,6 +467,17 @@ export default function EcoSphereGame() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-900 via-teal-800 to-blue-900 p-4 md:p-8">
+      {/* Admin Access Button */}
+      <div className="fixed top-4 right-4 z-50">
+        <a
+          href="/admin"
+          className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-bold shadow-lg transition-all flex items-center gap-2"
+          title="Admin Panel - Access all levels"
+        >
+          <span>🔐</span> Admin
+        </a>
+      </div>
+
       <div className="max-w-7xl mx-auto mb-8">
         <div className="flex justify-between items-center">
           <div>
