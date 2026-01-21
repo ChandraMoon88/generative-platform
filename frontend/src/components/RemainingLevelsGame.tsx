@@ -469,7 +469,32 @@ export default function RemainingLevelsGame({ levelNumber }: Props) {
               </div>
             ))}
           </div>
+          
+          {/* Level 4+ metrics dashboard */}
+          {levelNumber >= 4 && (
+            <div className="mt-6 grid grid-cols-3 gap-4 bg-white/10 backdrop-blur-md rounded-xl p-6">
+              <div>
+                <div className="text-xs text-gray-400 mb-1">Budget Remaining</div>
+                <div className={`text-2xl font-bold ${budget > 20000 ? 'text-green-400' : budget > 10000 ? 'text-yellow-400' : 'text-red-400'}`}>
+                  ${budget.toLocaleString()}
+                </div>
+              </div>
+              <div>
+                <div className="text-xs text-gray-400 mb-1">Team Morale</div>
+                <div className={`text-2xl font-bold ${teamMorale > 60 ? 'text-green-400' : teamMorale > 40 ? 'text-yellow-400' : 'text-red-400'}`}>
+                  {teamMorale}%
+                </div>
+              </div>
+              <div>
+                <div className="text-xs text-gray-400 mb-1">Events Handled</div>
+                <div className="text-2xl font-bold text-purple-400">{eventsHandled.length}</div>
+              </div>
+            </div>
+          )}
         </div>
+        
+        {/* Render event modals when they occur */}
+        {renderEventModals()}
       </div>
     );
   }
