@@ -226,8 +226,15 @@ export default function EcoSphereGame() {
     if (levelId <= maxUnlockedLevel) {
       setCurrentLevel(levelId);
       setShowLevelSelect(false);
+      setGaiaMessage(GaiaMessages.challenge.text);
+      setTimeout(() => setGaiaMessage(null), 5000);
     }
   };
+  
+  // Show opening sequence first
+  if (showOpeningSequence) {
+    return <OpeningSequence onZoneSelected={handleZoneSelected} />;
+  }
 
   if (!gameStarted) {
     return (
