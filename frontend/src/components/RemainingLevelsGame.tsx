@@ -135,12 +135,12 @@ const LEVEL_CONFIGS: {[key: number]: LevelConfig} = {
     icon: Heart,
     color: 'from-pink-500 to-rose-600',
     tasks: [
-      { name: 'Host Town Hall', description: 'Present progress to community', timeRequired: 55, completed: false },
-      { name: 'Create Education Program', description: 'Develop curriculum for schools', timeRequired: 60, completed: false },
-      { name: 'Organize Cleanup Day', description: 'Mobilize 100+ volunteers', timeRequired: 50, completed: false },
-      { name: 'Launch Social Media', description: 'Share success stories online', timeRequired: 45, completed: false },
-      { name: 'Partner with Businesses', description: 'Secure local sponsorships', timeRequired: 55, completed: false },
-      { name: 'Celebrate Milestones', description: 'Recognition event for volunteers', timeRequired: 50, completed: false }
+      { name: 'Host Town Hall', description: 'Present progress to community', timeRequired: 55, completed: false, inputType: 'text', inputPrompt: 'Write key points you will present at the town hall meeting:' },
+      { name: 'Create Education Program', description: 'Develop curriculum for schools', timeRequired: 60, completed: false, inputType: 'text', inputPrompt: 'Outline educational topics and activities for the school curriculum:' },
+      { name: 'Organize Cleanup Day', description: 'Mobilize 100+ volunteers', timeRequired: 50, completed: false, inputType: 'number', inputPrompt: 'Enter target number of volunteers for cleanup day:' },
+      { name: 'Launch Social Media', description: 'Share success stories online', timeRequired: 45, completed: false, inputType: 'text', inputPrompt: 'Write a social media post highlighting a project success story:' },
+      { name: 'Partner with Businesses', description: 'Secure local sponsorships', timeRequired: 55, completed: false, inputType: 'text', inputPrompt: 'List businesses you will approach and what you will offer them:' },
+      { name: 'Celebrate Milestones', description: 'Recognition event for volunteers', timeRequired: 50, completed: false, inputType: 'text', inputPrompt: 'Plan the volunteer recognition event - venue, activities, awards:' }
     ],
     quiz: [
       { question: 'Why is community support important?', options: ['It is not', 'Long-term sustainability', 'Looks good', 'Free labor'], correctAnswer: 1 },
