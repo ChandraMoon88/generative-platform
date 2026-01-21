@@ -280,7 +280,7 @@ export default function Level2Game() {
                   {!source.documented && (
                     <div className="grid grid-cols-3 gap-3 mb-4">
                       <button
-                        onClick={() => collectEvidence(source.id, 'photo')}
+                        onClick={() => openEvidenceModal(source.id, 'photo')}
                         disabled={source.evidence.photo}
                         className={`p-4 rounded-lg transition-all ${
                           source.evidence.photo
@@ -289,11 +289,14 @@ export default function Level2Game() {
                         }`}
                       >
                         <Camera className="w-6 h-6 mx-auto mb-2" />
-                        <div className="text-sm">{source.evidence.photo ? '✓ Photo Taken' : 'Take Photo'}</div>
+                        <div className="text-sm font-bold">{source.evidence.photo ? '✓ Photo Taken' : 'Take Photo'}</div>
+                        {source.evidence.photo && (
+                          <div className="text-xs mt-2 text-gray-400 truncate">{source.evidence.photoDescription}</div>
+                        )}
                       </button>
 
                       <button
-                        onClick={() => collectEvidence(source.id, 'measurement')}
+                        onClick={() => openEvidenceModal(source.id, 'measurement')}
                         disabled={source.evidence.measurement}
                         className={`p-4 rounded-lg transition-all ${
                           source.evidence.measurement
@@ -302,11 +305,14 @@ export default function Level2Game() {
                         }`}
                       >
                         <AlertCircle className="w-6 h-6 mx-auto mb-2" />
-                        <div className="text-sm">{source.evidence.measurement ? '✓ Measured' : 'Take Measurement'}</div>
+                        <div className="text-sm font-bold">{source.evidence.measurement ? '✓ Measured' : 'Take Measurement'}</div>
+                        {source.evidence.measurement && (
+                          <div className="text-xs mt-2 text-gray-400">{source.evidence.measurementValue}</div>
+                        )}
                       </button>
 
                       <button
-                        onClick={() => collectEvidence(source.id, 'interview')}
+                        onClick={() => openEvidenceModal(source.id, 'interview')}
                         disabled={source.evidence.interview}
                         className={`p-4 rounded-lg transition-all ${
                           source.evidence.interview
@@ -315,7 +321,10 @@ export default function Level2Game() {
                         }`}
                       >
                         <FileText className="w-6 h-6 mx-auto mb-2" />
-                        <div className="text-sm">{source.evidence.interview ? '✓ Interview Done' : 'Interview Witness'}</div>
+                        <div className="text-sm font-bold">{source.evidence.interview ? '✓ Interview Done' : 'Interview Witness'}</div>
+                        {source.evidence.interview && (
+                          <div className="text-xs mt-2 text-gray-400 truncate">{source.evidence.interviewNotes}</div>
+                        )}
                       </button>
                     </div>
                   )}
