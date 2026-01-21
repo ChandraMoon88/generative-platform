@@ -624,14 +624,8 @@ export default function RemainingLevelsGame({ levelNumber }: Props) {
   // Dynamic Event Modal (overlays on any phase during levels 4+)
   const EventIcon = currentEvent?.icon;
   
-  return (
+  const renderEventModals = () => (
     <>
-      {phase === 'intro' && (
-        <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-6 text-white">
-          {/* Intro content already rendered above */}
-        </div>
-      )}
-      
       {/* Dynamic Event Modal */}
       {currentEvent && !eventConsequence && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-6 animate-fade-in">
@@ -741,4 +735,17 @@ export default function RemainingLevelsGame({ levelNumber }: Props) {
       )}
     </>
   );
+
+  // Add event modals to the intro phase
+  if (phase === 'intro') {
+    return (
+      <>
+        {/* Intro content already rendered above in original return */}
+        {renderEventModals()}
+      </>
+    );
+  }
+
+  // Return null for other phases as they already handle their own rendering
+  return null;
 }
