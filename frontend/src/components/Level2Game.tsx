@@ -73,12 +73,31 @@ export default function Level2Game() {
     }, 3000);
   };
 
-  const collectEvidence = (sourceId: number, evidenceType: 'photo' | 'measurement' | 'interview') => {
-    setSources(prev => prev.map(s => 
-      s.id === sourceId 
-        ? { ...s, evidence: { ...s.evidence, [evidenceType]: true } }
-        : s
-    ));
+  const collectEvidence = (sourceId: number, evidenceType: 'photo' | 'measurement' | 'interview', value: string) => {
+    setSources(prev => prev.map(s => {
+      if (s.id === sourceId) {
+        const newEvidence = { ...s.evidence };
+        if (evidenceType === 'photo') {
+          newEvidence.photo = true;
+          newEvidence.photoDescription = value;
+        } else if (evidenceType === 'measurement') {
+          newEvidence.measurement = true;
+          newEvidence.measurementValue = value;
+        } else if (evidenceType === 'interview') {
+          newEvidence.interview = true;
+          newEvidence.interviewNotes = value;
+        }
+        return { ...s, evidence: newEvidence };
+      }
+      return s;
+    }));
+    setActiveModal(null);
+    setInputValue('');
+  };
+
+  const openEvidenceModal = (sourceId: number, type: 'photo' | 'measurement' | 'interview') => {
+    setActiveModal({ sourceId, type });
+    setInputValue('');
   };
 
   const completeDocumentation = (sourceId: number) => {
