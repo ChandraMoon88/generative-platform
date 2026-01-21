@@ -130,10 +130,10 @@ export default function EcosystemFoodWeb({ ecosystem, onSpeciesClick, selectedSp
                       <span className="text-3xl">{sp.icon}</span>
                       <div className="flex flex-col items-end gap-1">
                         {sp.isKeystone && (
-                          <Star className="w-4 h-4 text-yellow-400" title="Keystone Species" />
+                          <Star className="w-4 h-4 text-yellow-400" />
                         )}
                         {sp.isEndangered && (
-                          <AlertTriangle className="w-4 h-4 text-red-400" title="Endangered" />
+                          <AlertTriangle className="w-4 h-4 text-red-400" />
                         )}
                       </div>
                     </div>
