@@ -434,7 +434,16 @@ export default function Level2Game() {
             </ul>
           </div>
           <button
-            onClick={() => window.location.href = '/projects'}
+            onClick={() => {
+              // Update game state to unlock Level 3
+              const currentState = JSON.parse(localStorage.getItem('ecosphere_game_state') || '{}');
+              if (currentState) {
+                currentState.currentLevel = 3;
+                currentState.maxUnlockedLevel = Math.max(currentState.maxUnlockedLevel || 1, 3);
+                localStorage.setItem('ecosphere_game_state', JSON.stringify(currentState));
+              }
+              window.location.href = '/projects';
+            }}
             className="px-12 py-4 bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl font-bold text-xl hover:scale-105 transition-transform"
           >
             Continue to Level 3
