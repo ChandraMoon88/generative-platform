@@ -15,6 +15,10 @@ interface LevelConfig {
     description: string;
     timeRequired: number; // seconds
     completed: boolean;
+    inputType?: 'text' | 'number' | 'selection';
+    inputPrompt?: string;
+    inputOptions?: string[];
+    userInput?: string;
   }[];
   quiz?: {
     question: string;
