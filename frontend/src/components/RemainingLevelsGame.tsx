@@ -283,6 +283,10 @@ export default function RemainingLevelsGame({ levelNumber }: Props) {
   const [quizAnswers, setQuizAnswers] = useState<number[]>([]);
   const [quizSubmitted, setQuizSubmitted] = useState(false);
   
+  // Task input state
+  const [showTaskInput, setShowTaskInput] = useState(false);
+  const [taskInputValue, setTaskInputValue] = useState('');
+  
   // Dynamic events state
   const [currentEvent, setCurrentEvent] = useState<DynamicEvent | null>(null);
   const [budget, setBudget] = useState(50000);
