@@ -285,7 +285,7 @@ export default function OpeningSequence({ onZoneSelected }: Props) {
                 A wise choice. This ecosystem needs you.&rdquo;
               </p>
               <p className="text-gray-300">
-                Your journey begins here, but remember—every ecosystem is connected. 
+                Your journey begins here, but remember&mdash;every ecosystem is connected. 
                 Success in one area opens doors to heal others.
               </p>
             </div>
