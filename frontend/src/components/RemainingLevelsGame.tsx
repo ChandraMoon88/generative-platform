@@ -278,6 +278,14 @@ export default function RemainingLevelsGame({ levelNumber }: Props) {
   const [phase, setPhase] = useState<'intro' | 'tasks' | 'quiz' | 'complete'>('intro');
   const [quizAnswers, setQuizAnswers] = useState<number[]>([]);
   const [quizSubmitted, setQuizSubmitted] = useState(false);
+  
+  // Dynamic events state
+  const [currentEvent, setCurrentEvent] = useState<DynamicEvent | null>(null);
+  const [budget, setBudget] = useState(50000);
+  const [daysElapsed, setDaysElapsed] = useState(0);
+  const [teamMorale, setTeamMorale] = useState(75);
+  const [eventsHandled, setEventsHandled] = useState<string[]>([]);
+  const [eventConsequence, setEventConsequence] = useState<string | null>(null);
 
   useEffect(() => {
     if (phase === 'tasks' && currentTaskIndex < tasks.length) {
