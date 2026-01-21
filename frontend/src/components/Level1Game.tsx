@@ -353,16 +353,22 @@ export default function Level1Game() {
           {/* River Map Visualization */}
           <div className="lg:col-span-2">
             <RiverMapVisualization
-              segments={riverData.map(seg => ({
-                segmentId: seg.segmentId,
-                name: seg.name,
-                waterQuality: 100 - seg.pollutionLevel,
-                pollutionLevel: seg.pollutionLevel,
-                oxygenLevel: seg.dissolvedOxygen,
-                temperature: (seg.temperature - 32) * 5/9, // Convert to Celsius
-                scanned: seg.scanned,
-                timestamp: seg.timestamp
-              }))}
+              segments={riverData.map(seg => {
+                // Convert pollution level string to number
+                const pollutionMap = { critical: 85, high: 65, moderate: 40, low: 15 };
+                const pollutionNum = pollutionMap[seg.pollutionLevel];
+                
+                return {
+                  segmentId: seg.segmentId,
+                  name: seg.name,
+                  waterQuality: 100 - pollutionNum,
+                  pollutionLevel: pollutionNum,
+                  oxygenLevel: seg.dissolvedOxygen,
+                  temperature: (seg.temperature - 32) * 5/9, // Convert to Celsius
+                  scanned: seg.scanned,
+                  timestamp: seg.timestamp
+                };
+              })}
               selectedSegment={selectedSegment}
               scanningSegment={scanningSegment}
               onSegmentClick={scanSegment}
