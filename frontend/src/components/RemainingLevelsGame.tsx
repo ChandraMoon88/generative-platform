@@ -155,12 +155,12 @@ const LEVEL_CONFIGS: {[key: number]: LevelConfig} = {
     icon: Shield,
     color: 'from-indigo-500 to-blue-600',
     tasks: [
-      { name: 'Study Environmental Laws', description: 'Review all applicable regulations', timeRequired: 60, completed: false },
-      { name: 'Submit Compliance Reports', description: 'File required documentation', timeRequired: 55, completed: false },
-      { name: 'Schedule Inspections', description: 'Coordinate with regulators', timeRequired: 45, completed: false },
-      { name: 'Address Violations', description: 'Correct any issues found', timeRequired: 50, completed: false },
-      { name: 'Update Permits', description: 'Renew necessary approvals', timeRequired: 55, completed: false },
-      { name: 'Train Staff on Compliance', description: 'Ensure everyone follows rules', timeRequired: 50, completed: false }
+      { name: 'Study Environmental Laws', description: 'Review all applicable regulations', timeRequired: 60, completed: false, inputType: 'text', inputPrompt: 'List key environmental laws and regulations applicable to your project:' },
+      { name: 'Submit Compliance Reports', description: 'File required documentation', timeRequired: 55, completed: false, inputType: 'text', inputPrompt: 'Summarize compliance status and progress for quarterly report:' },
+      { name: 'Schedule Inspections', description: 'Coordinate with regulators', timeRequired: 45, completed: false, inputType: 'text', inputPrompt: 'Plan inspection schedule and list what will be inspected:' },
+      { name: 'Address Violations', description: 'Correct any issues found', timeRequired: 50, completed: false, inputType: 'text', inputPrompt: 'Describe corrective actions for any compliance violations:' },
+      { name: 'Update Permits', description: 'Renew necessary approvals', timeRequired: 55, completed: false, inputType: 'text', inputPrompt: 'List permits that need renewal and any changes required:' },
+      { name: 'Train Staff on Compliance', description: 'Ensure everyone follows rules', timeRequired: 50, completed: false, inputType: 'text', inputPrompt: 'Outline compliance training topics for your team:' }
     ],
     quiz: [
       { question: 'What happens if you violate environmental laws?', options: ['Nothing', 'Fines and shutdowns', 'Warning only', 'Promotion'], correctAnswer: 1 },
