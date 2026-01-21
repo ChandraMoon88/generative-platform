@@ -359,19 +359,118 @@ export default function RemainingLevelsGame({ levelNumber }: Props) {
     }, 4000);
   };
 
+  const validateTaskInput = (task: typeof tasks[0], value: string): { valid: boolean; message: string } => {
+    const input = value.toLowerCase().trim();
+    
+    // Number validation
+    if (task.inputType === 'number') {
+      const num = parseFloat(value);
+      if (isNaN(num) || num <= 0) {
+        return { valid: false, message: '❌ Please enter a valid positive number' };
+      }
+      
+      // Budget validation - should be reasonable
+      if (task.name.includes('Budget') || task.name.includes('Fund') || task.name.includes('Grant')) {
+        if (num < 1000) {
+          return { valid: false, message: '❌ Amount too low - environmental projects typically cost thousands of dollars' };
+        }
+        if (num > 10000000) {
+          return { valid: false, message: '❌ Amount unrealistic - enter a reasonable project budget' };
+        }
+      }
+      
+      // Volunteer count validation
+      if (task.name.includes('Volunteer')) {
+        if (num < 5) {
+          return { valid: false, message: '❌ Need more volunteers for effective community mobilization (minimum 5)' };
+        }
+        if (num > 1000) {
+          return { valid: false, message: '❌ Number unrealistic - be practical with volunteer targets' };
+        }
+      }
+      
+      return { valid: true, message: '✅ Valid input!' };
+    }
+    
+    // Text validation - must contain relevant keywords
+    if (task.inputType === 'text') {
+      const words = input.split(/\s+/).filter(w => w.length > 2);
+      
+      if (words.length < 10) {
+        return { valid: false, message: '❌ Response too brief - provide more detailed explanation (at least 10 meaningful words)' };
+      }
+      
+      // Task-specific keyword validation
+      if (task.name.includes('Team') || task.name.includes('Assign')) {
+        const hasTeamWords = /\b(role|responsibility|member|lead|coordinator|specialist|assign|manage)\b/.test(input);
+        if (!hasTeamWords) {
+          return { valid: false, message: '❌ Please describe specific roles, responsibilities, or team structure' };
+        }
+      }
+      
+      if (task.name.includes('Budget') || task.name.includes('Financial') || task.name.includes('Cost')) {
+        const hasFinanceWords = /\b(dollar|cost|expense|fund|budget|allocat|spend|invest|grant)\b/.test(input);
+        if (!hasFinanceWords) {
+          return { valid: false, message: '❌ Please include financial details (costs, budget allocation, funding)' };
+        }
+      }
+      
+      if (task.name.includes('Monitor') || task.name.includes('Track') || task.name.includes('Measure')) {
+        const hasMetrics = /\b(metric|measure|track|monitor|data|test|ph|level|quality|sample|rate)\b/.test(input);
+        if (!hasMetrics) {
+          return { valid: false, message: '❌ Please specify what metrics or measurements you will track' };
+        }
+      }
+      
+      if (task.name.includes('Strategy') || task.name.includes('Plan') || task.name.includes('Deploy')) {
+        const hasActionWords = /\b(will|plan|step|phase|first|then|next|schedule|timeline)\b/.test(input);
+        if (!hasActionWords) {
+          return { valid: false, message: '❌ Please describe specific steps or action plan' };
+        }
+      }
+      
+      if (task.name.includes('Communit') || task.name.includes('Public') || task.name.includes('Stakeholder')) {
+        const hasCommunity = /\b(resident|community|public|people|stakeholder|citizen|local|neighbor)\b/.test(input);
+        if (!hasCommunity) {
+          return { valid: false, message: '❌ Please address community involvement or public engagement' };
+        }
+      }
+      
+      if (task.name.includes('Report') || task.name.includes('Document') || task.name.includes('Summary')) {
+        const hasDoc = /\b(result|finding|data|metric|outcome|achievement|progress|status|report)\b/.test(input);
+        if (!hasDoc) {
+          return { valid: false, message: '❌ Please include specific findings, results, or documentation details' };
+        }
+      }
+      
+      if (task.name.includes('Crisis') || task.name.includes('Emergency') || task.name.includes('Spill')) {
+        const hasCrisis = /\b(safety|evacuate|contain|emergency|protocol|immediate|response|alert)\b/.test(input);
+        if (!hasCrisis) {
+          return { valid: false, message: '❌ Please address safety and emergency response procedures' };
+        }
+      }
+      
+      if (task.name.includes('Permit') || task.name.includes('Compliance') || task.name.includes('Law') || task.name.includes('Regulation')) {
+        const hasLegal = /\b(law|regulation|permit|compliance|legal|authority|agency|epa|requirement)\b/.test(input);
+        if (!hasLegal) {
+          return { valid: false, message: '❌ Please mention relevant laws, regulations, or regulatory agencies' };
+        }
+      }
+      
+      return { valid: true, message: '✅ Valid input!' };
+    }
+    
+    return { valid: true, message: '✅ Valid input!' };
+  };
+
   const handleTaskInput = () => {
     const currentTask = tasks[currentTaskIndex];
     
-    // Validate input
-    if (currentTask.inputType === 'number') {
-      const num = parseFloat(taskInputValue);
-      if (isNaN(num) || num <= 0) {
-        alert('Please enter a valid positive number');
-        return;
-      }
-    } else if (currentTask.inputType === 'text' && taskInputValue.trim().length < 20) {
-      alert('Please provide more detailed information (at least 20 characters)');
-      return;
+    const validation = validateTaskInput(currentTask, taskInputValue);
+    
+    if (!validation.valid) {
+      alert(validation.message);
+      return; // Don't close modal, let user try again
     }
     
     // Save input and complete task
