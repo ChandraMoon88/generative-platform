@@ -420,6 +420,31 @@ export default function Level2Game() {
                 {activeModal.type === 'interview' && 'Document witness testimony. What did they tell you about this pollution source?'}
               </p>
 
+              <div className="bg-yellow-500/20 border-l-4 border-yellow-400 p-4 mb-4 text-sm">
+                <p className="font-bold text-yellow-300 mb-2">✓ Your answer must include:</p>
+                {activeModal.type === 'photo' && (
+                  <ul className="list-disc list-inside space-y-1 text-yellow-100">
+                    <li>Color or appearance (green, brown, murky, dark, etc.)</li>
+                    <li>Type of pollution (chemical, foam, oil, waste, etc.)</li>
+                    <li>Location (pipe, water surface, shore, etc.)</li>
+                  </ul>
+                )}
+                {activeModal.type === 'measurement' && (
+                  <ul className="list-disc list-inside space-y-1 text-yellow-100">
+                    <li>Numeric values (actual numbers)</li>
+                    <li>Units (pH, PPM, mg/L, NTU, etc.)</li>
+                    <li>Multiple measurements if possible</li>
+                  </ul>
+                )}
+                {activeModal.type === 'interview' && (
+                  <ul className="list-disc list-inside space-y-1 text-yellow-100">
+                    <li>Impact on health or environment</li>
+                    <li>Timeline (how long it's been happening)</li>
+                    <li>Specific concerns mentioned</li>
+                  </ul>
+                )}
+              </div>
+
               <textarea
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
