@@ -195,12 +195,12 @@ const LEVEL_CONFIGS: {[key: number]: LevelConfig} = {
     icon: Star,
     color: 'from-teal-500 to-green-600',
     tasks: [
-      { name: 'Create Maintenance Plan', description: 'Schedule ongoing care', timeRequired: 60, completed: false },
-      { name: 'Establish Endowment', description: 'Secure long-term funding', timeRequired: 55, completed: false },
-      { name: 'Train Local Leaders', description: 'Transfer knowledge', timeRequired: 50, completed: false },
-      { name: 'Build Partnerships', description: 'Ensure continued support', timeRequired: 55, completed: false },
-      { name: 'Monitor for 5 Years', description: 'Commit to long-term tracking', timeRequired: 45, completed: false },
-      { name: 'Adaptive Management', description: 'Adjust based on results', timeRequired: 50, completed: false }
+      { name: 'Create Maintenance Plan', description: 'Schedule ongoing care', timeRequired: 60, completed: false, inputType: 'text', inputPrompt: 'Create a maintenance schedule with specific tasks and frequencies:' },
+      { name: 'Establish Endowment', description: 'Secure long-term funding', timeRequired: 55, completed: false, inputType: 'number', inputPrompt: 'Enter target endowment amount for perpetual funding (in dollars):' },
+      { name: 'Train Local Leaders', description: 'Transfer knowledge', timeRequired: 50, completed: false, inputType: 'text', inputPrompt: 'Describe training program for local leaders to take over management:' },
+      { name: 'Build Partnerships', description: 'Ensure continued support', timeRequired: 55, completed: false, inputType: 'text', inputPrompt: 'List partner organizations and their roles in long-term support:' },
+      { name: 'Monitor for 5 Years', description: 'Commit to long-term tracking', timeRequired: 45, completed: false, inputType: 'text', inputPrompt: 'Define 5-year monitoring plan and key metrics to track:' },
+      { name: 'Adaptive Management', description: 'Adjust based on results', timeRequired: 50, completed: false, inputType: 'text', inputPrompt: 'Explain how you will adapt strategies based on monitoring results:' }
     ],
     quiz: [
       { question: 'What is the biggest threat to restoration projects?', options: ['Initial failure', 'Lack of long-term care', 'Too much success', 'Overcrowding'], correctAnswer: 1 },
@@ -215,12 +215,12 @@ const LEVEL_CONFIGS: {[key: number]: LevelConfig} = {
     icon: Award,
     color: 'from-orange-500 to-red-600',
     tasks: [
-      { name: 'Identify New Sites', description: 'Survey 5 additional rivers', timeRequired: 60, completed: false },
-      { name: 'Replicate Model', description: 'Apply successful strategies', timeRequired: 55, completed: false },
-      { name: 'Recruit Regional Teams', description: 'Expand to 3 new locations', timeRequired: 50, completed: false },
-      { name: 'Secure Major Funding', description: 'Apply for $500K grant', timeRequired: 60, completed: false },
-      { name: 'Develop Training Materials', description: 'Create replication guide', timeRequired: 50, completed: false },
-      { name: 'Launch Regional Network', description: 'Connect all restoration sites', timeRequired: 55, completed: false }
+      { name: 'Identify New Sites', description: 'Survey 5 additional rivers', timeRequired: 60, completed: false, inputType: 'text', inputPrompt: 'List 5 new river sites and why they were selected for restoration:' },
+      { name: 'Replicate Model', description: 'Apply successful strategies', timeRequired: 55, completed: false, inputType: 'text', inputPrompt: 'Describe which strategies from the first site will be replicated:' },
+      { name: 'Recruit Regional Teams', description: 'Expand to 3 new locations', timeRequired: 50, completed: false, inputType: 'text', inputPrompt: 'Define team structure and roles for the 3 new locations:' },
+      { name: 'Secure Major Funding', description: 'Apply for $500K grant', timeRequired: 60, completed: false, inputType: 'text', inputPrompt: 'Write grant proposal summary explaining why you need $500K:' },
+      { name: 'Develop Training Materials', description: 'Create replication guide', timeRequired: 50, completed: false, inputType: 'text', inputPrompt: 'Outline key sections of your replication guide:' },
+      { name: 'Launch Regional Network', description: 'Connect all restoration sites', timeRequired: 55, completed: false, inputType: 'text', inputPrompt: 'Describe how sites will collaborate and share resources:' }
     ],
     quiz: [
       { question: 'What is key to successful scaling?', options: ['Speed', 'Replicable systems', 'Different approaches', 'Luck'], correctAnswer: 1 },
