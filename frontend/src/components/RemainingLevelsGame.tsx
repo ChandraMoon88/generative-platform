@@ -763,14 +763,9 @@ export default function RemainingLevelsGame({ levelNumber }: Props) {
 
   // Add event modals to the intro phase
   if (phase === 'intro') {
-    return (
-      <>
-        {/* Intro content already rendered above in original return */}
-        {renderEventModals()}
-      </>
-    );
+    // Already rendered above with its own return
   }
 
-  // Return null for other phases as they already handle their own rendering
-  return null;
+  // Fallback return (should not reach here)
+  return renderEventModals();
 }
