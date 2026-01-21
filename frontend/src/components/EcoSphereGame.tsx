@@ -256,7 +256,7 @@ export default function EcoSphereGame() {
             <div className="bg-white/10 backdrop-blur-md rounded-2xl p-8 text-left space-y-6 max-w-2xl mx-auto">
               <p className="text-lg text-white/90">
                 Welcome, <span className="text-emerald-300 font-semibold">Restoration Architect</span>. 
-                You've been chosen to heal EcoSphere - a beautiful planet facing environmental challenges.
+                You&apos;ve been chosen to heal EcoSphere - a beautiful planet facing environmental challenges.
               </p>
               
               <div className="space-y-3">
@@ -482,7 +482,7 @@ export default function EcoSphereGame() {
                 <Icon className="w-16 h-16 text-white/60" />
               </div>
               <p className="text-white/70 mb-6">
-                Gameplay mechanics for "{currentLevelData.title}" would appear here in the full implementation.
+                Gameplay mechanics for &ldquo;{currentLevelData.title}&rdquo; would appear here in the full implementation.
               </p>
 
               <button
@@ -570,7 +570,7 @@ export default function EcoSphereGame() {
                 </div>
                 <h3 className="text-xl font-bold text-white mb-2">Journey Complete!</h3>
                 <p className="text-white/80 text-sm">
-                  You've mastered all 15 levels and become a true Restoration Architect. Your movement is changing the world!
+                  You&apos;ve mastered all 15 levels and become a true Restoration Architect. Your movement is changing the world!
                 </p>
               </div>
             </div>

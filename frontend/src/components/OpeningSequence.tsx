@@ -214,11 +214,11 @@ export default function OpeningSequence({ onZoneSelected }: Props) {
             Choose Your Path
           </h1>
           <p className="text-2xl text-cyan-300 mb-4 italic">
-            "What calls to you first? What do you feel needs attention?"
+            &ldquo;What calls to you first? What do you feel needs attention?&rdquo;
           </p>
           <p className="text-lg text-gray-300 max-w-3xl mx-auto">
             Each region faces different environmental challenges. Your choice will define your starting point, 
-            but remember—no choice is wrong. Whatever draws your attention is exactly where you're meant to begin.
+            but remember—no choice is wrong. Whatever draws your attention is exactly where you&apos;re meant to begin.
           </p>
         </div>
 
@@ -281,8 +281,8 @@ export default function OpeningSequence({ onZoneSelected }: Props) {
           <div className="text-center animate-fade-in">
             <div className="bg-white/10 backdrop-blur-md rounded-2xl p-8 max-w-2xl mx-auto mb-6">
               <p className="text-xl text-cyan-300 italic mb-4">
-                "You've chosen {LANDING_ZONES.find(z => z.id === selectedZone)?.name}. 
-                A wise choice. This ecosystem needs you."
+                &ldquo;You&apos;ve chosen {LANDING_ZONES.find(z => z.id === selectedZone)?.name}.
+                A wise choice. This ecosystem needs you.&rdquo;
               </p>
               <p className="text-gray-300">
                 Your journey begins here, but remember—every ecosystem is connected. 

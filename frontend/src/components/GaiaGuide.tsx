@@ -39,6 +39,7 @@ export default function GaiaGuide({ message, onClose, autoClose = false, autoClo
     }
     
     return () => clearTimeout(timer);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [autoClose, autoCloseDelay, message]);
 
   const handleClose = () => {
@@ -105,7 +106,7 @@ export default function GaiaGuide({ message, onClose, autoClose = false, autoClo
               </div>
               
               <p className="text-white text-lg leading-relaxed italic">
-                "{messageObj.text}"
+                &ldquo;{messageObj.text}&rdquo;
               </p>
             </div>
           </div>
