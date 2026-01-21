@@ -35,12 +35,12 @@ const LEVEL_CONFIGS: {[key: number]: LevelConfig} = {
     icon: Play,
     color: 'from-blue-500 to-cyan-600',
     tasks: [
-      { name: 'Deploy Team Alpha', description: 'Assign team to wetland restoration site', timeRequired: 45, completed: false },
-      { name: 'Secure Permits', description: 'Process regulatory approvals', timeRequired: 60, completed: false },
-      { name: 'Order Materials', description: 'Purchase water filtration equipment', timeRequired: 40, completed: false },
-      { name: 'Community Briefing', description: 'Present plan to stakeholders', timeRequired: 50, completed: false },
-      { name: 'Begin Construction', description: 'Start infrastructure work', timeRequired: 55, completed: false },
-      { name: 'Monitor Progress', description: 'Track implementation metrics', timeRequired: 45, completed: false }
+      { name: 'Deploy Team Alpha', description: 'Assign team to wetland restoration site', timeRequired: 45, completed: false, inputType: 'text', inputPrompt: 'Describe your team deployment strategy and location assignment:' },
+      { name: 'Secure Permits', description: 'Process regulatory approvals', timeRequired: 60, completed: false, inputType: 'text', inputPrompt: 'List the permits you need and regulatory bodies involved:' },
+      { name: 'Order Materials', description: 'Purchase water filtration equipment', timeRequired: 40, completed: false, inputType: 'number', inputPrompt: 'Enter budget allocation for materials (in dollars):' },
+      { name: 'Community Briefing', description: 'Present plan to stakeholders', timeRequired: 50, completed: false, inputType: 'text', inputPrompt: 'Write key talking points for your stakeholder presentation:' },
+      { name: 'Begin Construction', description: 'Start infrastructure work', timeRequired: 55, completed: false, inputType: 'text', inputPrompt: 'Describe the construction phases and safety protocols:' },
+      { name: 'Monitor Progress', description: 'Track implementation metrics', timeRequired: 45, completed: false, inputType: 'text', inputPrompt: 'Define what metrics you will track (pH levels, flow rate, etc.):' }
     ],
     quiz: [
       { question: 'What is the most important factor in successful implementation?', options: ['Speed', 'Communication', 'Budget', 'Technology'], correctAnswer: 1 },
