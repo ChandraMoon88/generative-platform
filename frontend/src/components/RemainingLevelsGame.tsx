@@ -666,6 +666,44 @@ export default function RemainingLevelsGame({ levelNumber }: Props) {
           )}
         </div>
         
+        {/* Task Input Modal */}
+        {showTaskInput && currentTask && currentTask.inputType && (
+          <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <div className="bg-slate-900 rounded-2xl max-w-2xl w-full p-8 border-2 border-white/20">
+              <h3 className="text-2xl font-bold mb-4">✍️ Complete Task: {currentTask.name}</h3>
+              
+              <p className="text-gray-400 mb-6">{currentTask.inputPrompt}</p>
+
+              {currentTask.inputType === 'number' ? (
+                <input
+                  type="number"
+                  value={taskInputValue}
+                  onChange={(e) => setTaskInputValue(e.target.value)}
+                  placeholder="Enter amount..."
+                  className="w-full px-4 py-3 bg-white/10 border-2 border-white/20 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-cyan-400"
+                />
+              ) : (
+                <textarea
+                  value={taskInputValue}
+                  onChange={(e) => setTaskInputValue(e.target.value)}
+                  placeholder="Type your answer here (minimum 20 characters)..."
+                  className="w-full h-40 px-4 py-3 bg-white/10 border-2 border-white/20 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-cyan-400 resize-none"
+                />
+              )}
+
+              <div className="flex gap-4 mt-6">
+                <button
+                  onClick={() => handleTaskInput()}
+                  disabled={!taskInputValue.trim()}
+                  className={`flex-1 px-6 py-3 bg-gradient-to-r ${config.color} rounded-lg font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed`}
+                >
+                  Submit & Continue
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+        
         {/* Render event modals when they occur */}
         {renderEventModals()}
       </div>
