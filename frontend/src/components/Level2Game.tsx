@@ -72,8 +72,56 @@ export default function Level2Game() {
       }
     }, 3000);
   };
+  const validateEvidence = (evidenceType: 'photo' | 'measurement' | 'interview', value: string): { valid: boolean; message: string } => {
+    const input = value.toLowerCase().trim();
+    
+    if (evidenceType === 'photo') {
+      // Must describe pollution indicators
+      const hasColor = /\b(green|brown|black|grey|gray|yellow|orange|red|murky|dark|discolored)\b/.test(input);
+      const hasPollution = /\b(chemical|discharge|foam|oil|waste|contamination|pollution|sludge|debris|dead|smell|odor)\b/.test(input);
+      const hasLocation = /\b(pipe|drain|outlet|shore|surface|bank|water|river|stream|factory|plant|facility)\b/.test(input);
+      
+      if (!hasColor && !hasPollution) {
+        return { valid: false, message: '❌ Photo description must mention pollution indicators (color, type, or visual evidence). Example: "Dark chemical discharge from pipe, foam on water surface"' };
+      }
+      if (!hasLocation) {
+        return { valid: false, message: '❌ Please specify where you see the pollution (pipe, water surface, shore, etc.)' };
+      }
+    } else if (evidenceType === 'measurement') {
+      // Must include unit and reasonable value
+      const hasUnit = /\b(ppm|ph|mg\/l|ntu|percent|%|degrees|celsius|fahrenheit)\b/.test(input);
+      const hasNumber = /\d+/.test(input);
+      
+      if (!hasNumber) {
+        return { valid: false, message: '❌ Measurement must include numeric values. Example: "pH 3.2, Turbidity 850 NTU"' };
+      }
+      if (!hasUnit) {
+        return { valid: false, message: '❌ Please include measurement units (pH, PPM, mg/L, NTU, etc.)' };
+      }
+    } else if (evidenceType === 'interview') {
+      // Must mention impact or timeline
+      const hasImpact = /\b(health|sick|smell|drinking|fish|dead|concern|worried|affected|problem|issue|damage|harm)\b/.test(input);
+      const hasTimeline = /\b(\d+\s*(year|month|week|day)|recent|long|always|since|ago)\b/.test(input);
+      
+      if (!hasImpact) {
+        return { valid: false, message: '❌ Interview must document impact on community or environment. Example: "Residents report health issues, strong chemical smell for 2 years"' };
+      }
+      if (!hasTimeline) {
+        return { valid: false, message: '❌ Please include how long this has been happening (timeline)' };
+      }
+    }
+    
+    return { valid: true, message: '✅ Evidence accepted!' };
+  };
 
   const collectEvidence = (sourceId: number, evidenceType: 'photo' | 'measurement' | 'interview', value: string) => {
+    const validation = validateEvidence(evidenceType, value);
+    
+    if (!validation.valid) {
+      alert(validation.message);
+      return; // Don't close modal, let user try again
+    }
+    
     setSources(prev => prev.map(s => {
       if (s.id === sourceId) {
         const newEvidence = { ...s.evidence };
