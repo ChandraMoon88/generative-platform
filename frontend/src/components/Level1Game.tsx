@@ -350,64 +350,23 @@ export default function Level1Game() {
         </div>
 
         <div className="max-w-7xl mx-auto grid lg:grid-cols-3 gap-6">
-          {/* River Segments */}
+          {/* River Map Visualization */}
           <div className="lg:col-span-2">
-            <div className="bg-white/10 backdrop-blur-md rounded-xl p-6">
-              <h3 className="text-xl font-bold mb-4">The Weeping River - 10 Segments</h3>
-              <p className="text-gray-400 mb-6">Click on each segment to scan it with your Environmental Scanner</p>
-              
-              <div className="space-y-3">
-                {riverData.map((segment) => (
-                  <button
-                    key={segment.segmentId}
-                    onClick={() => scanSegment(segment.segmentId)}
-                    disabled={segment.scanned || scanningSegment !== null}
-                    className={`w-full p-4 rounded-xl transition-all ${
-                      segment.scanned
-                        ? 'bg-white/5 cursor-default'
-                        : scanningSegment === segment.segmentId
-                        ? 'bg-blue-500/30 animate-pulse'
-                        : 'bg-white/10 hover:bg-white/20 cursor-pointer hover:scale-102'
-                    }`}
-                  >
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-4">
-                        <div className={`w-16 h-16 rounded-lg ${getPollutionColor(segment.pollutionLevel)} flex items-center justify-center`}>
-                          {segment.scanned ? (
-                            <CheckCircle className="w-8 h-8" />
-                          ) : scanningSegment === segment.segmentId ? (
-                            <RotateCcw className="w-8 h-8 animate-spin" />
-                          ) : (
-                            <span className="text-2xl font-bold">{segment.segmentId}</span>
-                          )}
-                        </div>
-                        <div className="text-left">
-                          <div className="font-bold text-lg">{segment.name}</div>
-                          {segment.scanned ? (
-                            <div className="text-sm text-gray-400">{getHealthStatus(segment)}</div>
-                          ) : scanningSegment === segment.segmentId ? (
-                            <div className="text-sm text-blue-400">Scanning...</div>
-                          ) : (
-                            <div className="text-sm text-gray-400">Click to scan</div>
-                          )}
-                        </div>
-                      </div>
-                      {segment.scanned && (
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setSelectedSegment(segment.segmentId);
-                          }}
-                          className="px-4 py-2 bg-blue-500 hover:bg-blue-600 rounded-lg transition-colors"
-                        >
-                          View Details
-                        </button>
-                      )}
-                    </div>
-                  </button>
-                ))}
-              </div>
-            </div>
+            <RiverMapVisualization
+              segments={riverData.map(seg => ({
+                segmentId: seg.segmentId,
+                name: seg.name,
+                waterQuality: 100 - seg.pollutionLevel,
+                pollutionLevel: seg.pollutionLevel,
+                oxygenLevel: seg.dissolvedOxygen,
+                temperature: (seg.temperature - 32) * 5/9, // Convert to Celsius
+                scanned: seg.scanned,
+                timestamp: seg.timestamp
+              }))}
+              selectedSegment={selectedSegment}
+              scanningSegment={scanningSegment}
+              onSegmentClick={scanSegment}
+            />
           </div>
 
           {/* Data Display */}
