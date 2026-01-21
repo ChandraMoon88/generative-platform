@@ -300,12 +300,16 @@ export default function RemainingLevelsGame({ levelNumber }: Props) {
       const interval = setInterval(() => {
         setTimer(prev => {
           if (prev >= tasks[currentTaskIndex].timeRequired) {
+            console.log('Task completed:', tasks[currentTaskIndex].name, 'Has input type:', tasks[currentTaskIndex].inputType);
+            
             // Show input modal if task requires input
             if (tasks[currentTaskIndex].inputType) {
+              console.log('Showing input modal for task with inputType:', tasks[currentTaskIndex].inputType);
               setShowTaskInput(true);
               return prev; // Keep timer at max
             }
             
+            console.log('No inputType, completing task immediately');
             // If no input required, complete immediately
             const newTasks = [...tasks];
             newTasks[currentTaskIndex].completed = true;
