@@ -301,12 +301,28 @@ export default function EcoSphereGame() {
         <div className="max-w-7xl mx-auto">
           <div className="flex justify-between items-center mb-8">
             <h2 className="text-4xl font-bold text-white">Select Level</h2>
-            <button
-              onClick={() => setShowLevelSelect(false)}
-              className="px-6 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-colors"
-            >
-              Back to Game
-            </button>
+            <div className="flex gap-4">
+              <button
+                onClick={() => {
+                  // Unlock all levels
+                  const currentState = loadGameState();
+                  if (currentState) {
+                    currentState.maxUnlockedLevel = 15;
+                    localStorage.setItem('ecosphere_game_state', JSON.stringify(currentState));
+                    window.location.reload();
+                  }
+                }}
+                className="px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors font-bold"
+              >
+                🔓 Unlock All Levels
+              </button>
+              <button
+                onClick={() => setShowLevelSelect(false)}
+                className="px-6 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-colors"
+              >
+                Back to Game
+              </button>
+            </div>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

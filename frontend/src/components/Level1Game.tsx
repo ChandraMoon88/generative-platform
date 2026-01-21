@@ -727,10 +727,19 @@ export default function Level1Game() {
               </div>
 
               <button
-                onClick={() => window.location.href = '/projects'}
+                onClick={() => {
+                  // Update game state to unlock Level 2
+                  const currentState = loadGameState();
+                  if (currentState) {
+                    currentState.currentLevel = 2;
+                    currentState.maxUnlockedLevel = Math.max(currentState.maxUnlockedLevel, 2);
+                    localStorage.setItem('ecosphere_game_state', JSON.stringify(currentState));
+                  }
+                  window.location.href = '/projects';
+                }}
                 className="px-12 py-4 bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl text-white font-bold text-xl hover:scale-105 transition-transform"
               >
-                Continue Your Journey <ChevronRight className="inline ml-2" />
+                Continue to Level 2 <ChevronRight className="inline ml-2" />
               </button>
             </div>
           </div>
