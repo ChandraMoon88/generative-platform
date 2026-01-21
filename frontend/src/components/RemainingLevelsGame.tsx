@@ -75,12 +75,12 @@ const LEVEL_CONFIGS: {[key: number]: LevelConfig} = {
     icon: Users,
     color: 'from-purple-500 to-pink-600',
     tasks: [
-      { name: 'Interview Scientists', description: 'Hire ecologist and chemist', timeRequired: 50, completed: false },
-      { name: 'Recruit Volunteers', description: 'Organize community support', timeRequired: 45, completed: false },
-      { name: 'Train Team', description: 'Conduct safety and skills training', timeRequired: 60, completed: false },
-      { name: 'Assign Roles', description: 'Define responsibilities', timeRequired: 40, completed: false },
-      { name: 'Team Building Exercise', description: 'Build group cohesion', timeRequired: 50, completed: false },
-      { name: 'Set Communication Protocol', description: 'Establish reporting system', timeRequired: 45, completed: false }
+      { name: 'Interview Scientists', description: 'Hire ecologist and chemist', timeRequired: 50, completed: false, inputType: 'text', inputPrompt: 'Describe the qualifications and expertise you are looking for in your scientific team:' },
+      { name: 'Recruit Volunteers', description: 'Organize community support', timeRequired: 45, completed: false, inputType: 'number', inputPrompt: 'Enter target number of volunteers to recruit:' },
+      { name: 'Train Team', description: 'Conduct safety and skills training', timeRequired: 60, completed: false, inputType: 'text', inputPrompt: 'List the key safety protocols and skills you will train your team on:' },
+      { name: 'Assign Roles', description: 'Define responsibilities', timeRequired: 40, completed: false, inputType: 'text', inputPrompt: 'Define specific roles and responsibilities for each team member:' },
+      { name: 'Team Building Exercise', description: 'Build group cohesion', timeRequired: 50, completed: false, inputType: 'text', inputPrompt: 'Describe team building activities you will organize:' },
+      { name: 'Set Communication Protocol', description: 'Establish reporting system', timeRequired: 45, completed: false, inputType: 'text', inputPrompt: 'Define how often and through what channels your team will communicate:' }
     ],
     quiz: [
       { question: 'What makes a good team leader?', options: ['Being the smartest', 'Good communication', 'Working alone', 'Giving orders'], correctAnswer: 1 },
@@ -95,12 +95,12 @@ const LEVEL_CONFIGS: {[key: number]: LevelConfig} = {
     icon: DollarSign,
     color: 'from-yellow-500 to-orange-600',
     tasks: [
-      { name: 'Create Budget Spreadsheet', description: 'Detail all expenses', timeRequired: 55, completed: false },
-      { name: 'Apply for Grants', description: 'Submit funding applications', timeRequired: 60, completed: false },
-      { name: 'Track Expenditures', description: 'Monitor spending weekly', timeRequired: 45, completed: false },
-      { name: 'Adjust Allocations', description: 'Reallocate based on needs', timeRequired: 50, completed: false },
-      { name: 'Generate Reports', description: 'Create financial summaries', timeRequired: 55, completed: false },
-      { name: 'Plan for Contingencies', description: 'Set aside emergency funds', timeRequired: 45, completed: false }
+      { name: 'Create Budget Spreadsheet', description: 'Detail all expenses', timeRequired: 55, completed: false, inputType: 'text', inputPrompt: 'List main budget categories and estimated costs for your project:' },
+      { name: 'Apply for Grants', description: 'Submit funding applications', timeRequired: 60, completed: false, inputType: 'number', inputPrompt: 'Enter total grant funding amount you are applying for (in dollars):' },
+      { name: 'Track Expenditures', description: 'Monitor spending weekly', timeRequired: 45, completed: false, inputType: 'number', inputPrompt: 'Enter current week expenses (in dollars):' },
+      { name: 'Adjust Allocations', description: 'Reallocate based on needs', timeRequired: 50, completed: false, inputType: 'text', inputPrompt: 'Explain what budget adjustments you need to make and why:' },
+      { name: 'Generate Reports', description: 'Create financial summaries', timeRequired: 55, completed: false, inputType: 'text', inputPrompt: 'Summarize key financial metrics and spending trends:' },
+      { name: 'Plan for Contingencies', description: 'Set aside emergency funds', timeRequired: 45, completed: false, inputType: 'number', inputPrompt: 'Enter emergency fund amount to set aside (in dollars):' }
     ],
     quiz: [
       { question: 'What percentage should be kept for emergencies?', options: ['0%', '5%', '10-15%', '50%'], correctAnswer: 2 },
@@ -115,12 +115,12 @@ const LEVEL_CONFIGS: {[key: number]: LevelConfig} = {
     icon: Zap,
     color: 'from-red-500 to-orange-600',
     tasks: [
-      { name: 'Respond to Chemical Spill', description: 'Activate emergency protocol', timeRequired: 60, completed: false },
-      { name: 'Evacuate Area', description: 'Ensure safety first', timeRequired: 50, completed: false },
-      { name: 'Contain Contamination', description: 'Deploy barriers', timeRequired: 55, completed: false },
-      { name: 'Communicate with Public', description: 'Issue safety updates', timeRequired: 45, completed: false },
-      { name: 'Coordinate with Authorities', description: 'Work with regulators', timeRequired: 50, completed: false },
-      { name: 'Document Incident', description: 'Create detailed report', timeRequired: 55, completed: false }
+      { name: 'Respond to Chemical Spill', description: 'Activate emergency protocol', timeRequired: 60, completed: false, inputType: 'text', inputPrompt: 'Outline immediate steps to respond to the chemical spill:' },
+      { name: 'Evacuate Area', description: 'Ensure safety first', timeRequired: 50, completed: false, inputType: 'text', inputPrompt: 'Define evacuation radius and safety procedures:' },
+      { name: 'Contain Contamination', description: 'Deploy barriers', timeRequired: 55, completed: false, inputType: 'text', inputPrompt: 'Describe containment strategy and equipment needed:' },
+      { name: 'Communicate with Public', description: 'Issue safety updates', timeRequired: 45, completed: false, inputType: 'text', inputPrompt: 'Write a public safety announcement about the incident:' },
+      { name: 'Coordinate with Authorities', description: 'Work with regulators', timeRequired: 50, completed: false, inputType: 'text', inputPrompt: 'List which agencies to contact and what information to provide:' },
+      { name: 'Document Incident', description: 'Create detailed report', timeRequired: 55, completed: false, inputType: 'text', inputPrompt: 'Write incident summary: what happened, actions taken, and lessons learned:' }
     ],
     quiz: [
       { question: 'What is the first priority in a crisis?', options: ['Money', 'Safety', 'Blame', 'Media'], correctAnswer: 1 },
