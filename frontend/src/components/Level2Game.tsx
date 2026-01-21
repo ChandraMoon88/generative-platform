@@ -36,13 +36,22 @@ export default function Level2Game() {
   const [tracking, setTracking] = useState(false);
   const [phase, setPhase] = useState<'intro' | 'tracking' | 'documenting' | 'prioritizing' | 'complete'>('intro');
   const [priorityMatrix, setPriorityMatrix] = useState<{[key: number]: {impact: number, feasibility: number}}>({});
+  const [activeModal, setActiveModal] = useState<{sourceId: number, type: 'photo' | 'measurement' | 'interview'} | null>(null);
+  const [inputValue, setInputValue] = useState('');
 
   useEffect(() => {
     const initialSources = POLLUTION_SOURCES.map(s => ({
       ...s,
       found: false,
       documented: false,
-      evidence: { photo: false, measurement: false, interview: false }
+      evidence: { 
+        photo: false, 
+        photoDescription: '',
+        measurement: false, 
+        measurementValue: '',
+        interview: false,
+        interviewNotes: ''
+      }
     }));
     setSources(initialSources);
   }, []);
