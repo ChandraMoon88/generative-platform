@@ -296,10 +296,17 @@ export default function RemainingLevelsGame({ levelNumber }: Props) {
   const [eventConsequence, setEventConsequence] = useState<string | null>(null);
 
   useEffect(() => {
-    if (phase === 'tasks' && currentTaskIndex < tasks.length) {
+    if (phase === 'tasks' && currentTaskIndex < tasks.length && !showTaskInput) {
       const interval = setInterval(() => {
         setTimer(prev => {
           if (prev >= tasks[currentTaskIndex].timeRequired) {
+            // Show input modal if task requires input
+            if (tasks[currentTaskIndex].inputType) {
+              setShowTaskInput(true);
+              return prev; // Keep timer at max
+            }
+            
+            // If no input required, complete immediately
             const newTasks = [...tasks];
             newTasks[currentTaskIndex].completed = true;
             setTasks(newTasks);
@@ -329,7 +336,7 @@ export default function RemainingLevelsGame({ levelNumber }: Props) {
       
       return () => clearInterval(interval);
     }
-  }, [phase, currentTaskIndex, tasks, config.quiz, levelNumber, budget, daysElapsed, currentEvent, eventsHandled]);
+  }, [phase, currentTaskIndex, tasks, showTaskInput, config.quiz, levelNumber, budget, daysElapsed, currentEvent, eventsHandled]);
 
   const handleEventChoice = (choiceIndex: number) => {
     if (!currentEvent) return;
