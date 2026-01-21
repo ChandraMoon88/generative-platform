@@ -5,6 +5,7 @@ import {
   Sprout, Droplets, ThermometerSun, Wind, AlertTriangle,
   CheckCircle, XCircle, Clock, Award, ChevronRight, RotateCcw
 } from 'lucide-react';
+import RiverMapVisualization from './RiverMapVisualization';
 import { 
   generateRiverSegmentData, 
   RiverSegmentData, 
