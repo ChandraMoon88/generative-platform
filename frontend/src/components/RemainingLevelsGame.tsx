@@ -296,6 +296,17 @@ export default function RemainingLevelsGame({ levelNumber }: Props) {
             newTasks[currentTaskIndex].completed = true;
             setTasks(newTasks);
             
+            // Increment days elapsed
+            setDaysElapsed(d => d + 1);
+            
+            // Check for dynamic event (only on Level 4+)
+            if (levelNumber >= 4 && !currentEvent && Math.random() < 0.3) {
+              const event = getRandomEvent(levelNumber, budget, daysElapsed + 1);
+              if (event && !eventsHandled.includes(event.id)) {
+                setCurrentEvent(event);
+              }
+            }
+            
             if (currentTaskIndex + 1 < tasks.length) {
               setCurrentTaskIndex(currentTaskIndex + 1);
               return 0;
@@ -310,7 +321,7 @@ export default function RemainingLevelsGame({ levelNumber }: Props) {
       
       return () => clearInterval(interval);
     }
-  }, [phase, currentTaskIndex, tasks, config.quiz]);
+  }, [phase, currentTaskIndex, tasks, config.quiz, levelNumber, budget, daysElapsed, currentEvent, eventsHandled]);
 
   const Icon = config.icon;
   
