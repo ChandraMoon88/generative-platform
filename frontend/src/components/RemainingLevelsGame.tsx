@@ -235,12 +235,12 @@ const LEVEL_CONFIGS: {[key: number]: LevelConfig} = {
     icon: Shield,
     color: 'from-violet-500 to-purple-600',
     tasks: [
-      { name: 'Research Legislation', description: 'Identify policy gaps', timeRequired: 60, completed: false },
-      { name: 'Draft Policy Proposal', description: 'Write environmental protection bill', timeRequired: 65, completed: false },
-      { name: 'Build Coalition', description: 'Unite 20+ organizations', timeRequired: 55, completed: false },
-      { name: 'Testify at Hearings', description: 'Present to lawmakers', timeRequired: 50, completed: false },
-      { name: 'Media Campaign', description: 'Generate public pressure', timeRequired: 60, completed: false },
-      { name: 'Negotiate with Officials', description: 'Secure commitments', timeRequired: 55, completed: false }
+      { name: 'Research Legislation', description: 'Identify policy gaps', timeRequired: 60, completed: false, inputType: 'text', inputPrompt: 'Identify environmental policy gaps that need to be addressed:' },
+      { name: 'Draft Policy Proposal', description: 'Write environmental protection bill', timeRequired: 65, completed: false, inputType: 'text', inputPrompt: 'Write a summary of the environmental legislation you are proposing:' },
+      { name: 'Build Coalition', description: 'Unite 20+ organizations', timeRequired: 55, completed: false, inputType: 'text', inputPrompt: 'List organizations in your coalition and their key contributions:' },
+      { name: 'Testify at Hearings', description: 'Present to lawmakers', timeRequired: 50, completed: false, inputType: 'text', inputPrompt: 'Write key talking points for your testimony to lawmakers:' },
+      { name: 'Media Campaign', description: 'Generate public pressure', timeRequired: 60, completed: false, inputType: 'text', inputPrompt: 'Outline your media campaign strategy and key messages:' },
+      { name: 'Negotiate with Officials', description: 'Secure commitments', timeRequired: 55, completed: false, inputType: 'text', inputPrompt: 'Describe your negotiation strategy and desired outcomes:' }
     ],
     quiz: [
       { question: 'Why is policy change important?', options: ['It is not', 'Systemic protection', 'Looks good', 'Easy wins'], correctAnswer: 1 },
